@@ -10,6 +10,7 @@ import json
 
 
 client = commands.Bot(command_prefix='/')
+client.remove_command(help)
 reactions = {'🇲': "Monday", '2️⃣': "Tuesday", '🇼': "Wednesday", '🇹': "Thursday", '🇫': "Friday", '🚫': "Can't attend"}
 users = [237651345425825792, 371495733918040064]
 channel_id = 645296440419156010

@@ -169,8 +169,12 @@ See you all next week for more games!
 
 
 @client.event
-async def on_reaction_add(reaction, user):
-    message = reaction.message
+async def on_raw_reaction_add(payload):
+    if payload.channel_id != channel_id:
+        return
+    channel = client.get_channel(channel_id)
+    message = await channel.fetch_message(payload.message_id)
+    emoji = payload.emoji.name
     is_poll = False
     if message.embeds:
         embed = message.embeds[0]
@@ -181,8 +185,8 @@ async def on_reaction_add(reaction, user):
         print("everyone_plus_text")
         is_poll = True
     if is_poll:
-        if reaction.emoji in reactions and len(message.reactions) >= len(reactions):
-            print(f"Reaction {reaction.emoji} is in {reactions}")
+        if emoji in reactions and len(message.reactions) >= len(reactions):
+            print(f"Reaction {emoji} is in {reactions}")
             await tally(message)
 
 
@@ -274,7 +278,7 @@ async def tiebreak(ctx, weekday):
         await ctx.send(f"Sorry, I didn't recognize {weekday} as one of the options for the tie break. Try again. ")
 
 
-@tasks.loop(minutes=20)
+@tasks.loop(minutes=15)
 async def check_time():
     if state.get("next_poll_at", 0) <= time.time():
         print("Poll starting")

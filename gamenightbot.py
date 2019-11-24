@@ -278,7 +278,7 @@ async def tiebreak(ctx, weekday):
         await ctx.send(f"Sorry, I didn't recognize {weekday} as one of the options for the tie break. Try again. ")
 
 
-@tasks.loop(minutes=15)
+@tasks.loop(minutes=1)
 async def check_time():
     if state.get("next_poll_at", 0) <= time.time():
         print("Poll starting")

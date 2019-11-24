@@ -7,6 +7,8 @@ import random
 from discord.utils import get
 from discord.ext import commands, tasks
 import json
+import os
+import boto3
 
 
 client = commands.Bot(command_prefix='/')
@@ -16,6 +18,20 @@ users = [237651345425825792, 371495733918040064]
 channel_id = 645296440419156010
 dow={d:i for i,d in
          enumerate('monday,tuesday,wednesday,thursday,friday'.split(','))}
+S3_BUCKET = os.environ.get('S3_BUCKET')
+
+
+def save_to_s3(file_name):
+    s3_client = boto3.client('s3')
+    s3_client.upload_file(file_name, S3_BUCKET)
+
+
+def load_from_s3(file_name):
+    s3_client = boto3.client('s3')
+    s3_client.download_file(S3_BUCKET, file_name, file_name)
+
+
+load_from_s3("state.json")
 with open("state.json") as file:
     state = json.load(file)
 
@@ -31,6 +47,7 @@ async def save_state(field,value):
     print(f"state saved {state} with field={field} value={value}")
     with open("state.json", "w") as fh:
         json.dump(state, fh)
+    save_to_s3("state.json")
     return
 
 

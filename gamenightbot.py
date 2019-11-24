@@ -10,12 +10,10 @@ import json
 import os
 import boto3
 
-
-client = commands.Bot(command_prefix='/')
-client.remove_command(help)
+client = commands.Bot(command_prefix='/', help_command=None)
 reactions = {'🇲': "Monday", '2️⃣': "Tuesday", '🇼': "Wednesday", '🇹': "Thursday", '🇫': "Friday", '🚫': "Can't attend"}
-users = [237651345425825792, 371495733918040064]
-channel_id = 645296440419156010
+users = [int(user) for user in os.environ.get("USERS").split(',')]
+channel_id = int(os.environ.get("CHANNEL"))
 dow={d:i for i,d in
          enumerate('monday,tuesday,wednesday,thursday,friday'.split(','))}
 S3_BUCKET = os.environ.get('S3_BUCKET')
@@ -23,7 +21,7 @@ S3_BUCKET = os.environ.get('S3_BUCKET')
 
 def save_to_s3(file_name):
     s3_client = boto3.client('s3')
-    s3_client.upload_file(file_name, S3_BUCKET)
+    s3_client.upload_file(file_name, S3_BUCKET, file_name)
 
 
 def load_from_s3(file_name):
@@ -35,11 +33,18 @@ load_from_s3("state.json")
 with open("state.json") as file:
     state = json.load(file)
 
-
 @client.event
 async def on_ready():
     print(f"Bot start up. Loaded state={state}")
     check_time.start()
+
+
+async def get_date_for_day(weekday):
+    day = dow[weekday.lower()]
+    date = datetime.today()
+    while date.weekday() != day:
+        date += timedelta(days=1)
+    return weekday + date.strftime(" %B %d, %Y")
 
 
 async def save_state(field,value):
@@ -182,19 +187,6 @@ async def on_reaction_add(reaction, user):
             await tally(message)
 
 
-
-@client.command()
-async def clear(ctx, amount=100):
-    await ctx.channel.purge(limit=amount)
-
-
-async def get_date_for_day(weekday):
-    day = dow[weekday.lower()]
-    date = datetime.today()
-    while date.weekday() != day:
-        date += timedelta(days=1)
-    return weekday + date.strftime(" %B %d, %Y")
-
 async def remind(reminder):
     message = f"""@everyone
 It's game night!
@@ -202,6 +194,8 @@ Tonight we will be playing {reminder['game_name']} @ {reminder['start_time']}. H
     """
     channel = client.get_channel(channel_id)
     await channel.send(message)
+    await save_state("remind_at", float('Inf'))
+    await save_state("reminder", None)
 
 
 async def poll_time():
@@ -230,6 +224,7 @@ A winning day will be announced once everyone has voted.
 async def check_dm_with_host(ctx):
     host = state.get("last_host", 0)
     if ctx.message.channel.type != discord.ChannelType.private:
+        await ctx.message.add_reaction('🙉')
         await ctx.author.send(f"Sorry the command you tried to invoke (`/{ctx.command.name}`) in #{ctx.message.channel.name} on {ctx.message.channel.guild} is limited to direct message only,")
         return False
     elif ctx.author.id != host:
@@ -245,7 +240,7 @@ async def suggest(ctx, start_time, *gamename):
     game_name = " ".join(gamename)
     reminder = {"start_time": start_time, "game_name": game_name}
     game_night = state.get("game_night", "game night")
-    remind_at = parse(f"{time} {game_night}")
+    remind_at = parse(f"{start_time} {game_night}")
     if remind_at is None:
         await ctx.send(f"Sorry I had trouble understanding {start_time} as a a start time. Please try again.")
         return
@@ -254,12 +249,12 @@ async def suggest(ctx, start_time, *gamename):
     await save_state("reminder", reminder)
     channel = client.get_channel(channel_id)
     announce = f"""@everyone The poll has concluded. 
-{host.mention} has suggested we play **{game_name}** @ **{time}** on **{game_night}**.
+{host.mention} has suggested we play **{game_name}** @ **{start_time}** on **{game_night}**.
 I'll remind this channel an hour before then."""
     await channel.send(announce)
 
 
-commands.check(check_dm_with_host)
+@commands.check(check_dm_with_host)
 @client.command()
 async def tiebreak(ctx, weekday):
     weekday = weekday.capitalize()
@@ -279,28 +274,6 @@ async def tiebreak(ctx, weekday):
     else:
         await ctx.send(f"Sorry, I didn't recognize {weekday} as one of the options for the tie break. Try again. ")
 
-@client.command()
-async def poll(ctx):
-    message = """@everyone
-The weekly poll is ready! Please indicate your availability below:
-
-:regional_indicator_m: - Monday
-2️⃣ - Tuesday
-:regional_indicator_w: - Wednesday
-:regional_indicator_t: - Thursday
-:regional_indicator_f: - Friday
-:no_entry_sign: - Can't attend
-
-A winning day will be announced once everyone has voted.
-    """
-    msg = await ctx.send(message)
-    today = date.today().strftime("%B %d, %Y")
-    embed = discord.Embed(title=f"Weekly game night poll - {today}")
-    await msg.edit(embed=embed)
-    for reaction in reactions.keys():
-        client.emojis
-        await msg.add_reaction(reaction)
-
 
 @tasks.loop(minutes=20)
 async def check_time():
@@ -313,4 +286,4 @@ async def check_time():
             await remind(reminder)
 
 
-client.run("NjQzNDExMzczMzQ2NTIxMDg4.XdAcRQ.CqH7gcHcPDwywCHlv44Mf1orhlQ")
+client.run(os.environ.get("DISCORD_BOT_TOKEN"))

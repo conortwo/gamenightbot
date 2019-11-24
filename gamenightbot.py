@@ -29,7 +29,6 @@ def load_from_s3(file_name):
     s3_client.download_file(S3_BUCKET, file_name, file_name)
 
 
-load_from_s3("state.json")
 with open("state.json") as file:
     state = json.load(file)
 
@@ -83,7 +82,7 @@ async def update_poll_status(message, status):
 async def winners(message):
     counts = {r.emoji: r.count-1 for r in message.reactions if r.emoji in reactions}
     opt_outs = counts['🚫']
-    max_players = 2 - opt_outs
+    max_players = len(users) - opt_outs
     if opt_outs > max_players:
         return {'🚫': opt_outs}
     else:

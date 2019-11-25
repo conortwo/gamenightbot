@@ -176,11 +176,12 @@ async def on_raw_reaction_add(payload):
 
 
 async def remind(reminder):
+    channel = client.get_channel(channel_id)
+    emoji = get(channel.guild.emojis, name='rollHigh')
     message = f"""@everyone
 It's game night!
-Tonight we will be playing {reminder['game_name']} @ {reminder['start_time']}. Have fun! :rollHigh:
+Tonight we will be playing **{reminder['game_name']}** @ **{reminder['start_time']}**(approximately 1 hour from now), Have fun! {emoji}
     """
-    channel = client.get_channel(channel_id)
     await channel.send(message)
     await save_state("remind_at", float('Inf'))
     await save_state("reminder", None)

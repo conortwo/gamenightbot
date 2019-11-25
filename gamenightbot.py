@@ -58,23 +58,16 @@ async def save_state(field,value):
 async def update_poll_status(message, status):
     if message.embeds:
         embed = message.embeds[0]
-        fields = embed.fields
-        if len(fields) == 0 or status == "closed":
+        if status == "closed":
             embed.clear_fields()
             embed.add_field(name="poll_status", value=status, inline=True)
             await message.edit(embed=embed)
             return True
-        elif status == "open":
-            embed.clear_fields()
-            await message.edit(embed=embed)
-            return False
         else:
             return False
     else:
         embed = discord.Embed()
         embed.add_field(name="poll_status", value=status, inline=True)
-        if status == "open":
-            embed.clear_fields()
         await message.edit(embed=embed)
         return True
 
@@ -144,6 +137,7 @@ async def tally(message):
     channel = client.get_channel(channel_id)
     if len(recount) == 1:
         key, count = recount.popitem()
+        await save_state("open_poll", None)
         if key == '🚫':
             resp = f"""Game night is **CANCELLED** as a majority({count}) of players have indicated they can't attend({key}).
 See you all next week for more games!               
@@ -157,6 +151,7 @@ See you all next week for more games!
     elif len(recount) >= 1:
         tied = []
         choices = []
+        await save_state("open_poll", None)
         for key in recount:
             tied.append(f"{reactions[key]}({key})")
             choices.append(key)
@@ -164,31 +159,19 @@ See you all next week for more games!
         await channel.send(f"""{", ".join(tied[:-1])} and {tied[-1]} have {"both" if (len(tied) == 2 )  else "all"} tied with {count} votes! This tie will be broken by this weeks host.""")
         await choose_host(channel, choices)
         await update_poll_status(message, "closed")
-    else:
-        await update_poll_status(message, "open")
 
 
 @client.event
 async def on_raw_reaction_add(payload):
-    if payload.channel_id != channel_id:
+    open_poll = state.get("open_poll", None)
+    if payload.channel_id != channel_id or not open_poll or open_poll != payload.message_id:
         return
-    return # Poll closed, TODO: rework check to take an id from state
     channel = client.get_channel(channel_id)
     message = await channel.fetch_message(payload.message_id)
     emoji = payload.emoji.name
-    is_poll = False
-    if message.embeds:
-        embed = message.embeds[0]
-        if embed.title != embed.Empty and embed.title.startswith("Weekly"):
-            print("embed weekly")
-            is_poll = True
-    elif message.mention_everyone and "weekly poll" in message.content:
-        print("everyone_plus_text")
-        is_poll = True
-    if is_poll:
-        if emoji in reactions and len(message.reactions) >= len(reactions):
-            print(f"Reaction {emoji} is in {reactions}")
-            await tally(message)
+    if emoji in reactions and len(message.reactions) >= len(reactions):
+        print(f"Reaction {emoji} is in {reactions}")
+        await tally(message)
 
 
 async def remind(reminder):
@@ -220,6 +203,7 @@ A winning day will be announced once everyone has voted.
     await msg.edit(embed=embed)
     for reaction in reactions.keys():
         await msg.add_reaction(reaction)
+    await save_state("open_poll", msg.id)
     next_poll = datetime.now() + timedelta(days=7)
     print(f"next poll is at {next_poll}")
     await save_state("next_poll_at", next_poll.timestamp())

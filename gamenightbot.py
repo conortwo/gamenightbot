@@ -230,7 +230,7 @@ async def suggest(ctx, start_time, *gamename):
     reminder = {"start_time": start_time, "game_name": game_name}
     game_night = state.get("game_night", "game night")
     remind_at = parse(f"{start_time} {game_night}")
-    if remind_at is None or remind_at <= time.time():
+    if remind_at is None or remind_at.timestamp() <= time.time():
         await ctx.send(f"Sorry I had trouble understanding {start_time} as a a start time. Please try again.")
         return
     await ctx.send(f"Ok, I'll announce your suggestion of {game_name} @ {start_time} on {game_night}.")

@@ -58,7 +58,8 @@ async def save_state(field,value):
 async def update_poll_status(message, status):
     if message.embeds:
         embed = message.embeds[0]
-        if status == "closed":
+        fields = embed.fields
+        if len(fields) == 0 or status == "closed":
             embed.clear_fields()
             embed.add_field(name="poll_status", value=status, inline=True)
             await message.edit(embed=embed)
@@ -132,7 +133,7 @@ async def tally(message):
     is_closing = await update_poll_status(message, "closing")
     if not is_closing:
         return
-    await asyncio.sleep(10)
+    await asyncio.sleep(30)
     recount = await winners(message)
     channel = client.get_channel(channel_id)
     if len(recount) == 1:

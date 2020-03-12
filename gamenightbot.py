@@ -362,7 +362,6 @@ async def tiebreak(ctx, weekday):
 
 @tasks.loop(minutes=1)
 async def check_time():
-    await save_state("channel_id", 402183402608132096)
     if state.get("next_poll_at", 0) <= time.time():
         print("Poll starting")
         await poll_time()

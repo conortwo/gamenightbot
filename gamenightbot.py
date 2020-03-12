@@ -51,7 +51,7 @@ async def save_state(field,value):
     print(f"state saved {state} with field={field} value={value}")
     with open("state.json", "w") as fh:
         json.dump(state, fh)
-    # save_to_s3("state.json")
+    save_to_s3("state.json")
     return
 
 
@@ -362,6 +362,7 @@ async def tiebreak(ctx, weekday):
 
 @tasks.loop(minutes=1)
 async def check_time():
+    await save_state("channel_id", 402183402608132096)
     if state.get("next_poll_at", 0) <= time.time():
         print("Poll starting")
         await poll_time()

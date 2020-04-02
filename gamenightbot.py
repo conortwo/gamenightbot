@@ -27,13 +27,11 @@ def load_from_s3(file_name):
     s3_client = boto3.client('s3')
     s3_client.download_file(S3_BUCKET, file_name, file_name)
 
+
 load_from_s3("state.json")
 with open("state.json") as file:
     state = json.load(file)
-    state["next_poll_at"] = 1585846800
-    with open("state.json", "w") as fh:
-        json.dump(state, fh)
-    save_to_s3("state.json")
+
 
 @client.event
 async def on_ready():

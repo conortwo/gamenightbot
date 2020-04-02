@@ -31,6 +31,8 @@ load_from_s3("state.json")
 with open("state.json") as file:
     state = json.load(file)
     state["next_poll_at"] = 1585846800
+    with open("state.json", "w") as fh:
+        json.dump(state, fh)
     save_to_s3("state.json")
 
 @client.event

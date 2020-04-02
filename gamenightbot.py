@@ -31,10 +31,6 @@ def load_from_s3(file_name):
 load_from_s3("state.json")
 with open("state.json") as file:
     state = json.load(file)
-    state["remind_at"] = 1586095200
-    with open("state.json", "w") as fh:
-        json.dump(state, fh)
-    save_to_s3("state.json")
 
 
 @client.event

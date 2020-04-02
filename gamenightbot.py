@@ -30,7 +30,6 @@ def load_from_s3(file_name):
 load_from_s3("state.json")
 with open("state.json") as file:
     state = json.load(file)
-    state["next_poll_at"] = 1585846800
 
 @client.event
 async def on_ready():

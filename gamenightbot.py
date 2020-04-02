@@ -12,7 +12,7 @@ import boto3
 
 client = commands.Bot(command_prefix='/', help_command=None)
 reactions = {'🇫': "Friday", '🇸': "Saturday", '☀️': "Sunday", '🇲': "Monday", '2️⃣': "Tuesday", '🇼': "Wednesday", '🇹': "Thursday", '🚫': "Can't attend"}
-timeslots = {'1️⃣': "12pm - 2pm", '2️⃣': "2pm - 4pm", '3️⃣': "4pm - 6pm", '4️⃣': "6pm - 8pm", '🚫': "Can't attend"}
+timeslots = {'1️⃣': "1pm - 3pm", '2️⃣': "3pm - 5pm", '3️⃣': "5pm - 7pm", '4️⃣': "7pm - 9pm", '5️⃣':"9pm-11pm", '🚫': "Can't attend"}
 dow={d:i for i,d in
          enumerate('monday,tuesday,wednesday,thursday,friday,saturday,sunday'.split(','))}
 S3_BUCKET = os.environ.get('S3_BUCKET')
@@ -30,6 +30,7 @@ def load_from_s3(file_name):
 load_from_s3("state.json")
 with open("state.json") as file:
     state = json.load(file)
+    state["next_poll_at"] = 1585846800
 
 @client.event
 async def on_ready():
@@ -51,11 +52,13 @@ async def save_state(field,value):
     print(f"state saved {state} with field={field} value={value}")
     with open("state.json", "w") as fh:
         json.dump(state, fh)
-    save_to_s3("state.json")
+    # save_to_s3("state.json")
     return
 
 
 async def update_poll_status(message, status):
+    channel = client.get_channel(state.get("channel_id"))
+    message = await channel.fetch_message(message.id)
     if message.embeds:
         embed = message.embeds[0]
         fields = embed.fields
@@ -91,20 +94,24 @@ async def winners(message, is_timeslot):
         flat_list = [voter for sublist in total_voters for voter in sublist]
         voter_ids = set([voter.id for voter in flat_list])
         non_voters = set(users) - set(voter_ids)
-        if len(non_voters) == 1:
+        if len(non_voters) == 0:
+            await save_state("late", None)
+        elif len(non_voters) == 1:
             late = client.get_user(non_voters.pop())
-            nudged = state.get("nudged", None)
-            if nudged and nudged == late.id:
+            nudgee = state.get("late", None)
+            if nudgee and nudgee == late.id:
                 pass
             else:
-                await nudge(late)
+                await save_state("nudge_at", (datetime.now() + timedelta(hours=2)).timestamp())
+                await save_state("late", late.id)
         return winning
 
 
 async def nudge(late):
     channel_id = state.get("channel_id")
-    await save_state("nudged", late.id)
     await late.send(f"""Hey {late.name}! Looks like your vote could help close out a poll in <#{channel_id}>. Get voting!""")
+    await save_state("nudge_at", float('Inf'))
+    await save_state("late", None)
 
 
 async def prompt_host(host, options):
@@ -116,7 +123,7 @@ async def prompt_host(host, options):
 Feel free to pick a time slot that falls in any of those ranges!"""
     await host.send(f"""Howdy {host.name}! You are this week's host!
 Type ```/suggest [start_time] [game_name]``` to make a suggestion.
-`start_time` should be one word e.g `8pm` while `game_name` can be any number of words.
+`start_time` should be one word e.g `8pm` while `game_name` can be any number of words. Timezone is GMT+1.
 {timeslot}
 Your suggestion will be announced in the channel where the poll took place. Choose wisely!
     """)
@@ -136,11 +143,12 @@ Can't decide? Type `/tiebreak random` and I'll break the tie for you!
 async def poll_timeslot(weekend, count):
     message = f"""@everyone
 {reactions[weekend]}({weekend}) has won with {count} votes!
-Weekends are a busier time so let's try to narrow down a range for the start time. All times are GMT.
-1️⃣ - Starting between 12pm and 2pm
-2️⃣ - Starting between 2pm and 4pm
-3️⃣ - Starting between 4pm and 6pm
-4️⃣ - Starting between 6pm and 8pm
+Weekends are a busier time so let's try to narrow down a range for the start time. All times are GMT+!.
+1️⃣ - Starting between 1pm and 3pm
+2️⃣ - Starting between 3pm and 5pm
+3️⃣ - Starting between 5pm and 7pm
+4️⃣ - Starting between 7pm and 9pm
+5️⃣ - Starting between 9pm and 11pm
 :no_entry_sign: - Can't attend
 
     """
@@ -148,7 +156,6 @@ Weekends are a busier time so let's try to narrow down a range for the start tim
     msg = await channel.send(message)
     for reaction in timeslots.keys():
         await msg.add_reaction(reaction)
-    await save_state("nudged", None)
     await save_state("side_poll", msg.id)
     await save_state("weekend", reactions[weekend])
 
@@ -274,7 +281,7 @@ Today we will be playing **{reminder['game_name']}** @ **{reminder['start_time']
 async def poll_time():
     message = """@everyone
 The weekly poll is ready! Please indicate your availability below:
-:regional_indicator_f: - Late night Friday (starting from 10pm GMT)
+:regional_indicator_f: - Late night Friday (starting from 10pm GMT+1)
 :regional_indicator_s: - Saturday (A secondary poll to pick a time slot will follow)
 :sunny: - Sunday (A secondary poll to pick a time slot will follow)
 :regional_indicator_m: - Monday
@@ -294,7 +301,6 @@ A winning day will be announced once everyone has voted.
     await save_state("open_poll", msg.id)
     next_poll = datetime.now() + timedelta(days=7)
     print(f"next poll is at {next_poll}")
-    await save_state("nudged", None)
     await save_state("next_poll_at", next_poll.timestamp())
 
 
@@ -322,7 +328,7 @@ async def suggest(ctx, start_time, *gamename):
         await ctx.send(f"Sorry I had trouble understanding {start_time} as a a start time. Please try again.")
         return
     await ctx.send(f"Ok, I'll announce your suggestion of {game_name} @ {start_time} on {game_night}.")
-    await save_state("remind_at", (remind_at - timedelta(hours=1)).timestamp())
+    await save_state("remind_at", remind_at.timestamp())
     await save_state("reminder", reminder)
     channel = client.get_channel(state.get("channel_id"))
     announce = f"""@everyone The poll has concluded. 
@@ -369,6 +375,13 @@ async def check_time():
         reminder = state.get("reminder", None)
         if reminder:
             await remind(reminder)
+    if state.get("nudge_at", float('Inf') <= time.time()):
+        nudgee = state.get("late", None)
+        if nudgee:
+            late = client.get_user(nudgee)
+            await nudge(late)
+        else:
+            await save_state("nudge_at", float('Inf'))
 
 
 client.run(os.environ.get("DISCORD_BOT_TOKEN"))

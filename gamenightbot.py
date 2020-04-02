@@ -31,6 +31,10 @@ def load_from_s3(file_name):
 load_from_s3("state.json")
 with open("state.json") as file:
     state = json.load(file)
+    state["remind_at"] = 1586095200
+    with open("state.json", "w") as fh:
+        json.dump(state, fh)
+    save_to_s3("state.json")
 
 
 @client.event
@@ -124,7 +128,7 @@ async def prompt_host(host, options):
 Feel free to pick a time slot that falls in any of those ranges!"""
     await host.send(f"""Howdy {host.name}! You are this week's host!
 Type ```/suggest [start_time] [game_name]``` to make a suggestion.
-`start_time` should be one word e.g `8pm` while `game_name` can be any number of words. Timezone is GMT+1.
+`start_time` should be one word e.g `8pm` while `game_name` can be any number of words. Timezone is UTC+1.
 {timeslot}
 Your suggestion will be announced in the channel where the poll took place. Choose wisely!
     """)
@@ -144,7 +148,7 @@ Can't decide? Type `/tiebreak random` and I'll break the tie for you!
 async def poll_timeslot(weekend, count):
     message = f"""@everyone
 {reactions[weekend]}({weekend}) has won with {count} votes!
-Weekends are a busier time so let's try to narrow down a range for the start time. All times are GMT+!.
+Weekends are a busier time so let's try to narrow down a range for the start time. All times are UTC+1.
 1️⃣ - Starting between 1pm and 3pm
 2️⃣ - Starting between 3pm and 5pm
 3️⃣ - Starting between 5pm and 7pm
@@ -282,7 +286,7 @@ Today we will be playing **{reminder['game_name']}** @ **{reminder['start_time']
 async def poll_time():
     message = """@everyone
 The weekly poll is ready! Please indicate your availability below:
-:regional_indicator_f: - Late night Friday (starting from 10pm GMT+1)
+:regional_indicator_f: - Late night Friday (starting from 10pm UTC+1)
 :regional_indicator_s: - Saturday (A secondary poll to pick a time slot will follow)
 :sunny: - Sunday (A secondary poll to pick a time slot will follow)
 :regional_indicator_m: - Monday
@@ -329,7 +333,7 @@ async def suggest(ctx, start_time, *gamename):
         await ctx.send(f"Sorry I had trouble understanding {start_time} as a a start time. Please try again.")
         return
     await ctx.send(f"Ok, I'll announce your suggestion of {game_name} @ {start_time} on {game_night}.")
-    await save_state("remind_at", remind_at.timestamp())
+    await save_state("remind_at", (remind_at - timedelta(hours=2)).timestamp())
     await save_state("reminder", reminder)
     channel = client.get_channel(state.get("channel_id"))
     announce = f"""@everyone The poll has concluded. 
@@ -376,7 +380,7 @@ async def check_time():
         reminder = state.get("reminder", None)
         if reminder:
             await remind(reminder)
-    if state.get("nudge_at", float('Inf') <= time.time()):
+    if state.get("nudge_at", float('Inf')) <= time.time():
         nudgee = state.get("late", None)
         if nudgee:
             late = client.get_user(nudgee)

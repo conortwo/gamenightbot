@@ -30,6 +30,8 @@ def load_from_s3(file_name):
 load_from_s3("state.json")
 with open("state.json") as file:
     state = json.load(file)
+    state["next_poll_at"] = 1585846800
+    save_to_s3("state.json")
 
 @client.event
 async def on_ready():
@@ -51,7 +53,7 @@ async def save_state(field,value):
     print(f"state saved {state} with field={field} value={value}")
     with open("state.json", "w") as fh:
         json.dump(state, fh)
-    # save_to_s3("state.json")
+    save_to_s3("state.json")
     return
 
 

@@ -17,18 +17,18 @@ dow={d:i for i,d in
          enumerate('monday,tuesday,wednesday,thursday,friday,saturday,sunday'.split(','))}
 S3_BUCKET = os.environ.get('S3_BUCKET')
 
-
-def save_to_s3(file_name):
-    s3_client = boto3.client('s3')
-    s3_client.upload_file(file_name, S3_BUCKET, file_name)
-
-
-def load_from_s3(file_name):
-    s3_client = boto3.client('s3')
-    s3_client.download_file(S3_BUCKET, file_name, file_name)
-
-
-load_from_s3("state.json")
+#
+# def save_to_s3(file_name):
+#     s3_client = boto3.client('s3')
+#     s3_client.upload_file(file_name, S3_BUCKET, file_name)
+#
+#
+# def load_from_s3(file_name):
+#     s3_client = boto3.client('s3')
+#     s3_client.download_file(S3_BUCKET, file_name, file_name)
+#
+#
+# load_from_s3("state.json")
 with open("state.json") as file:
     state = json.load(file)
 
@@ -39,26 +39,26 @@ async def on_ready():
     check_time.start()
 
 
-async def get_date_for_day(weekday):
+async def get_date_for_day(channel_id, weekday):
     day = dow[weekday.lower()]
-    ts = state.get("next_poll_at")
+    ts = state[channel_id].get("next_poll_at")
     future_date = datetime.utcfromtimestamp(ts)
     while future_date.weekday() != day:
         future_date -= timedelta(days=1)
     return weekday + future_date.strftime(" %B %d, %Y")
 
 
-async def save_state(field,value):
-    state[field] = value
-    print(f"state saved {state} with field={field} value={value}")
+async def save_state(channel_id, field, value):
+    state[channel_id][field] = value
+    print(f"state saved {state[channel_id]} with field={field} value={value}")
     with open("state.json", "w") as fh:
         json.dump(state, fh)
-    save_to_s3("state.json")
+    # save_to_s3("state.json")
     return
 
 
-async def update_poll_status(message, status):
-    channel = client.get_channel(state.get("channel_id"))
+async def update_poll_status(channel_id, message, status):
+    channel = client.get_channel(int(channel_id))
     message = await channel.fetch_message(message.id)
     if message.embeds:
         embed = message.embeds[0]
@@ -77,18 +77,18 @@ async def update_poll_status(message, status):
         return True
 
 
-async def winners(message, is_timeslot):
+async def winners(channel_id, message, is_timeslot):
     emojis = timeslots if is_timeslot else reactions
     counts = {r: r.count-1 for r in message.reactions if r.emoji in emojis}
     cancel = [react for react in message.reactions if react.emoji == '🚫'][0]
     opt_outs = counts[cancel]
-    max_players = len(state.get("users")) - opt_outs
+    max_players = len(state[channel_id].get("users")) - opt_outs
     if opt_outs > max_players:
         return {cancel: opt_outs}
     else:
         winning = {r: counts[r] for r in counts if counts[r] == max_players}
         total_voters = []
-        users = state.get("users")
+        users = state[channel_id].get("users")
         for k in counts:
             voters = await k.users().flatten()
             total_voters.append(voters)
@@ -96,23 +96,23 @@ async def winners(message, is_timeslot):
         voter_ids = set([voter.id for voter in flat_list])
         non_voters = set(users) - set(voter_ids)
         if len(non_voters) == 0:
-            await save_state("late", None)
+            await save_state(channel_id, "late", None)
         elif len(non_voters) == 1:
             late = client.get_user(non_voters.pop())
-            nudgee = state.get("late", None)
+            nudgee = state[channel_id].get("late", None)
             if nudgee and nudgee == late.id:
                 pass
             else:
-                await save_state("nudge_at", (datetime.now() + timedelta(hours=2)).timestamp())
-                await save_state("late", late.id)
+                await save_state(channel_id, "nudge_at", (datetime.now() + timedelta(hours=2)).timestamp())
+                await save_state(channel_id, "late", late.id)
         return winning
 
 
-async def nudge(late):
-    channel_id = state.get("channel_id")
+async def nudge(channel_id, late):
+    channel_id = state[channel_id].get("channel_id")
     await late.send(f"""Hey {late.name}! Looks like your vote could help close out a poll in <#{channel_id}>. Get voting!""")
-    await save_state("nudge_at", float('Inf'))
-    await save_state("late", None)
+    await save_state(channel_id, "nudge_at", float('Inf'))
+    await save_state(channel_id, "late", None)
 
 
 async def prompt_host(host, options):
@@ -141,7 +141,7 @@ Day of the week should be expressed as a word, e.g ```/tiebreak Monday```
 Can't decide? Type `/tiebreak random` and I'll break the tie for you!
     """)
 
-async def poll_timeslot(weekend, count):
+async def poll_timeslot(channel_id, weekend, count):
     message = f"""@everyone
 {reactions[weekend]}({weekend}) has won with {count} votes!
 Weekends are a busier time so let's try to narrow down a range for the start time. All times are UTC+1.
@@ -153,16 +153,17 @@ Weekends are a busier time so let's try to narrow down a range for the start tim
 :no_entry_sign: - Can't attend
 
     """
-    channel = client.get_channel(state.get("channel_id"))
+    channel = client.get_channel(int(channel_id))
     msg = await channel.send(message)
     for reaction in timeslots.keys():
         await msg.add_reaction(reaction)
-    await save_state("side_poll", msg.id)
-    await save_state("weekend", reactions[weekend])
+    await save_state(channel_id, "side_poll", msg.id)
+    await save_state(channel_id, "weekend", reactions[weekend])
 
 async def choose_host(channel, choices):
-    users = state.get("users")
-    last_host = state.get("last_host", users[0])
+    channel_id = channel.id
+    users = state[channel_id].get("users")
+    last_host = state[channel_id].get("last_host", users[0])
     filtered_choices = []
     new_host_idx = users.index(last_host)
     next_host_idx = users.index(last_host) + 1
@@ -186,42 +187,42 @@ async def choose_host(channel, choices):
 They will receive a DM which will allow them to suggest a start time and game for the winning day.
     """
     await channel.send(announce)
-    weekend = state.get("weekend", None)
+    weekend = state[channel_id].get("weekend", None)
     emojis = timeslots if weekend else reactions
     if weekend:
-        await save_state("side_poll", None)
-        await save_state("weekend", None)
+        await save_state(channel_id, "side_poll", None)
+        await save_state(channel_id, "weekend", None)
         day_and_date = await get_date_for_day(weekend)
-        await save_state("game_night", day_and_date)
+        await save_state(channel_id, "game_night", day_and_date)
         options = [emojis[choice] for choice in choices]
         await prompt_host(host, options)
     elif len(choices) == 1:
         day_and_date = await get_date_for_day(reactions[choices[0]])
-        await save_state("game_night", day_and_date)
+        await save_state(channel_id, "game_night", day_and_date)
         await prompt_host(host, [])
     else:
-        await save_state("tied", [emojis[choice] for choice in choices])
+        await save_state(channel_id, "tied", [emojis[choice] for choice in choices])
         await prompt_tiebreaker(host, choices)
-    await save_state("last_host", host.id)
+    await save_state(channel_id, "last_host", host.id)
 
 
-async def tally(message , is_timeslot=False):
-    leading = await winners(message, is_timeslot)
+async def tally(channel_id, message , is_timeslot=False):
+    leading = await winners(channel_id, message, is_timeslot)
     if len(leading) == 0:
         return
     is_closing = await update_poll_status(message, "closing")
     if not is_closing:
         return
     await asyncio.sleep(30)
-    channel = client.get_channel(state.get("channel_id"))
+    channel = client.get_channel(int(channel_id))
     message = await channel.fetch_message(message.id)
-    recount = await winners(message, is_timeslot)
-    channel = client.get_channel(state.get("channel_id"))
+    recount = await winners(channel_id, message, is_timeslot)
+    channel = client.get_channel(int(channel_id))
     emojis = timeslots if is_timeslot else reactions
 
     if len(recount) == 1:
         key, count = recount.popitem()
-        await save_state("open_poll", None)
+        await save_state(channel_id, "open_poll", None)
         if key.emoji == '🚫':
             resp = f"""Game day is **CANCELLED** as a majority({count}) of players have indicated they can't attend({key.emoji}).
 See you all next week for more games!               
@@ -237,7 +238,7 @@ See you all next week for more games!
     elif len(recount) >= 1:
         tied = []
         choices = []
-        await save_state("open_poll", None)
+        await save_state(channel_id, "open_poll", None)
         for key in recount:
             tied.append(f"{emojis[key.emoji]}({key.emoji})")
             choices.append(key)
@@ -249,37 +250,38 @@ See you all next week for more games!
 
 @client.event
 async def on_raw_reaction_add(payload):
-    open_poll = state.get("open_poll", None)
-    side_poll = state.get("side_poll", None)
-    if payload.channel_id == state.get("channel_id") and side_poll and side_poll == payload.message_id:
-        channel = client.get_channel(state.get("channel_id"))
+    channel_id = str(payload.channel_id)
+    open_poll = state[channel_id].get("open_poll", None)
+    side_poll = state[channel_id].get("side_poll", None)
+    if side_poll and side_poll == payload.message_id:
+        channel = client.get_channel(int(channel_id))
         message = await channel.fetch_message(payload.message_id)
         emoji = payload.emoji.name
         if emoji in timeslots and len(message.reactions) >= len(timeslots):
             print(f"Reaction {emoji} is in {timeslots}")
-            await tally(message, True)
-    elif payload.channel_id == state.get("channel_id") and open_poll and open_poll == payload.message_id:
-        channel = client.get_channel(state.get("channel_id"))
+            await tally(channel_id, message, True)
+    elif open_poll and open_poll == payload.message_id:
+        channel = client.get_channel(int(channel_id))
         message = await channel.fetch_message(payload.message_id)
         emoji = payload.emoji.name
         if emoji in reactions and len(message.reactions) >= len(reactions):
             print(f"Reaction {emoji} is in {reactions}")
-            await tally(message)
+            await tally(channel_id, message)
 
 
-async def remind(reminder):
-    channel = client.get_channel(state.get("channel_id"))
+async def remind(channel_id, reminder):
+    channel = client.get_channel(int(channel_id))
     emoji = get(channel.guild.emojis, name='rollHigh')
     message = f"""@everyone
 It's game day!
 Today we will be playing **{reminder['game_name']}** @ **{reminder['start_time']}**(approximately 1 hour from now), Have fun! {emoji}
     """
     await channel.send(message)
-    await save_state("remind_at", float('Inf'))
-    await save_state("reminder", None)
+    await save_state(channel_id, "remind_at", float('Inf'))
+    await save_state(channel_id, "reminder", None)
 
 
-async def poll_time():
+async def poll_time(channel_id):
     message = """@everyone
 The weekly poll is ready! Please indicate your availability below:
 :regional_indicator_f: - Late night Friday (starting from 10pm UTC+1)
@@ -292,26 +294,30 @@ The weekly poll is ready! Please indicate your availability below:
 :no_entry_sign: - Can't attend
 A winning day will be announced once everyone has voted.
     """
-    channel = client.get_channel(state.get("channel_id"))
+    channel = client.get_channel(int(channel_id))
     msg = await channel.send(message)
     today = date.today().strftime("%B %d, %Y")
     embed = discord.Embed(title=f"Weekly game day poll - {today}")
     await msg.edit(embed=embed)
     for reaction in reactions.keys():
         await msg.add_reaction(reaction)
-    await save_state("open_poll", msg.id)
+    await save_state(channel_id, "open_poll", msg.id)
     next_poll = datetime.now() + timedelta(days=7)
     print(f"next poll is at {next_poll}")
-    await save_state("next_poll_at", next_poll.timestamp())
+    await save_state(channel_id, "next_poll_at", next_poll.timestamp())
 
 
 async def check_dm_with_host(ctx):
-    host = state.get("last_host", 0)
+    possible_hosts = []
+    for channel_id in state.keys():
+        host = state[channel_id].get("last_host", None)
+        if host:
+            possible_hosts.append(host)
     if ctx.message.channel.type != discord.ChannelType.private:
         await ctx.message.add_reaction('🙉')
         await ctx.author.send(f"Sorry the command you tried to invoke (`/{ctx.command.name}`) in #{ctx.message.channel.name} on {ctx.message.channel.guild} is limited to direct message only,")
         return False
-    elif ctx.author.id != host:
+    elif ctx.author.id not in possible_hosts:
         await ctx.author.send("Sorry, only the weekly host can perform this action.")
         return False
     return True
@@ -319,19 +325,25 @@ async def check_dm_with_host(ctx):
 
 @commands.check(check_dm_with_host)
 @client.command()
-async def suggest(ctx, start_time, *gamename):
+async def suggest(ctx, start_time, *gamename, **kwargs):
+    channel_id = kwargs.get("channel_id", None)
+    if not channel_id:
+        for chan in state.keys():
+            host = state[chan].get("last_host", None)
+            if ctx.message.author == host:
+                channel_id = chan
     host = ctx.message.author
     game_name = " ".join(gamename)
     reminder = {"start_time": start_time, "game_name": game_name}
-    game_night = state.get("game_night", "game day")
+    game_night = state[channel_id].get("game_night", "game day")
     remind_at = parse(f"{start_time} {game_night}")
     if remind_at is None or remind_at.timestamp() <= time.time():
         await ctx.send(f"Sorry I had trouble understanding {start_time} as a a start time. Please try again.")
         return
     await ctx.send(f"Ok, I'll announce your suggestion of {game_name} @ {start_time} on {game_night}.")
-    await save_state("remind_at", (remind_at - timedelta(hours=2)).timestamp())
-    await save_state("reminder", reminder)
-    channel = client.get_channel(state.get("channel_id"))
+    await save_state(channel_id, "remind_at", (remind_at - timedelta(hours=2)).timestamp())
+    await save_state(channel_id, "reminder", reminder)
+    channel = client.get_channel(int(channel_id))
     announce = f"""@everyone The poll has concluded. 
 {host.mention} has suggested we play **{game_name}** @ **{start_time}** on **{game_night}**.
 I'll remind this channel an hour before then."""
@@ -340,10 +352,17 @@ I'll remind this channel an hour before then."""
 
 @commands.check(check_dm_with_host)
 @client.command()
-async def tiebreak(ctx, weekday):
+async def tiebreak(ctx, weekday, **kwargs):
+    channel_id = kwargs.get("channel_id", None)
+    if not channel_id:
+        for chan in state.keys():
+            host = state[chan].get("last_host", None)
+            if ctx.message.author == host:
+                channel_id = chan
+
     weekday = weekday.capitalize()
     host = ctx.message.author
-    options = state.get("tied", [])
+    options = state[channel_id].get("tied", [])
     if len(options) == 0:
         await ctx.send("Sorry, there doesn't seem to be a tie for you to break this week.")
     if weekday == "Random":
@@ -352,14 +371,14 @@ async def tiebreak(ctx, weekday):
     if weekday in options:
         await ctx.send(f"Ok, I'll set {weekday} as the game day.")
         day_and_date = await get_date_for_day(weekday)
-        await save_state("game_night", day_and_date)
-        await save_state("tied", [])
+        await save_state(channel_id, "game_night", day_and_date)
+        await save_state(channel_id, "tied", [])
         ivd = {v: k for k, v in reactions.items()}
         if weekday in ["Saturday", "Sunday"]:
-            users = state.get("users")
-            last_host = state.get("last_host", users[0])
+            users = state[channel_id].get("users")
+            last_host = state[channel_id].get("last_host", users[0])
             before = users.index(last_host) - 1
-            await save_state("last_host", users[before])
+            await save_state(channel_id, "last_host", users[before])
             await poll_timeslot(ivd[weekday], "the most")
         else:
             await prompt_host(host, [])
@@ -369,20 +388,21 @@ async def tiebreak(ctx, weekday):
 
 @tasks.loop(minutes=1)
 async def check_time():
-    if state.get("next_poll_at", 0) <= time.time():
-        print("Poll starting")
-        await poll_time()
-    if state.get("remind_at", float('Inf')) <= time.time():
-        reminder = state.get("reminder", None)
-        if reminder:
-            await remind(reminder)
-    if state.get("nudge_at", float('Inf')) <= time.time():
-        nudgee = state.get("late", None)
-        if nudgee:
-            late = client.get_user(nudgee)
-            await nudge(late)
-        else:
-            await save_state("nudge_at", float('Inf'))
+    for channel_id in state.keys():
+        if state[channel_id].get("next_poll_at", 0) <= time.time():
+            print("Poll starting")
+            await poll_time(channel_id)
+        if state[channel_id].get("remind_at", float('Inf')) <= time.time():
+            reminder = state[channel_id].get("reminder", None)
+            if reminder:
+                await remind(channel_id, reminder)
+        if state[channel_id].get("nudge_at", float('Inf')) <= time.time():
+            nudgee = state[channel_id].get("late", None)
+            if nudgee:
+                late = client.get_user(nudgee)
+                await nudge(late)
+            else:
+                await save_state(channel_id, "nudge_at", float('Inf'))
 
 
-client.run(os.environ.get("DISCORD_BOT_TOKEN"))
+client.run("NjQzNDExMzczMzQ2NTIxMDg4.XdAcRQ.CqH7gcHcPDwywCHlv44Mf1orhlQ")

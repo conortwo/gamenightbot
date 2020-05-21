@@ -17,18 +17,18 @@ dow={d:i for i,d in
          enumerate('monday,tuesday,wednesday,thursday,friday,saturday,sunday'.split(','))}
 S3_BUCKET = os.environ.get('S3_BUCKET')
 
-#
-# def save_to_s3(file_name):
-#     s3_client = boto3.client('s3')
-#     s3_client.upload_file(file_name, S3_BUCKET, file_name)
-#
-#
-# def load_from_s3(file_name):
-#     s3_client = boto3.client('s3')
-#     s3_client.download_file(S3_BUCKET, file_name, file_name)
-#
-#
-# load_from_s3("state.json")
+
+def save_to_s3(file_name):
+    s3_client = boto3.client('s3')
+    s3_client.upload_file(file_name, S3_BUCKET, file_name)
+
+
+def load_from_s3(file_name):
+    s3_client = boto3.client('s3')
+    s3_client.download_file(S3_BUCKET, file_name, file_name)
+
+
+load_from_s3("state.json")
 with open("state.json") as file:
     state = json.load(file)
 
@@ -53,7 +53,7 @@ async def save_state(channel_id, field, value):
     print(f"state saved {state[channel_id]} with field={field} value={value}")
     with open("state.json", "w") as fh:
         json.dump(state, fh)
-    # save_to_s3("state.json")
+    save_to_s3("state.json")
     return
 
 
@@ -161,7 +161,7 @@ Weekends are a busier time so let's try to narrow down a range for the start tim
     await save_state(channel_id, "weekend", reactions[weekend])
 
 async def choose_host(channel, choices):
-    channel_id = channel.id
+    channel_id = str(channel.id)
     users = state[channel_id].get("users")
     last_host = state[channel_id].get("last_host", users[0])
     filtered_choices = []
@@ -192,12 +192,12 @@ They will receive a DM which will allow them to suggest a start time and game fo
     if weekend:
         await save_state(channel_id, "side_poll", None)
         await save_state(channel_id, "weekend", None)
-        day_and_date = await get_date_for_day(weekend)
+        day_and_date = await get_date_for_day(channel_id, weekend)
         await save_state(channel_id, "game_night", day_and_date)
         options = [emojis[choice] for choice in choices]
         await prompt_host(host, options)
     elif len(choices) == 1:
-        day_and_date = await get_date_for_day(reactions[choices[0]])
+        day_and_date = await get_date_for_day(channel_id, reactions[choices[0]])
         await save_state(channel_id, "game_night", day_and_date)
         await prompt_host(host, [])
     else:
@@ -210,7 +210,7 @@ async def tally(channel_id, message , is_timeslot=False):
     leading = await winners(channel_id, message, is_timeslot)
     if len(leading) == 0:
         return
-    is_closing = await update_poll_status(message, "closing")
+    is_closing = await update_poll_status(channel_id, message, "closing")
     if not is_closing:
         return
     await asyncio.sleep(30)
@@ -229,12 +229,12 @@ See you all next week for more games!
             """
             await channel.send(resp)
         elif key.emoji in ['🇸', '☀️']:
-            await poll_timeslot(key.emoji, count)
+            await poll_timeslot(channel_id, key.emoji, count)
         else:
             resp = f"{emojis[key.emoji]}({key.emoji}) has won with {count} votes!"
             await channel.send(resp)
             await choose_host(channel, [key])
-        await update_poll_status(message, "closed")
+        await update_poll_status(channel_id, message, "closed")
     elif len(recount) >= 1:
         tied = []
         choices = []
@@ -245,7 +245,7 @@ See you all next week for more games!
         _, count = recount.popitem()
         await channel.send(f"""{", ".join(tied[:-1])} and {tied[-1]} have {"both" if (len(tied) == 2 )  else "all"} tied with {count} votes! This tie will be broken by this weeks host.""")
         await choose_host(channel, choices)
-        await update_poll_status(message, "closed")
+        await update_poll_status(channel_id, message, "closed")
 
 
 @client.event
@@ -325,12 +325,18 @@ async def check_dm_with_host(ctx):
 
 @commands.check(check_dm_with_host)
 @client.command()
-async def suggest(ctx, start_time, *gamename, **kwargs):
-    channel_id = kwargs.get("channel_id", None)
-    if not channel_id:
+async def suggest(ctx, start_time, *gamename):
+    if len(gamename) < 0:
+        await ctx.send(
+            f"You must specify a game name.")
+        return
+    if gamename[-1] == "double_host":
+        channel_id = gamename[-2]
+        gamename = gamename[:-2]
+    else:
         for chan in state.keys():
             host = state[chan].get("last_host", None)
-            if ctx.message.author == host:
+            if ctx.message.author.id == host:
                 channel_id = chan
     host = ctx.message.author
     game_name = " ".join(gamename)
@@ -352,12 +358,14 @@ I'll remind this channel an hour before then."""
 
 @commands.check(check_dm_with_host)
 @client.command()
-async def tiebreak(ctx, weekday, **kwargs):
-    channel_id = kwargs.get("channel_id", None)
-    if not channel_id:
+async def tiebreak(ctx, weekday, *args):
+    channel_id = None
+    if len(args) > 0 and args[-1] == "double_host":
+        channel_id = args[-2]
+    else:
         for chan in state.keys():
             host = state[chan].get("last_host", None)
-            if ctx.message.author == host:
+            if ctx.message.author.id == host:
                 channel_id = chan
 
     weekday = weekday.capitalize()
@@ -370,7 +378,7 @@ async def tiebreak(ctx, weekday, **kwargs):
         await ctx.send(f"Sure, I've chosen {weekday} at random for you.")
     if weekday in options:
         await ctx.send(f"Ok, I'll set {weekday} as the game day.")
-        day_and_date = await get_date_for_day(weekday)
+        day_and_date = await get_date_for_day(channel_id, weekday)
         await save_state(channel_id, "game_night", day_and_date)
         await save_state(channel_id, "tied", [])
         ivd = {v: k for k, v in reactions.items()}
@@ -379,7 +387,7 @@ async def tiebreak(ctx, weekday, **kwargs):
             last_host = state[channel_id].get("last_host", users[0])
             before = users.index(last_host) - 1
             await save_state(channel_id, "last_host", users[before])
-            await poll_timeslot(ivd[weekday], "the most")
+            await poll_timeslot(channel_id, ivd[weekday], "the most")
         else:
             await prompt_host(host, [])
     else:
@@ -400,9 +408,9 @@ async def check_time():
             nudgee = state[channel_id].get("late", None)
             if nudgee:
                 late = client.get_user(nudgee)
-                await nudge(late)
+                await nudge(channel_id, late)
             else:
                 await save_state(channel_id, "nudge_at", float('Inf'))
 
 
-client.run("NjQzNDExMzczMzQ2NTIxMDg4.XdAcRQ.CqH7gcHcPDwywCHlv44Mf1orhlQ")
+client.run(os.environ.get("DISCORD_BOT_TOKEN"))

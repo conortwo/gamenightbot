@@ -143,7 +143,7 @@ async def prompt_bonus_host(channel_id, host):
     attendees.remove(host.id)
     mentions = f"""<@{'>, <@'.join( str(a) for a in attendees[:-1])}> and <@{attendees[
     -1]}>""" if len(attendees) > 1 else f"<@{attendees[0]}>"
-    await host.send(f"""Hey there {host.name}! You are this week' lucky **bonus** host!
+    await host.send(f"""Hey there {host.name}! You are this week's lucky **bonus** host!
 **{len(attendees)}** players ({mentions}) will be joining you on {game_night}.
 Type ```/bonus [start_time] [game_name]``` to make a suggestion.
 `start_time` should be one word e.g `8pm` while `game_name` can be any number of words. Timezone is UTC+1.
@@ -264,7 +264,7 @@ See you all next week for more games!
             tied.append(f"{emojis[key.emoji]}({key.emoji})")
             choices.append(key)
         _, count = recount.popitem()
-        await channel.send(f"""{", ".join(tied[:-1])} and {tied[-1]} have {"both" if (len(tied) == 2 )  else "all"} tied with {count} votes! This tie will be broken by this weeks host.""")
+        await channel.send(f"""{", ".join(tied[:-1])} and {tied[-1]} have {"both" if (len(tied) == 2 )  else "all"} tied with {count} votes! This tie will be broken by this week's host.""")
         await choose_host(channel, choices)
         await update_poll_status(channel_id, message, "closed")
 

@@ -589,7 +589,7 @@ async def check_time():
                 time.time():
             reminder = state[channel_id].get("bonus_reminder", None)
             if reminder:
-                await remind(channel_id, reminder)
+                await bonus_remind(channel_id, reminder)
         if state[channel_id].get("nudge_at", float('Inf')) <= time.time():
             nudgee = state[channel_id].get("late", None)
             if nudgee:

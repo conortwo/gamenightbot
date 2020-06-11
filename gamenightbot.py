@@ -454,10 +454,34 @@ async def check_bonus(channel_id):
             make_up[k] = set(voter_ids) - set(attendees)
         if len(make_up) > 0:
             best_opt = max(make_up, key=lambda k: len(make_up[k]))
-            mentions = f"""This way, <@{'>, + <@'.join(str(a) for a in attendees)}> can still play this week."""  if len(make_up[best_opt]) > 0 else ""
+            tied = [k for k in make_up.keys() if len(make_up[k]) == len(make_up[best_opt])]
+            if winner in ["Friday", "Saturday", "Sunday"]:
+                filtered = [ k for k in tied if k.emoji not in ['🇫', '🇸', '☀️']]
+            else:
+                filtered = [ k for k in tied if k.emoji in ['🇫', '🇸', '☀️']]
+            if len(filtered) > 0:
+                best_opt = random.choice(filtered)
+            else:
+                best_opt = random.choice(tied)
+            mentions = f"""This way, <@{'>, + <@'.join(str(a) for a in make_up[best_opt])}> can still play this week."""  if len(make_up[best_opt]) > 0 else ""
             if len(make_up[best_opt]) == 0:
                 best_opt = max(options, key=options.get)
-            bonus_msg = f"""Experimental :woman_scientist: :warning:
+                tied = [k for k in options.keys() if options[k] == options[best_opt]]
+                if winner in ["Friday", "Saturday", "Sunday"]:
+                    filtered = [k for k in tied if
+                                k.emoji not in ['🇫', '🇸', '☀️']]
+                else:
+                    filtered = [k for k in tied if
+                                k.emoji in ['🇫', '🇸', '☀️']]
+                if len(filtered) > 0:
+                    best_opt = random.choice(filtered)
+                else:
+                    best_opt = random.choice(tied)
+            audience = await best_opt.users().flatten()
+            audience_ids = set([voter.id for voter in audience if voter.id != 643411373346521088 ])
+            prompt = f"""<@{'>, <@'.join( str(a) for a in audience_ids[:-1])}> and <@{audience_ids[
+            -1]}>"""
+            bonus_msg = f"""{prompt}
 I see that {reactions[best_opt.emoji]}({best_opt.emoji}) has {options[
 best_opt]} votes. Want me to setup an additional bonus game night for then?
 {mentions}

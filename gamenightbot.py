@@ -103,7 +103,7 @@ async def winners(channel_id, message, is_timeslot):
             if nudgee and nudgee == late.id:
                 pass
             else:
-                await save_state(channel_id, "nudge_at", (datetime.now() + timedelta(hours=2)).timestamp())
+                await save_state(channel_id, "nudge_at", (datetime.now() + timedelta(hours=1)).timestamp())
                 await save_state(channel_id, "late", late.id)
         return winning
 
@@ -308,7 +308,7 @@ They will receive a DM which will allow them to suggest a start time and game fo
             pass
         else:
             await save_state(channel_id, "nudge_at",
-                             (datetime.now() + timedelta(hours=2)).timestamp())
+                             (datetime.now() + timedelta(hours=1)).timestamp())
             await save_state(channel_id, "late", late.id)
 @client.event
 async def on_raw_reaction_add(payload):
@@ -455,7 +455,7 @@ async def check_bonus(channel_id):
         if len(make_up) > 0:
             best_opt = max(make_up, key=lambda k: len(make_up[k]))
             tied = [k for k in make_up.keys() if len(make_up[k]) == len(make_up[best_opt])]
-            if winner in ["Friday", "Saturday", "Sunday"]:
+            if weekday in ["Friday", "Saturday", "Sunday"]:
                 filtered = [ k for k in tied if k.emoji not in ['🇫', '🇸', '☀️']]
             else:
                 filtered = [ k for k in tied if k.emoji in ['🇫', '🇸', '☀️']]
@@ -467,7 +467,7 @@ async def check_bonus(channel_id):
             if len(make_up[best_opt]) == 0:
                 best_opt = max(options, key=options.get)
                 tied = [k for k in options.keys() if options[k] == options[best_opt]]
-                if winner in ["Friday", "Saturday", "Sunday"]:
+                if weekday in ["Friday", "Saturday", "Sunday"]:
                     filtered = [k for k in tied if
                                 k.emoji not in ['🇫', '🇸', '☀️']]
                 else:
@@ -478,7 +478,7 @@ async def check_bonus(channel_id):
                 else:
                     best_opt = random.choice(tied)
             audience = await best_opt.users().flatten()
-            audience_ids = set([voter.id for voter in audience if voter.id != 643411373346521088 ])
+            audience_ids = [voter.id for voter in audience if voter.id != 643411373346521088 ]
             prompt = f"""<@{'>, <@'.join( str(a) for a in audience_ids[:-1])}> and <@{audience_ids[
             -1]}>"""
             bonus_msg = f"""{prompt}

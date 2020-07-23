@@ -280,7 +280,7 @@ async def bonus_go_no_go(channel_id, message):
     flat_list = [voter for sublist in total_voters for voter in sublist]
     voter_ids = set([voter.id for voter in flat_list])
     non_voters = set(users) - set(voter_ids)
-    if len(voter_ids) == 4:
+    if len(voter_ids) == 5:
         await save_state(channel_id, "late", None)
         await save_state(channel_id, "bonus_poll", None)
         for k in winning:

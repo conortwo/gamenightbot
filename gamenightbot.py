@@ -17,6 +17,82 @@ dow={d:i for i,d in
          enumerate('monday,tuesday,wednesday,thursday,friday,saturday,sunday'.split(','))}
 S3_BUCKET = os.environ.get('S3_BUCKET')
 
+four_player_bgg = {
+    "Azul": "https://boardgamegeek.com/boardgame/230802/azul",
+    "Burgle Bros": "https://boardgamegeek.com/boardgame/172081/burgle-bros",
+    "Champions of Midgard": "https://boardgamegeek.com/boardgame/172287/champions-midgard",
+    "Clank!": "https://boardgamegeek.com/boardgame/201808/clank-deck-building-adventure",
+    "Cryptid": "https://boardgamegeek.com/boardgame/246784/cryptid",
+    "Decrypto": "https://boardgamegeek.com/boardgame/225694/decrypto",
+    "Dice Throne": "https://boardgamegeek.com/boardgame/216734/dice-throne-season-one",
+    "Everdell": "https://boardgamegeek.com/boardgame/199792/everdell",
+    "Forbidden Island": "https://boardgamegeek.com/boardgame/65244/forbidden-island",
+    "Fort": "https://boardgamegeek.com/boardgame/296912/fort",
+    "Ghost Stories": "https://boardgamegeek.com/boardgame/37046/ghost-stories",
+    "Gloomhaven: Jaws of the Lion": "https://boardgamegeek.com/boardgame/291457/gloomhaven-jaws-lion",
+    "Machi Koro" : "https://boardgamegeek.com/boardgame/143884/machi-koro",
+    "Mechs vs. Minions" : "https://boardgamegeek.com/boardgame/209010/mechs-vs-minions",
+    "Root": "https://boardgamegeek.com/boardgame/237182/root",
+    "Smash up": "https://boardgamegeek.com/boardgame/122522/smash",
+    "Survive: Escape From Atlantis!": "https://boardgamegeek.com/boardgame/2653/survive-escape-atlantis",
+    "Suburbia": "https://boardgamegeek.com/boardgame/123260/suburbia",
+    "Terraforming Mars": "https://boardgamegeek.com/boardgame/167791/terraforming-mars",
+    "T.I.M.E Stories": "https://boardgamegeek.com/boardgame/146508/time-stories",
+    "Crokinole": "https://boardgamegeek.com/boardgame/521/crokinole",
+    "Tragedy Looper": "https://boardgamegeek.com/boardgame/148319/tragedy-looper",
+    "XCOM: The Board game": "https://boardgamegeek.com/boardgame/163602/xcom-board-game"
+}
+
+default_bgg = {
+    "Cockroach Poker": "https://boardgamegeek.com/boardgame/11971/cockroach-poker",
+    "7 Wonders": "https://boardgamegeek.com/boardgame/68448/7-wonders",
+    "Betrayal at Baldur's Gate": "https://boardgamegeek.com/boardgame/228660/betrayal-baldurs-gate",
+    "Blood Rage": "https://boardgamegeek.com/boardgame/170216/blood-rage",
+    "Mysterium": "https://boardgamegeek.com/boardgame/181304/mysterium",
+    "Coup": "https://boardgamegeek.com/boardgame/131357/coup",
+    "Dead of Winter": "https://boardgamegeek.com/boardgame/150376/dead-winter-crossroads-game",
+    "Eldritch Horror": "https://boardgamegeek.com/boardgame/146021/eldritch-horror",
+    "Epic Spell Wars": "https://boardgamegeek.com/boardgame/112686/epic-spell-wars-battle-wizards-duel-mt-skullzfyre",
+    "Forbidden Desert": "https://boardgamegeek.com/boardgame/136063/forbidden-desert",
+    "Formula D": "https://boardgamegeek.com/boardgame/37904/formula-d",
+    "Fury of Dracula": "https://boardgamegeek.com/boardgame/181279/fury-dracula-thirdfourth-edition",
+    "Game of Thrones": "https://boardgamegeek.com/boardgame/103343/game-thrones-board-game-second-edition",
+    "Lords of Vegas": "https://boardgamegeek.com/boardgame/20437/lords-vegas",
+    "King of New York": "https://boardgamegeek.com/boardgame/160499/king-new-york",
+    "Horrified": "https://boardgamegeek.com/boardgame/282524/horrified",
+    "Inis": "https://boardgamegeek.com/boardgame/155821/inis",
+    "Lovecraft Letter": "https://boardgamegeek.com/boardgame/198740/lovecraft-letter",
+    "Mansions of Madness": "https://boardgamegeek.com/boardgame/205059/mansions-madness-second-edition",
+    "Pandemic: The Cure": "https://boardgamegeek.com/boardgame/150658/pandemic-cure",
+    "Red Dragon Inn": "https://boardgamegeek.com/boardgame/24310/red-dragon-inn",
+    "Rising Sun": "https://boardgamegeek.com/boardgame/205896/rising-sun",
+    "Scythe": "https://boardgamegeek.com/boardgame/169786/scythe",
+    "Shadows over Camelot": "https://boardgamegeek.com/boardgame/15062/shadows-over-camelot",
+    "Sheriff of Nottingham": "https://boardgamegeek.com/boardgame/157969/sheriff-nottingham",
+    "Space Alert": "https://boardgamegeek.com/boardgame/38453/space-alert",
+    "Star Wars: Imperial Assault": "https://boardgamegeek.com/boardgame/164153/star-wars-imperial-assault",
+    "Sub Terra": "https://boardgamegeek.com/boardgame/204472/sub-terra",
+    "Quacks of Quedlinburg": "https://boardgamegeek.com/boardgame/244521/quacks-quedlinburg",
+    "The Settlers of Catan": "https://boardgamegeek.com/boardgame/13/catan",
+    "Ticket to Ride Europe": "https://boardgamegeek.com/boardgame/14996/ticket-ride-europe",
+    "War of Whispers": "https://boardgamegeek.com/boardgame/253499/war-whispers",
+    "Welcome To...": "https://boardgamegeek.com/boardgame/233867/welcome",
+    "Western Legends": "https://boardgamegeek.com/boardgame/232405/western-legends",
+    "Zombicide": "https://boardgamegeek.com/boardgame/113924/zombicide",
+    "Tokaido": "https://boardgamegeek.com/boardgame/123540/tokaido"
+}
+
+five_player_bgg = {
+    "The Resistance": "https://boardgamegeek.com/boardgame/41114/resistance",
+    "A Fake Artist Goes to New York": "https://boardgamegeek.com/boardgame/135779/fake-artist-goes-new-york",
+    "Battlestar Galactica": "https://boardgamegeek.com/boardgame/37111/battlestar-galactica-board-game",
+    "Cash' n Guns": "https://boardgamegeek.com/boardgame/19237/cah-n-gun",
+    "Deception: Murder in Hong Kong": "https://boardgamegeek.com/boardgame/156129/deception-murder-hong-kong",
+    "Just One": "https://boardgamegeek.com/boardgame/254640/just-one",
+    "The Resistance: Avalon": "https://boardgamegeek.com/boardgame/128882/resistance-avalon",
+    "The Thing": "https://boardgamegeek.com/boardgame/226634/thing-infection-outpost-31",
+    "Wavelength": "https://boardgamegeek.com/boardgame/262543/wavelength"
+}
 
 def save_to_s3(file_name):
     s3_client = boto3.client('s3')
@@ -598,6 +674,38 @@ async def tiebreak(ctx, weekday, *args):
             await prompt_host(channel_id, host,  [])
     else:
         await ctx.send(f"Sorry, I didn't recognize {weekday} as one of the options for the tie break. Try again. ")
+
+async def output_boardgames(ctx, options, num_players, num_games):
+    games = random.sample(options, num_games)
+    nl = "\n"
+    bgames = f"""{''.join(f"**• {game[0]}** - {game[1]}{nl}" for game in games)}"""
+    await ctx.send(f"""Okay {ctx.author.id}, here are {num_games} which play well with {num_players} players. See if there's anything you like!
+    {bgames}
+    """)
+
+@client.command()
+async def random_boardgame(ctx, num_players=None, num_games="5"):
+    if num_players is None:
+        await ctx.send(""" You must specify a number of players to find board games for. Currently supported: 4 or 5
+        Type ```/random_boardgame [player_count] [num_games](default 5)``` to get random games for that many players.
+        e.g ````/random_boardgame 4 5``` will get 5 games which can be played with 4 players.""")
+    else:
+        try:
+            games = int(num_games)
+            if games > 10:
+                await ctx.send("Sorry, that's too many games. Please keep the number at 10 or under.")
+            if num_players == "4":
+                options = {**four_player_bgg, **default_bgg}
+                output_boardgames(options, "4", games)
+            elif num_players == "5":
+                options = {**five_player_bgg, **default_bgg}
+                output_boardgames(options, "5", games)
+            else:
+                await ctx.send(
+                    """Sorry, I'm not aware of which games can be played with that many players.""")
+        except ValueError:
+            await ctx.send(f"Sorry, I don't understand {num_games} as a number.")
+
 
 @tasks.loop(minutes=1)
 async def check_time():

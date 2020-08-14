@@ -685,10 +685,10 @@ async def output_boardgames(ctx, options, num_players, num_games):
 {bgames}""")
 
 @client.command()
-async def random_boardgame(ctx, num_players=None, num_games="5"):
+async def random_boardgame(ctx, num_players=None, num_games="3"):
     if num_players is None:
         await ctx.send(""" You must specify a number of players to find board games for. Currently supported: 4 or 5
-Type ```/random_boardgame [player_count] [num_games](default 5)``` to get random games for that many players.
+Type ```/random_boardgame [player_count] [num_games](default 3)``` to get random games for that many players.
 e.g ```/random_boardgame 4 5``` gets 5 games which can be played with 4 players.""")
     else:
         try:

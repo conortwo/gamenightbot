@@ -17,6 +17,17 @@ dow={d:i for i,d in
          enumerate('monday,tuesday,wednesday,thursday,friday,saturday,sunday'.split(','))}
 S3_BUCKET = os.environ.get('S3_BUCKET')
 
+
+def save_to_s3(file_name):
+    s3_client = boto3.client('s3')
+    s3_client.upload_file(file_name, S3_BUCKET, file_name)
+
+
+def load_from_s3(file_name):
+    s3_client = boto3.client('s3')
+    s3_client.download_file(S3_BUCKET, file_name, file_name)
+
+
 four_player_bgg = {
     "Azul": "https://boardgamegeek.com/boardgame/230802/azul",
     "Burgle Bros": "https://boardgamegeek.com/boardgame/172081/burgle-bros",
@@ -29,7 +40,7 @@ four_player_bgg = {
     "Forbidden Island": "https://boardgamegeek.com/boardgame/65244/forbidden-island",
     "Fort": "https://boardgamegeek.com/boardgame/296912/fort",
     "Ghost Stories": "https://boardgamegeek.com/boardgame/37046/ghost-stories",
-    "Gloomhaven: Jaws of the Lion": "https://boardgamegeek.com/boardgame/291457/gloomhaven-jaws-lion",
+    "Gloomhaven": "https://boardgamegeek.com/boardgame/174430/gloomhaven",
     "Machi Koro" : "https://boardgamegeek.com/boardgame/143884/machi-koro",
     "Mechs vs. Minions" : "https://boardgamegeek.com/boardgame/209010/mechs-vs-minions",
     "Root": "https://boardgamegeek.com/boardgame/237182/root",
@@ -93,15 +104,6 @@ five_player_bgg = {
     "The Thing": "https://boardgamegeek.com/boardgame/226634/thing-infection-outpost-31",
     "Wavelength": "https://boardgamegeek.com/boardgame/262543/wavelength"
 }
-
-def save_to_s3(file_name):
-    s3_client = boto3.client('s3')
-    s3_client.upload_file(file_name, S3_BUCKET, file_name)
-
-
-def load_from_s3(file_name):
-    s3_client = boto3.client('s3')
-    s3_client.download_file(S3_BUCKET, file_name, file_name)
 
 
 load_from_s3("state.json")
@@ -676,30 +678,29 @@ async def tiebreak(ctx, weekday, *args):
         await ctx.send(f"Sorry, I didn't recognize {weekday} as one of the options for the tie break. Try again. ")
 
 async def output_boardgames(ctx, options, num_players, num_games):
-    games = random.sample(options, num_games)
+    games = random.sample(list(options), num_games)
     nl = "\n"
-    bgames = f"""{''.join(f"**• {game[0]}** - {game[1]}{nl}" for game in games)}"""
-    await ctx.send(f"""Okay {ctx.author.id}, here are {num_games} which play well with {num_players} players. See if there's anything you like!
-    {bgames}
-    """)
+    bgames = f"""{''.join(f'**• {game}** - {options[game]}{nl}' for game in games)}"""
+    await ctx.send(f"""Okay <@{ctx.author.id}>, I've chosen **{num_games}** board games which play well with **{num_players}** players:
+{bgames}""")
 
 @client.command()
 async def random_boardgame(ctx, num_players=None, num_games="5"):
     if num_players is None:
         await ctx.send(""" You must specify a number of players to find board games for. Currently supported: 4 or 5
-        Type ```/random_boardgame [player_count] [num_games](default 5)``` to get random games for that many players.
-        e.g ````/random_boardgame 4 5``` will get 5 games which can be played with 4 players.""")
+Type ```/random_boardgame [player_count] [num_games](default 5)``` to get random games for that many players.
+e.g ```/random_boardgame 4 5``` gets 5 games which can be played with 4 players.""")
     else:
         try:
             games = int(num_games)
-            if games > 10:
-                await ctx.send("Sorry, that's too many games. Please keep the number at 10 or under.")
-            if num_players == "4":
+            if games > 5:
+                await ctx.send("Sorry, that's too many games. Please keep the number at 5 or under.")
+            elif num_players == "4":
                 options = {**four_player_bgg, **default_bgg}
-                output_boardgames(options, "4", games)
+                await output_boardgames(ctx, options, "4", games)
             elif num_players == "5":
                 options = {**five_player_bgg, **default_bgg}
-                output_boardgames(options, "5", games)
+                await output_boardgames(ctx, options, "5", games)
             else:
                 await ctx.send(
                     """Sorry, I'm not aware of which games can be played with that many players.""")

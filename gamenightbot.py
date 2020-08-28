@@ -42,7 +42,6 @@ four_player_bgg = {
     "Ghost Stories": "https://boardgamegeek.com/boardgame/37046/ghost-stories",
     "Gloomhaven": "https://boardgamegeek.com/boardgame/174430/gloomhaven",
     "Machi Koro" : "https://boardgamegeek.com/boardgame/143884/machi-koro",
-    "Mechs vs. Minions" : "https://boardgamegeek.com/boardgame/209010/mechs-vs-minions",
     "Root": "https://boardgamegeek.com/boardgame/237182/root",
     "Smash up": "https://boardgamegeek.com/boardgame/122522/smash",
     "Survive: Escape From Atlantis!": "https://boardgamegeek.com/boardgame/2653/survive-escape-atlantis",
@@ -89,8 +88,7 @@ default_bgg = {
     "War of Whispers": "https://boardgamegeek.com/boardgame/253499/war-whispers",
     "Welcome To...": "https://boardgamegeek.com/boardgame/233867/welcome",
     "Western Legends": "https://boardgamegeek.com/boardgame/232405/western-legends",
-    "Zombicide": "https://boardgamegeek.com/boardgame/113924/zombicide",
-    "Tokaido": "https://boardgamegeek.com/boardgame/123540/tokaido"
+    "Zombicide": "https://boardgamegeek.com/boardgame/113924/zombicide"
 }
 
 five_player_bgg = {
@@ -665,15 +663,15 @@ async def tiebreak(ctx, weekday, *args):
         await save_state(channel_id, "game_night", day_and_date)
         await save_state(channel_id, "tied", [])
         ivd = {v: k for k, v in reactions.items()}
-        if weekday in ["Saturday", "Sunday"]:
-            users = state[channel_id].get("users")
-            last_host = state[channel_id].get("last_host", users[0])
-            before = users.index(last_host) - 1
-            await save_state(channel_id, "last_host", users[before])
-            await poll_timeslot(channel_id, ivd[weekday], "the most")
-        else:
-            host = ctx.message.author
-            await prompt_host(channel_id, host,  [])
+        # if weekday in ["Saturday", "Sunday"]:
+        #     users = state[channel_id].get("users")
+        #     last_host = state[channel_id].get("last_host", users[0])
+        #     before = users.index(last_host) - 1
+        #     await save_state(channel_id, "last_host", users[before])
+        #     await poll_timeslot(channel_id, ivd[weekday], "the most")
+        # else:
+        host = ctx.message.author
+        await prompt_host(channel_id, host,  [])
     else:
         await ctx.send(f"Sorry, I didn't recognize {weekday} as one of the options for the tie break. Try again. ")
 

@@ -70,7 +70,6 @@ default_bgg = {
     "Lords of Vegas": "https://boardgamegeek.com/boardgame/20437/lords-vegas",
     "King of New York": "https://boardgamegeek.com/boardgame/160499/king-new-york",
     "Horrified": "https://boardgamegeek.com/boardgame/282524/horrified",
-    "Inis": "https://boardgamegeek.com/boardgame/155821/inis",
     "Lovecraft Letter": "https://boardgamegeek.com/boardgame/198740/lovecraft-letter",
     "Mansions of Madness": "https://boardgamegeek.com/boardgame/205059/mansions-madness-second-edition",
     "Pandemic: The Cure": "https://boardgamegeek.com/boardgame/150658/pandemic-cure",
@@ -88,7 +87,6 @@ default_bgg = {
     "War of Whispers": "https://boardgamegeek.com/boardgame/253499/war-whispers",
     "Welcome To...": "https://boardgamegeek.com/boardgame/233867/welcome",
     "Western Legends": "https://boardgamegeek.com/boardgame/232405/western-legends",
-    "Zombicide": "https://boardgamegeek.com/boardgame/113924/zombicide"
 }
 
 five_player_bgg = {
@@ -102,6 +100,38 @@ five_player_bgg = {
     "The Thing": "https://boardgamegeek.com/boardgame/226634/thing-infection-outpost-31",
     "Wavelength": "https://boardgamegeek.com/boardgame/262543/wavelength"
 }
+
+# default_games = {
+#     "Bang! The Dice Game": "https://boardgamegeek.com/boardgame/143741/bang-dice-game",
+#     "Betrayal Legacy": "https://boardgamegeek.com/boardgame/240196/betrayal-legacy",
+#     "Camel Up": "https://boardgamegeek.com/boardgame/153938/camel",
+#     "Cosmic Encounter": "https://boardgamegeek.com/boardgame/39463/cosmic-encounter",
+#     "Deep Sea Adventure": "https://boardgamegeek.com/boardgame/169654/deep-sea-adventure",
+#     "Lords of Waterdeep": "https://boardgamegeek.com/boardgame/110327/lords-waterdeep".
+#     "Nemesis": "https://boardgamegeek.com/boardgame/167355/nemesis",
+#     "Secret Hitler": "https://boardgamegeek.com/boardgame/188834/secret-hitler",
+#     "Skull": "https://boardgamegeek.com/boardgame/92415/skull",
+#     "Small World": "https://boardgamegeek.com/boardgame/40692/small-world",
+#     "Wingspan": "https://boardgamegeek.com/boardgame/266192/wingspan",
+#     "Camp Grizzly": "https://boardgamegeek.com/boardgame/143096/camp-grizzly",
+#     "Inis": "https://boardgamegeek.com/boardgame/155821/inis",
+#     "Zombicide": "https://boardgamegeek.com/boardgame/113924/zombicide"
+#     "king of tokyo" : "",
+#     "tokaido": "",
+#     "Arkham horror the card game": "",
+#     "Pandemic": "",
+#     "Food Chain M": "",
+#     "Love Letter": "",
+#     "Mechs vs minions": "",
+#     "Among us",
+#     "Left 4 Dead 2",
+#     "Garrys Mod",
+#     "Jackbox PP",
+#     "Pummel Party",
+#     "Skribbl.io",
+#     "Human Fall Flat",
+#     "Golf with your friends"
+# }
 
 
 load_from_s3("state.json")
@@ -138,6 +168,7 @@ async def update_poll_status(channel_id, message, status):
     message = await channel.fetch_message(message.id)
     if message.embeds:
         embed = message.embeds[0]
+        embed.clear_fields()
         fields = embed.fields
         if len(fields) == 0 or status == "closed":
             embed.clear_fields()
@@ -206,7 +237,7 @@ Feel free to pick a time slot that falls in any of those ranges!"""
     await host.send(f"""Howdy {host.name}! You are this week's host!
 **{len(attendees)}** players ({mentions}) will be joining you on {game_night}.
 Type ```/suggest [start_time] [game_name]``` to make a suggestion.
-`start_time` should be one word e.g `8pm` while `game_name` can be any number of words. Timezone is UTC+1.
+`start_time` should be one word e.g `8pm` while `game_name` can be any number of words. Timezone is UTC.
 {timeslot}
 Your suggestion will be announced in the channel where the poll took place. Choose wisely!
 """)
@@ -222,7 +253,7 @@ async def prompt_bonus_host(channel_id, host):
     await host.send(f"""Hey there {host.name}! You are this week's lucky **bonus** host!
 **{len(attendees)}** players ({mentions}) will be joining you on {game_night}.
 Type ```/bonus [start_time] [game_name]``` to make a suggestion.
-`start_time` should be one word e.g `8pm` while `game_name` can be any number of words. Timezone is UTC+1.
+`start_time` should be one word e.g `8pm` while `game_name` can be any number of words. Timezone is UTC.
 Your suggestion will be announced in the channel where the poll took place. Choose wisely!
 """)
 
@@ -241,7 +272,7 @@ Can't decide? Type `/tiebreak random` and I'll break the tie for you!
 async def poll_timeslot(channel_id, weekend, count):
     message = f"""@everyone
 {reactions[weekend]}({weekend}) has won with {count} votes!
-Weekends are a busier time so let's try to narrow down a range for the start time. All times are UTC+1.
+Weekends are a busier time so let's try to narrow down a range for the start time. All times are UTC.
 1️⃣ - Starting between 1pm and 3pm
 2️⃣ - Starting between 3pm and 5pm
 3️⃣ - Starting between 5pm and 7pm
@@ -442,7 +473,7 @@ Today we will be playing **{reminder['game_name']}** @ **{reminder['start_time']
 async def poll_time(channel_id):
     message = """@everyone
 The weekly poll is ready! Please indicate your availability below:
-:regional_indicator_f: - Late night Friday (starting from 10pm UTC+1)
+:regional_indicator_f: - Late night Friday (starting from 10pm UTC)
 :regional_indicator_s: - Saturday (A secondary poll to pick a time slot will follow)
 :sunny: - Sunday (A secondary poll to pick a time slot will follow)
 :regional_indicator_m: - Monday
@@ -595,7 +626,7 @@ async def bonus(ctx, start_time, *gamename):
         return
     await ctx.send(f"Ok, I'll announce your suggestion of {game_name} @ {start_time} on {game_night}.")
     await save_state(channel_id, "bonus_remind_at", (remind_at - timedelta(
-        hours=2)).timestamp())
+        hours=1)).timestamp())
     await save_state(channel_id, "bonus_reminder", reminder)
     channel = client.get_channel(int(channel_id))
     announce = f"""Okay, I've setup a ✨ **bonus** ✨ game day for {mentions}.
@@ -628,7 +659,7 @@ async def suggest(ctx, start_time, *gamename):
         await ctx.send(f"Sorry I had trouble understanding {start_time} as a a start time. Please try again.")
         return
     await ctx.send(f"Ok, I'll announce your suggestion of {game_name} @ {start_time} on {game_night}.")
-    await save_state(channel_id, "remind_at", (remind_at - timedelta(hours=2)).timestamp())
+    await save_state(channel_id, "remind_at", (remind_at - timedelta(hours=1)).timestamp())
     await save_state(channel_id, "reminder", reminder)
     channel = client.get_channel(int(channel_id))
     announce = f"""@everyone The poll has concluded. 
@@ -663,15 +694,15 @@ async def tiebreak(ctx, weekday, *args):
         await save_state(channel_id, "game_night", day_and_date)
         await save_state(channel_id, "tied", [])
         ivd = {v: k for k, v in reactions.items()}
-        # if weekday in ["Saturday", "Sunday"]:
-        #     users = state[channel_id].get("users")
-        #     last_host = state[channel_id].get("last_host", users[0])
-        #     before = users.index(last_host) - 1
-        #     await save_state(channel_id, "last_host", users[before])
-        #     await poll_timeslot(channel_id, ivd[weekday], "the most")
-        # else:
-        host = ctx.message.author
-        await prompt_host(channel_id, host,  [])
+        if weekday in ["Saturday", "Sunday"]:
+            users = state[channel_id].get("users")
+            last_host = state[channel_id].get("last_host", users[0])
+            before = users.index(last_host) - 1
+            await save_state(channel_id, "last_host", users[before])
+            await poll_timeslot(channel_id, ivd[weekday], "the most")
+        else:
+            host = ctx.message.author
+            await prompt_host(channel_id, host,  [])
     else:
         await ctx.send(f"Sorry, I didn't recognize {weekday} as one of the options for the tie break. Try again. ")
 

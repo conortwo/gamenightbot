@@ -746,15 +746,18 @@ async def check_time():
             print("Poll starting")
             await poll_time(channel_id)
         if state[channel_id].get("remind_at", float('Inf')) <= time.time():
+            print(f"remind")
             reminder = state[channel_id].get("reminder", None)
             if reminder:
                 await remind(channel_id, reminder)
         if state[channel_id].get("bonus_remind_at", float('Inf')) <= \
                 time.time():
+            print(f"bonus")
             reminder = state[channel_id].get("bonus_reminder", None)
             if reminder:
                 await bonus_remind(channel_id, reminder)
         if state[channel_id].get("nudge_at", float('Inf')) <= time.time():
+            print(f"nudge")
             nudgee = state[channel_id].get("late", None)
             if nudgee:
                 late = client.get_user(nudgee)

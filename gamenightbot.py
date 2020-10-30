@@ -740,6 +740,8 @@ e.g ```/random_boardgame 4 5``` gets 5 games which can be played with 4 players.
 @tasks.loop(minutes=1)
 async def check_time():
     for channel_id in state.keys():
+        print(
+            f"""Next poll for {channel_id} is @ {state[channel_id].get("next_poll_at")} time={time.time()}""")
         if state[channel_id].get("next_poll_at", 0) <= time.time():
             print("Poll starting")
             await poll_time(channel_id)

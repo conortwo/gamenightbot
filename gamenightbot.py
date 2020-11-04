@@ -11,7 +11,7 @@ import os
 import boto3
 
 client = commands.Bot(command_prefix='/', help_command=None)
-reactions = {'🇫': "Friday", '🇸': "Saturday", '☀️': "Sunday", '🇲': "Monday", '2️⃣': "Tuesday", '🇼': "Wednesday", '🇹': "Thursday", '🚫': "Can't attend"}
+reactions = {'🇹': "Thursday",'🇫': "Friday", '🇸': "Saturday", '☀️': "Sunday", '🇲': "Monday", '2️⃣': "Tuesday", '🇼': "Wednesday", '🚫': "Can't attend"}
 timeslots = {'1️⃣': "1pm - 3pm", '2️⃣': "3pm - 5pm", '3️⃣': "5pm - 7pm", '4️⃣': "7pm - 9pm", '5️⃣':"9pm-11pm", '🚫': "Can't attend"}
 dow={d:i for i,d in
          enumerate('monday,tuesday,wednesday,thursday,friday,saturday,sunday'.split(','))}
@@ -473,13 +473,13 @@ Today we will be playing **{reminder['game_name']}** @ **{reminder['start_time']
 async def poll_time(channel_id):
     message = """@everyone
 The weekly poll is ready! Please indicate your availability below:
+:regional_indicator_t: - Thursday
 :regional_indicator_f: - Late night Friday (starting from 10pm UTC)
 :regional_indicator_s: - Saturday (A secondary poll to pick a time slot will follow)
 :sunny: - Sunday (A secondary poll to pick a time slot will follow)
 :regional_indicator_m: - Monday
 2️⃣ - Tuesday
 :regional_indicator_w: - Wednesday
-:regional_indicator_t: - Thursday
 :no_entry_sign: - Can't attend
 A winning day will be announced once everyone has voted.
     """
@@ -739,9 +739,8 @@ e.g ```/random_boardgame 4 5``` gets 5 games which can be played with 4 players.
 
 @tasks.loop(minutes=1)
 async def check_time():
-    for channel_id in state.keys():
-        print(
-            f"""Next poll for {channel_id} is @ {state[channel_id].get("next_poll_at")} time={time.time()}""")
+    keys = state.keys()
+    for channel_id in keys:
         if state[channel_id].get("next_poll_at", 0) <= time.time():
             print("Poll starting")
             await poll_time(channel_id)
@@ -764,6 +763,7 @@ async def check_time():
                 await nudge(channel_id, late)
             else:
                 await save_state(channel_id, "nudge_at", float('Inf'))
+        print("looped")
 
 
 client.run(os.environ.get("DISCORD_BOT_TOKEN"))

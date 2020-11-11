@@ -41,7 +41,6 @@ four_player_bgg = {
     "Fort": "https://boardgamegeek.com/boardgame/296912/fort",
     "Ghost Stories": "https://boardgamegeek.com/boardgame/37046/ghost-stories",
     "Gloomhaven": "https://boardgamegeek.com/boardgame/174430/gloomhaven",
-    "Machi Koro" : "https://boardgamegeek.com/boardgame/143884/machi-koro",
     "Root": "https://boardgamegeek.com/boardgame/237182/root",
     "Smash up": "https://boardgamegeek.com/boardgame/122522/smash",
     "Survive: Escape From Atlantis!": "https://boardgamegeek.com/boardgame/2653/survive-escape-atlantis",
@@ -205,7 +204,7 @@ async def winners(channel_id, message, is_timeslot):
         if len(non_voters) == 0:
             await save_state(channel_id, "late", None)
         elif len(non_voters) == 1:
-            late = client.get_user(non_voters.pop())
+            late = await client.fetch_user(non_voters.pop())
             nudgee = state[channel_id].get("late", None)
             if nudgee and nudgee == late.id:
                 pass
@@ -310,7 +309,7 @@ async def choose_host(channel, choices):
     choices = filtered_choices
     users[new_host_idx], users[next_host_idx] = users[next_host_idx], users[new_host_idx]
     print(f" {last_host} has been succeeded by new host {new_host}")
-    host = client.get_user(new_host)
+    host = await client.fetch_user(new_host)
     announce = f""" <@{host.id}> is this week's host. {"They will first be asked to break the tie between the winning votes." if len(choices) > 1 else ""}
 They will receive a DM which will allow them to suggest a start time and game for the winning day.
     """
@@ -398,7 +397,7 @@ async def bonus_go_no_go(channel_id, message):
                 await save_state(channel_id, "bonus_attendees", voters[:])
                 voters.remove(state[channel_id].get("last_host"))
                 host_id = random.choice(voters)
-                client.get_user(host_id)
+                await client.fetch_user(host_id)
                 channel = client.get_channel(int(channel_id))
                 bonus_night = state[channel_id].get("bonus_night", "the bonus night")
                 announce = f""" <@{host_id}> is this week's randomly selected **bonus** host. 
@@ -409,7 +408,7 @@ They will receive a DM which will allow them to suggest a start time and game fo
                 host = await client.fetch_user(host_id)
                 await prompt_bonus_host(channel_id, host)
     elif len(non_voters) == 1:
-        late = client.get_user(non_voters.pop())
+        late = await client.fetch_user(non_voters.pop())
         nudgee = state[channel_id].get("late", None)
         if nudgee and nudgee == late.id:
             pass
@@ -759,7 +758,7 @@ async def check_time():
             print(f"nudge")
             nudgee = state[channel_id].get("late", None)
             if nudgee:
-                late = client.get_user(nudgee)
+                late = await client.fetch_user(nudgee)
                 await nudge(channel_id, late)
             else:
                 await save_state(channel_id, "nudge_at", float('Inf'))

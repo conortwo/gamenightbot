@@ -29,15 +29,61 @@ def load_from_s3(file_name):
 
 
 four_player_bgg = {
-    "Champions of Midgard": "https://boardgamegeek.com/boardgame/172287/champions-midgard",
+    "Azul": "https://boardgamegeek.com/boardgame/230802/azul",
+    "Burgle Bros": "https://boardgamegeek.com/boardgame/172081/burgle-bros",
     "Clank!": "https://boardgamegeek.com/boardgame/201808/clank-deck-building-adventure",
+    "Cryptid": "https://boardgamegeek.com/boardgame/246784/cryptid",
+    "Decrypto": "https://boardgamegeek.com/boardgame/225694/decrypto",
+    "Dice Throne": "https://boardgamegeek.com/boardgame/216734/dice-throne-season-one",
+    "Everdell": "https://boardgamegeek.com/boardgame/199792/everdell",
+    "Forbidden Island": "https://boardgamegeek.com/boardgame/65244/forbidden-island",
     "Fort": "https://boardgamegeek.com/boardgame/296912/fort",
+    "Ghost Stories": "https://boardgamegeek.com/boardgame/37046/ghost-stories",
+    "Root": "https://boardgamegeek.com/boardgame/237182/root",
+    "Smash up": "https://boardgamegeek.com/boardgame/122522/smash",
+    "Survive: Escape From Atlantis!": "https://boardgamegeek.com/boardgame/2653/survive-escape-atlantis",
+    "Suburbia": "https://boardgamegeek.com/boardgame/123260/suburbia",
+    "Terraforming Mars": "https://boardgamegeek.com/boardgame/167791/terraforming-mars",
+    "T.I.M.E Stories": "https://boardgamegeek.com/boardgame/146508/time-stories",
+    "Crokinole": "https://boardgamegeek.com/boardgame/521/crokinole",
+    "Tragedy Looper": "https://boardgamegeek.com/boardgame/148319/tragedy-looper",
+    "XCOM: The Board game": "https://boardgamegeek.com/boardgame/163602/xcom-board-game"
 }
 
 default_bgg = {
+    "Cockroach Poker": "https://boardgamegeek.com/boardgame/11971/cockroach-poker",
+    "7 Wonders": "https://boardgamegeek.com/boardgame/68448/7-wonders",
+    "Betrayal at Baldur's Gate": "https://boardgamegeek.com/boardgame/228660/betrayal-baldurs-gate",
+    "Blood Rage": "https://boardgamegeek.com/boardgame/170216/blood-rage",
+    "Mysterium": "https://boardgamegeek.com/boardgame/181304/mysterium",
+    "Coup": "https://boardgamegeek.com/boardgame/131357/coup",
+    "Dead of Winter": "https://boardgamegeek.com/boardgame/150376/dead-winter-crossroads-game",
+    "Eldritch Horror": "https://boardgamegeek.com/boardgame/146021/eldritch-horror",
+    "Epic Spell Wars": "https://boardgamegeek.com/boardgame/112686/epic-spell-wars-battle-wizards-duel-mt-skullzfyre",
     "Forbidden Desert": "https://boardgamegeek.com/boardgame/136063/forbidden-desert",
+    "Formula D": "https://boardgamegeek.com/boardgame/37904/formula-d",
+    "Fury of Dracula": "https://boardgamegeek.com/boardgame/181279/fury-dracula-thirdfourth-edition",
+    "Game of Thrones": "https://boardgamegeek.com/boardgame/103343/game-thrones-board-game-second-edition",
+    "Lords of Vegas": "https://boardgamegeek.com/boardgame/20437/lords-vegas",
     "King of New York": "https://boardgamegeek.com/boardgame/160499/king-new-york",
     "Horrified": "https://boardgamegeek.com/boardgame/282524/horrified",
+    "Lovecraft Letter": "https://boardgamegeek.com/boardgame/198740/lovecraft-letter",
+    "Mansions of Madness": "https://boardgamegeek.com/boardgame/205059/mansions-madness-second-edition",
+    "Pandemic: The Cure": "https://boardgamegeek.com/boardgame/150658/pandemic-cure",
+    "Red Dragon Inn": "https://boardgamegeek.com/boardgame/24310/red-dragon-inn",
+    "Rising Sun": "https://boardgamegeek.com/boardgame/205896/rising-sun",
+    "Scythe": "https://boardgamegeek.com/boardgame/169786/scythe",
+    "Shadows over Camelot": "https://boardgamegeek.com/boardgame/15062/shadows-over-camelot",
+    "Sheriff of Nottingham": "https://boardgamegeek.com/boardgame/157969/sheriff-nottingham",
+    "Space Alert": "https://boardgamegeek.com/boardgame/38453/space-alert",
+    "Star Wars: Imperial Assault": "https://boardgamegeek.com/boardgame/164153/star-wars-imperial-assault",
+    "Sub Terra": "https://boardgamegeek.com/boardgame/204472/sub-terra",
+    "The Settlers of Catan": "https://boardgamegeek.com/boardgame/13/catan",
+    "Ticket to Ride Europe": "https://boardgamegeek.com/boardgame/14996/ticket-ride-europe",
+    "War of Whispers": "https://boardgamegeek.com/boardgame/253499/war-whispers",
+    "Welcome To...": "https://boardgamegeek.com/boardgame/233867/welcome",
+    "Western Legends": "https://boardgamegeek.com/boardgame/232405/western-legends",
+    "League Legends": "https://na.leagueoflegends.com/en-us/"
 }
 
 five_player_bgg = {
@@ -52,37 +98,43 @@ five_player_bgg = {
     "Wavelength": "https://boardgamegeek.com/boardgame/262543/wavelength"
 }
 
-# default_games = {
-#     "Bang! The Dice Game": "https://boardgamegeek.com/boardgame/143741/bang-dice-game",
-#     "Betrayal Legacy": "https://boardgamegeek.com/boardgame/240196/betrayal-legacy",
-#     "Camel Up": "https://boardgamegeek.com/boardgame/153938/camel",
-#     "Cosmic Encounter": "https://boardgamegeek.com/boardgame/39463/cosmic-encounter",
-#     "Deep Sea Adventure": "https://boardgamegeek.com/boardgame/169654/deep-sea-adventure",
-#     "Lords of Waterdeep": "https://boardgamegeek.com/boardgame/110327/lords-waterdeep".
-#     "Nemesis": "https://boardgamegeek.com/boardgame/167355/nemesis",
-#     "Secret Hitler": "https://boardgamegeek.com/boardgame/188834/secret-hitler",
-#     "Skull": "https://boardgamegeek.com/boardgame/92415/skull",
-#     "Small World": "https://boardgamegeek.com/boardgame/40692/small-world",
-#     "Wingspan": "https://boardgamegeek.com/boardgame/266192/wingspan",
-#     "Camp Grizzly": "https://boardgamegeek.com/boardgame/143096/camp-grizzly",
-#     "Inis": "https://boardgamegeek.com/boardgame/155821/inis",
-#     "Zombicide": "https://boardgamegeek.com/boardgame/113924/zombicide"
-#     "king of tokyo" : "",
-#     "tokaido": "",
-#     "Arkham horror the card game": "",
-#     "Pandemic": "",
-#     "Food Chain M": "",
-#     "Love Letter": "",
-#     "Mechs vs minions": "",
-#     "Among us",
-#     "Left 4 Dead 2",
-#     "Garrys Mod",
-#     "Jackbox PP",
-#     "Pummel Party",
-#     "Skribbl.io",
-#     "Human Fall Flat",
-#     "Golf with your friends"
-# }
+four_player_old_games = {
+    "Gloomhaven": "https://boardgamegeek.com/boardgame/174430/gloomhaven",
+    "Arkham Horror: The Card Game": "https://boardgamegeek.com/boardgame/205637/arkham-horror-card-game",
+    "Love Letter": "https://boardgamegeek.com/boardgame/129622/love-letter",
+    "Mechs vs. Minions": "https://boardgamegeek.com/boardgame/209010/mechs-vs-minions"
+}
+
+default_old_games = {
+    "Bang! The Dice Game": "https://boardgamegeek.com/boardgame/143741/bang-dice-game",
+    "Betrayal Legacy": "https://boardgamegeek.com/boardgame/240196/betrayal-legacy",
+    "Camel Up": "https://boardgamegeek.com/boardgame/153938/camel",
+    "Cosmic Encounter": "https://boardgamegeek.com/boardgame/39463/cosmic-encounter",
+    "Champions of Midgard": "https://boardgamegeek.com/boardgame/172287/champions-midgard",
+    "Deep Sea Adventure": "https://boardgamegeek.com/boardgame/169654/deep-sea-adventure",
+    "Lords of Waterdeep": "https://boardgamegeek.com/boardgame/110327/lords-waterdeep",
+    "Nemesis": "https://boardgamegeek.com/boardgame/167355/nemesis",
+    "Secret Hitler": "https://boardgamegeek.com/boardgame/188834/secret-hitler",
+    "Skull": "https://boardgamegeek.com/boardgame/92415/skull",
+    "Small World": "https://boardgamegeek.com/boardgame/40692/small-world",
+    "Wingspan": "https://boardgamegeek.com/boardgame/266192/wingspan",
+    "Camp Grizzly": "https://boardgamegeek.com/boardgame/143096/camp-grizzly",
+    "Inis": "https://boardgamegeek.com/boardgame/155821/inis",
+    "Quacks of Quedlinburg": "https://boardgamegeek.com/boardgame/244521/quacks-quedlinburg",
+    "Zombicide": "https://boardgamegeek.com/boardgame/113924/zombicide",
+    "King Of Tokyo" : "https://boardgamegeek.com/boardgame/70323/king-tokyo",
+    "Tokaido": "https://boardgamegeek.com/boardgame/123540/tokaido",
+    "Pandemic": "https://boardgamegeek.com/boardgame/30549/pandemic",
+    "Food Chain Magnate": "https://boardgamegeek.com/boardgame/175914/food-chain-magnate",
+    "Among us": "https://store.steampowered.com/app/945360/Among_Us/",
+    "Left 4 Dead 2": "https://store.steampowered.com/app/550/Left_4_Dead_2/",
+    "Garry's Mod" : "https://store.steampowered.com/app/4000/Garrys_Mod/",
+    "Jackbox Party Packs": "https://store.steampowered.com/app/1211630/The_Jackbox_Party_Pack_7/",
+    "Pummel Party": "https://store.steampowered.com/app/880940/Pummel_Party/",
+    "Skribbl.io": "https://skribbl.io/",
+    "Human Fall Flat": "https://store.steampowered.com/app/477160/Human_Fall_Flat/",
+    "Golf with your friends": "https://store.steampowered.com/app/477160/Human_Fall_Flat/"
+}
 
 
 load_from_s3("state.json")
@@ -93,9 +145,7 @@ with open("state.json") as file:
 @client.event
 async def on_ready():
     print(f"Bot start up. Loaded state={state}")
-    await save_state("402183402608132096", "bonus_poll", 781914951554957342)
-    # save_to_s3("state.json")
-    # check_time.start()
+    check_time.start()
 
 
 async def get_date_for_day(channel_id, weekday):
@@ -584,7 +634,7 @@ async def bonus(ctx, start_time, *gamename):
     await save_state(channel_id, "bonus_reminder", reminder)
     channel = client.get_channel(int(channel_id))
     announce = f"""Okay, I've setup a ✨ **bonus** ✨ game day for {mentions}.
-{host.mention} has suggested we play **{game_name}** @ **{start_time}** on **{game_night}**.
+{host.mention} has decided we'll play **{game_name}** @ **{start_time}** on **{game_night}**.
 I'll remind this channel an hour before then."""
     await channel.send(announce)
 
@@ -617,7 +667,7 @@ async def suggest(ctx, start_time, *gamename):
     await save_state(channel_id, "reminder", reminder)
     channel = client.get_channel(int(channel_id))
     announce = f"""@everyone The poll has concluded. 
-{host.mention} has suggested we play **{game_name}** @ **{start_time}** on **{game_night}**.
+{host.mention} has decided we'll play **{game_name}** @ **{start_time}** on **{game_night}**.
 I'll remind this channel an hour before then."""
     await channel.send(announce)
     await check_bonus(channel_id)
@@ -662,17 +712,22 @@ async def tiebreak(ctx, weekday, *args):
 
 async def output_boardgames(ctx, options, num_players, num_games):
     games = random.sample(list(options), num_games)
+    reacts = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣']
     nl = "\n"
-    bgames = f"""{''.join(f'**• {game}** - {options[game]}{nl}' for game in games)}"""
-    await ctx.send(f"""Okay <@{ctx.author.id}>, I've chosen **{num_games}** board games which play well with **{num_players}** players:
-{bgames}""")
+    bgames = f"""{''.join(f'**{reacts[i]} - {games[i]}** | {options[games[i]]}{nl}' for i in range(len(games)))}"""
+    msg = await ctx.send(f"""Okay <@{ctx.author.id}>, I've chosen **{num_games}** games which play well with **{num_players}** players:
+{bgames}🔁 - Request a new set of games""")
+    for reaction in reacts[:len(games)]:
+        await msg.add_reaction(reaction)
+    await msg.add_reaction('🔁')
+
 
 @client.command()
-async def random_boardgame(ctx, num_players=None, num_games="3"):
+async def new_game(ctx, num_players=None, num_games="3"):
     if num_players is None:
-        await ctx.send(""" You must specify a number of players to find board games for. Currently supported: 4 or 5
-Type ```/random_boardgame [player_count] [num_games](default 3)``` to get random games for that many players.
-e.g ```/random_boardgame 4 5``` gets 5 games which can be played with 4 players.""")
+        await ctx.send(""" You must specify a number of players to find games for. Currently supported: 4 or 5
+Type ```/new_game [player_count] [num_games](default 3)``` to get random new games for that many players.
+e.g ```/new_game 4 5``` gets 5 previously unplayed games which can be played with 4 players.""")
     else:
         try:
             games = int(num_games)
@@ -684,6 +739,53 @@ e.g ```/random_boardgame 4 5``` gets 5 games which can be played with 4 players.
             elif num_players == "5":
                 options = {**five_player_bgg, **default_bgg}
                 await output_boardgames(ctx, options, "5", games)
+            else:
+                await ctx.send(
+                    """Sorry, I'm not aware of which games can be played with that many players.""")
+        except ValueError:
+            await ctx.send(f"Sorry, I don't understand {num_games} as a number.")
+
+
+@client.command()
+async def random_game(ctx, num_players=None, num_games="3"):
+    if num_players is None:
+        await ctx.send(""" You must specify a number of players to find games for. Currently supported: 4 or 5
+Type ```/random_game [player_count] [num_games](default 3)``` to get random games for that many players.
+e.g ```/random_game 4 5``` gets 5 games which can be played with 4 players.""")
+    else:
+        try:
+            games = int(num_games)
+            if games > 5:
+                await ctx.send("Sorry, that's too many games. Please keep the number at 5 or under.")
+            elif num_players == "4":
+                options = {**four_player_bgg, **default_bgg, **four_player_old_games, **default_old_games}
+                await output_boardgames(ctx, options, "4", games)
+            elif num_players == "5":
+                options = {**five_player_bgg, **default_bgg, **default_old_games}
+                await output_boardgames(ctx, options, "5", games)
+            else:
+                await ctx.send(
+                    """Sorry, I'm not aware of which games can be played with that many players.""")
+        except ValueError:
+            await ctx.send(f"Sorry, I don't understand {num_games} as a number.")
+
+
+@client.command()
+async def old_game(ctx, num_players=None, num_games="3"):
+    if num_players is None:
+        await ctx.send(""" You must specify a number of players to find games for. Currently supported: 4 or 5
+Type ```/old_game [player_count] [num_games](default 3)``` to get random games we played before for that many players.
+e.g ```/old_game 4 5``` gets 5 previously played games which can be played with 4 players.""")
+    else:
+        try:
+            games = int(num_games)
+            if games > 5:
+                await ctx.send("Sorry, that's too many games. Please keep the number at 5 or under.")
+            elif num_players == "4":
+                options = {**four_player_old_games, **default_old_games}
+                await output_boardgames(ctx, options, "4", games)
+            elif num_players == "5":
+                await output_boardgames(ctx, default_old_games, "5", games)
             else:
                 await ctx.send(
                     """Sorry, I'm not aware of which games can be played with that many players.""")

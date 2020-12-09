@@ -29,63 +29,15 @@ def load_from_s3(file_name):
 
 
 four_player_bgg = {
-    "Azul": "https://boardgamegeek.com/boardgame/230802/azul",
-    "Burgle Bros": "https://boardgamegeek.com/boardgame/172081/burgle-bros",
     "Champions of Midgard": "https://boardgamegeek.com/boardgame/172287/champions-midgard",
     "Clank!": "https://boardgamegeek.com/boardgame/201808/clank-deck-building-adventure",
-    "Cryptid": "https://boardgamegeek.com/boardgame/246784/cryptid",
-    "Decrypto": "https://boardgamegeek.com/boardgame/225694/decrypto",
-    "Dice Throne": "https://boardgamegeek.com/boardgame/216734/dice-throne-season-one",
-    "Everdell": "https://boardgamegeek.com/boardgame/199792/everdell",
-    "Forbidden Island": "https://boardgamegeek.com/boardgame/65244/forbidden-island",
     "Fort": "https://boardgamegeek.com/boardgame/296912/fort",
-    "Ghost Stories": "https://boardgamegeek.com/boardgame/37046/ghost-stories",
-    "Gloomhaven": "https://boardgamegeek.com/boardgame/174430/gloomhaven",
-    "Root": "https://boardgamegeek.com/boardgame/237182/root",
-    "Smash up": "https://boardgamegeek.com/boardgame/122522/smash",
-    "Survive: Escape From Atlantis!": "https://boardgamegeek.com/boardgame/2653/survive-escape-atlantis",
-    "Suburbia": "https://boardgamegeek.com/boardgame/123260/suburbia",
-    "Terraforming Mars": "https://boardgamegeek.com/boardgame/167791/terraforming-mars",
-    "T.I.M.E Stories": "https://boardgamegeek.com/boardgame/146508/time-stories",
-    "Crokinole": "https://boardgamegeek.com/boardgame/521/crokinole",
-    "Tragedy Looper": "https://boardgamegeek.com/boardgame/148319/tragedy-looper",
-    "XCOM: The Board game": "https://boardgamegeek.com/boardgame/163602/xcom-board-game"
 }
 
 default_bgg = {
-    "Cockroach Poker": "https://boardgamegeek.com/boardgame/11971/cockroach-poker",
-    "7 Wonders": "https://boardgamegeek.com/boardgame/68448/7-wonders",
-    "Betrayal at Baldur's Gate": "https://boardgamegeek.com/boardgame/228660/betrayal-baldurs-gate",
-    "Blood Rage": "https://boardgamegeek.com/boardgame/170216/blood-rage",
-    "Mysterium": "https://boardgamegeek.com/boardgame/181304/mysterium",
-    "Coup": "https://boardgamegeek.com/boardgame/131357/coup",
-    "Dead of Winter": "https://boardgamegeek.com/boardgame/150376/dead-winter-crossroads-game",
-    "Eldritch Horror": "https://boardgamegeek.com/boardgame/146021/eldritch-horror",
-    "Epic Spell Wars": "https://boardgamegeek.com/boardgame/112686/epic-spell-wars-battle-wizards-duel-mt-skullzfyre",
     "Forbidden Desert": "https://boardgamegeek.com/boardgame/136063/forbidden-desert",
-    "Formula D": "https://boardgamegeek.com/boardgame/37904/formula-d",
-    "Fury of Dracula": "https://boardgamegeek.com/boardgame/181279/fury-dracula-thirdfourth-edition",
-    "Game of Thrones": "https://boardgamegeek.com/boardgame/103343/game-thrones-board-game-second-edition",
-    "Lords of Vegas": "https://boardgamegeek.com/boardgame/20437/lords-vegas",
     "King of New York": "https://boardgamegeek.com/boardgame/160499/king-new-york",
     "Horrified": "https://boardgamegeek.com/boardgame/282524/horrified",
-    "Lovecraft Letter": "https://boardgamegeek.com/boardgame/198740/lovecraft-letter",
-    "Mansions of Madness": "https://boardgamegeek.com/boardgame/205059/mansions-madness-second-edition",
-    "Pandemic: The Cure": "https://boardgamegeek.com/boardgame/150658/pandemic-cure",
-    "Red Dragon Inn": "https://boardgamegeek.com/boardgame/24310/red-dragon-inn",
-    "Rising Sun": "https://boardgamegeek.com/boardgame/205896/rising-sun",
-    "Scythe": "https://boardgamegeek.com/boardgame/169786/scythe",
-    "Shadows over Camelot": "https://boardgamegeek.com/boardgame/15062/shadows-over-camelot",
-    "Sheriff of Nottingham": "https://boardgamegeek.com/boardgame/157969/sheriff-nottingham",
-    "Space Alert": "https://boardgamegeek.com/boardgame/38453/space-alert",
-    "Star Wars: Imperial Assault": "https://boardgamegeek.com/boardgame/164153/star-wars-imperial-assault",
-    "Sub Terra": "https://boardgamegeek.com/boardgame/204472/sub-terra",
-    "Quacks of Quedlinburg": "https://boardgamegeek.com/boardgame/244521/quacks-quedlinburg",
-    "The Settlers of Catan": "https://boardgamegeek.com/boardgame/13/catan",
-    "Ticket to Ride Europe": "https://boardgamegeek.com/boardgame/14996/ticket-ride-europe",
-    "War of Whispers": "https://boardgamegeek.com/boardgame/253499/war-whispers",
-    "Welcome To...": "https://boardgamegeek.com/boardgame/233867/welcome",
-    "Western Legends": "https://boardgamegeek.com/boardgame/232405/western-legends",
 }
 
 five_player_bgg = {
@@ -141,7 +93,9 @@ with open("state.json") as file:
 @client.event
 async def on_ready():
     print(f"Bot start up. Loaded state={state}")
-    check_time.start()
+    await save_state("402183402608132096", "bonus_poll", 781914951554957342)
+    # save_to_s3("state.json")
+    # check_time.start()
 
 
 async def get_date_for_day(channel_id, weekday):
@@ -380,13 +334,14 @@ async def bonus_go_no_go(channel_id, message):
     winning = {r: counts[r] for r in counts if counts[r] >= 3}
     total_voters = []
     users = state[channel_id].get("users")
+    bonus_users = state[channel_id].get("bonus_attendees")
     for k in counts:
         voters = await k.users().flatten()
         total_voters.append(voters)
     flat_list = [voter for sublist in total_voters for voter in sublist]
     voter_ids = set([voter.id for voter in flat_list])
     non_voters = set(users) - set(voter_ids)
-    if len(voter_ids) == 5:
+    if len(voter_ids) >= len(bonus_users) + 1:
         await save_state(channel_id, "late", None)
         await save_state(channel_id, "bonus_poll", None)
         for k in winning:
@@ -396,8 +351,8 @@ async def bonus_go_no_go(channel_id, message):
                           voter.id != 643411373346521088]
                 await save_state(channel_id, "bonus_attendees", voters[:])
                 voters.remove(state[channel_id].get("last_host"))
-                host_id = random.choice(voters)
-                await client.fetch_user(host_id)
+                rand_idx = random.randrange(len(voters))
+                host_id = voters[rand_idx]
                 channel = client.get_channel(int(channel_id))
                 bonus_night = state[channel_id].get("bonus_night", "the bonus night")
                 announce = f""" <@{host_id}> is this week's randomly selected **bonus** host. 

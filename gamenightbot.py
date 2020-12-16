@@ -171,7 +171,6 @@ async def update_poll_status(channel_id, message, status):
     message = await channel.fetch_message(message.id)
     if message.embeds:
         embed = message.embeds[0]
-        embed.clear_fields()
         fields = embed.fields
         if len(fields) == 0 or status == "closed":
             embed.clear_fields()
@@ -344,6 +343,7 @@ async def tally(channel_id, message , is_timeslot=False):
     is_closing = await update_poll_status(channel_id, message, "closing")
     if not is_closing:
         return
+    await save_state(channel_id, "open_poll", None)
     await asyncio.sleep(30)
     channel = client.get_channel(int(channel_id))
     message = await channel.fetch_message(message.id)
@@ -353,7 +353,6 @@ async def tally(channel_id, message , is_timeslot=False):
 
     if len(recount) == 1:
         key, count = recount.popitem()
-        await save_state(channel_id, "open_poll", None)
         if key.emoji == '🚫':
             resp = f"""Game day is **CANCELLED** as a majority({count}) of players have indicated they can't attend({key.emoji}).
 See you all next week for more games!               
@@ -369,7 +368,6 @@ See you all next week for more games!
     elif len(recount) >= 1:
         tied = []
         choices = []
-        await save_state(channel_id, "open_poll", None)
         for key in recount:
             tied.append(f"{emojis[key.emoji]}({key.emoji})")
             choices.append(key)

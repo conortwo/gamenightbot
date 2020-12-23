@@ -145,6 +145,7 @@ with open("state.json") as file:
 @client.event
 async def on_ready():
     print(f"Bot start up. Loaded state={state}")
+    save_to_s3("state.json")
     check_time.start()
 
 
@@ -354,8 +355,8 @@ async def tally(channel_id, message , is_timeslot=False):
     if len(recount) == 1:
         key, count = recount.popitem()
         if key.emoji == '🚫':
-            resp = f"""Game day is **CANCELLED** as a majority({count}) of players have indicated they can't attend({key.emoji}).
-See you all next week for more games!               
+            resp = f"""Game day will be **skipped** this week as a majority({count}) of players have indicated they can't attend({key.emoji}).
+See you all next year for more games! 🎅 💝         
             """
             await channel.send(resp)
         elif key.emoji in ['🇸', '☀️']:

@@ -53,7 +53,6 @@ four_player_bgg = {
 default_bgg = {
     "Cockroach Poker": "https://boardgamegeek.com/boardgame/11971/cockroach-poker",
     "7 Wonders": "https://boardgamegeek.com/boardgame/68448/7-wonders",
-    "Betrayal at Baldur's Gate": "https://boardgamegeek.com/boardgame/228660/betrayal-baldurs-gate",
     "Blood Rage": "https://boardgamegeek.com/boardgame/170216/blood-rage",
     "Mysterium": "https://boardgamegeek.com/boardgame/181304/mysterium",
     "Coup": "https://boardgamegeek.com/boardgame/131357/coup",
@@ -77,13 +76,11 @@ default_bgg = {
     "Sheriff of Nottingham": "https://boardgamegeek.com/boardgame/157969/sheriff-nottingham",
     "Space Alert": "https://boardgamegeek.com/boardgame/38453/space-alert",
     "Star Wars: Imperial Assault": "https://boardgamegeek.com/boardgame/164153/star-wars-imperial-assault",
-    "Sub Terra": "https://boardgamegeek.com/boardgame/204472/sub-terra",
     "The Settlers of Catan": "https://boardgamegeek.com/boardgame/13/catan",
     "Ticket to Ride Europe": "https://boardgamegeek.com/boardgame/14996/ticket-ride-europe",
     "War of Whispers": "https://boardgamegeek.com/boardgame/253499/war-whispers",
     "Welcome To...": "https://boardgamegeek.com/boardgame/233867/welcome",
     "Western Legends": "https://boardgamegeek.com/boardgame/232405/western-legends",
-    "League Legends": "https://na.leagueoflegends.com/en-us/"
 }
 
 five_player_bgg = {
@@ -99,29 +96,31 @@ five_player_bgg = {
 }
 
 four_player_old_games = {
-    "Gloomhaven": "https://boardgamegeek.com/boardgame/174430/gloomhaven",
-    "Arkham Horror: The Card Game": "https://boardgamegeek.com/boardgame/205637/arkham-horror-card-game",
-    "Love Letter": "https://boardgamegeek.com/boardgame/129622/love-letter",
+    # "Gloomhaven": "https://boardgamegeek.com/boardgame/174430/gloomhaven",
+    # "Arkham Horror: The Card Game": "https://boardgamegeek.com/boardgame/205637/arkham-horror-card-game",
+    # "Love Letter": "https://boardgamegeek.com/boardgame/129622/love-letter",
+    "Sub Terra": "https://boardgamegeek.com/boardgame/204472/sub-terra",
+    "Betrayal at Baldur's Gate": "https://boardgamegeek.com/boardgame/228660/betrayal-baldurs-gate",
     "Mechs vs. Minions": "https://boardgamegeek.com/boardgame/209010/mechs-vs-minions"
 }
 
 default_old_games = {
-    "Bang! The Dice Game": "https://boardgamegeek.com/boardgame/143741/bang-dice-game",
+    # "Bang! The Dice Game": "https://boardgamegeek.com/boardgame/143741/bang-dice-game",
     "Betrayal Legacy": "https://boardgamegeek.com/boardgame/240196/betrayal-legacy",
-    "Camel Up": "https://boardgamegeek.com/boardgame/153938/camel",
-    "Cosmic Encounter": "https://boardgamegeek.com/boardgame/39463/cosmic-encounter",
+    # "Camel Up": "https://boardgamegeek.com/boardgame/153938/camel",
+    # "Cosmic Encounter": "https://boardgamegeek.com/boardgame/39463/cosmic-encounter",
     "Champions of Midgard": "https://boardgamegeek.com/boardgame/172287/champions-midgard",
-    "Deep Sea Adventure": "https://boardgamegeek.com/boardgame/169654/deep-sea-adventure",
-    "Lords of Waterdeep": "https://boardgamegeek.com/boardgame/110327/lords-waterdeep",
-    "Nemesis": "https://boardgamegeek.com/boardgame/167355/nemesis",
-    "Secret Hitler": "https://boardgamegeek.com/boardgame/188834/secret-hitler",
-    "Skull": "https://boardgamegeek.com/boardgame/92415/skull",
+    # "Deep Sea Adventure": "https://boardgamegeek.com/boardgame/169654/deep-sea-adventure",
+    # "Lords of Waterdeep": "https://boardgamegeek.com/boardgame/110327/lords-waterdeep",
+    # "Nemesis": "https://boardgamegeek.com/boardgame/167355/nemesis",
+    # "Secret Hitler": "https://boardgamegeek.com/boardgame/188834/secret-hitler",
+    # "Skull": "https://boardgamegeek.com/boardgame/92415/skull",
     "Small World": "https://boardgamegeek.com/boardgame/40692/small-world",
-    "Wingspan": "https://boardgamegeek.com/boardgame/266192/wingspan",
+    # "Wingspan": "https://boardgamegeek.com/boardgame/266192/wingspan",
     "Camp Grizzly": "https://boardgamegeek.com/boardgame/143096/camp-grizzly",
     "Inis": "https://boardgamegeek.com/boardgame/155821/inis",
-    "Quacks of Quedlinburg": "https://boardgamegeek.com/boardgame/244521/quacks-quedlinburg",
-    "Zombicide": "https://boardgamegeek.com/boardgame/113924/zombicide",
+    # "Quacks of Quedlinburg": "https://boardgamegeek.com/boardgame/244521/quacks-quedlinburg",
+    # "Zombicide": "https://boardgamegeek.com/boardgame/113924/zombicide",
     "King Of Tokyo" : "https://boardgamegeek.com/boardgame/70323/king-tokyo",
     "Tokaido": "https://boardgamegeek.com/boardgame/123540/tokaido",
     "Pandemic": "https://boardgamegeek.com/boardgame/30549/pandemic",
@@ -133,7 +132,8 @@ default_old_games = {
     "Pummel Party": "https://store.steampowered.com/app/880940/Pummel_Party/",
     "Skribbl.io": "https://skribbl.io/",
     "Human Fall Flat": "https://store.steampowered.com/app/477160/Human_Fall_Flat/",
-    "Golf with your friends": "https://store.steampowered.com/app/477160/Human_Fall_Flat/"
+    "Golf with your friends": "https://store.steampowered.com/app/431240/Golf_With_Your_Friends/",
+    "League Legends": "https://na.leagueoflegends.com/en-us/"
 }
 
 

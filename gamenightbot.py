@@ -47,7 +47,9 @@ four_player_bgg = {
     "T.I.M.E Stories": "https://boardgamegeek.com/boardgame/146508/time-stories",
     "Crokinole": "https://boardgamegeek.com/boardgame/521/crokinole",
     "Tragedy Looper": "https://boardgamegeek.com/boardgame/148319/tragedy-looper",
-    "XCOM: The Board game": "https://boardgamegeek.com/boardgame/163602/xcom-board-game"
+    "XCOM: The Board game": "https://boardgamegeek.com/boardgame/163602/xcom-board-game",
+    "Isle of Cats": "https://boardgamegeek.com/boardgame/281259/isle-cats",
+    "Five Tribes": "https://boardgamegeek.com/boardgame/157354/five-tribes"
 }
 
 default_bgg = {
@@ -69,18 +71,25 @@ default_bgg = {
     "Lovecraft Letter": "https://boardgamegeek.com/boardgame/198740/lovecraft-letter",
     "Mansions of Madness": "https://boardgamegeek.com/boardgame/205059/mansions-madness-second-edition",
     "Pandemic: The Cure": "https://boardgamegeek.com/boardgame/150658/pandemic-cure",
-    "Red Dragon Inn": "https://boardgamegeek.com/boardgame/24310/red-dragon-inn",
     "Rising Sun": "https://boardgamegeek.com/boardgame/205896/rising-sun",
-    "Scythe": "https://boardgamegeek.com/boardgame/169786/scythe",
     "Shadows over Camelot": "https://boardgamegeek.com/boardgame/15062/shadows-over-camelot",
     "Sheriff of Nottingham": "https://boardgamegeek.com/boardgame/157969/sheriff-nottingham",
     "Space Alert": "https://boardgamegeek.com/boardgame/38453/space-alert",
-    "Star Wars: Imperial Assault": "https://boardgamegeek.com/boardgame/164153/star-wars-imperial-assault",
     "The Settlers of Catan": "https://boardgamegeek.com/boardgame/13/catan",
     "Ticket to Ride Europe": "https://boardgamegeek.com/boardgame/14996/ticket-ride-europe",
     "War of Whispers": "https://boardgamegeek.com/boardgame/253499/war-whispers",
     "Welcome To...": "https://boardgamegeek.com/boardgame/233867/welcome",
     "Western Legends": "https://boardgamegeek.com/boardgame/232405/western-legends",
+    "Bloodborne: The board game": "https://boardgamegeek.com/boardgame/273330/bloodborne-board-game",
+    "Treasure Island": "https://boardgamegeek.com/boardgame/242639/treasure-island",
+    "Moonrakers": "https://boardgamegeek.com/boardgame/270239/moonrakers",
+    "Magic Maze": "https://boardgamegeek.com/boardgame/209778/magic-maze",
+    "Century: Golem Edition": "https://boardgamegeek.com/boardgame/232832/century-golem-edition",
+    "Brawlhalla": "https://store.steampowered.com/app/291550/Brawlhalla/",
+    "Keep Talking and Nobody Explodes": "https://store.steampowered.com/app/341800/Keep_Talking_and_Nobody_Explodes/",
+    "Valorant": "https://playvalorant.com/en-us/",
+    "CS2D": "https://store.steampowered.com/app/666220/CS2D/",
+
 }
 
 five_player_bgg = {
@@ -99,41 +108,47 @@ four_player_old_games = {
     # "Gloomhaven": "https://boardgamegeek.com/boardgame/174430/gloomhaven",
     # "Arkham Horror: The Card Game": "https://boardgamegeek.com/boardgame/205637/arkham-horror-card-game",
     # "Love Letter": "https://boardgamegeek.com/boardgame/129622/love-letter",
-    "Sub Terra": "https://boardgamegeek.com/boardgame/204472/sub-terra",
+    # "Sub Terra": "https://boardgamegeek.com/boardgame/204472/sub-terra",
     "Betrayal at Baldur's Gate": "https://boardgamegeek.com/boardgame/228660/betrayal-baldurs-gate",
-    "Mechs vs. Minions": "https://boardgamegeek.com/boardgame/209010/mechs-vs-minions"
+    # "Mechs vs. Minions": "https://boardgamegeek.com/boardgame/209010/mechs-vs-minions",
+    "Phasmophophobia": "https://store.steampowered.com/app/739630/Phasmophobia/",
 }
 
 default_old_games = {
     # "Bang! The Dice Game": "https://boardgamegeek.com/boardgame/143741/bang-dice-game",
     "Betrayal Legacy": "https://boardgamegeek.com/boardgame/240196/betrayal-legacy",
     # "Camel Up": "https://boardgamegeek.com/boardgame/153938/camel",
-    # "Cosmic Encounter": "https://boardgamegeek.com/boardgame/39463/cosmic-encounter",
-    "Champions of Midgard": "https://boardgamegeek.com/boardgame/172287/champions-midgard",
+    "Cosmic Encounter": "https://boardgamegeek.com/boardgame/39463/cosmic-encounter",
+    # "Champions of Midgard": "https://boardgamegeek.com/boardgame/172287/champions-midgard",
     # "Deep Sea Adventure": "https://boardgamegeek.com/boardgame/169654/deep-sea-adventure",
     # "Lords of Waterdeep": "https://boardgamegeek.com/boardgame/110327/lords-waterdeep",
     # "Nemesis": "https://boardgamegeek.com/boardgame/167355/nemesis",
     # "Secret Hitler": "https://boardgamegeek.com/boardgame/188834/secret-hitler",
     # "Skull": "https://boardgamegeek.com/boardgame/92415/skull",
-    "Small World": "https://boardgamegeek.com/boardgame/40692/small-world",
+    # "Small World": "https://boardgamegeek.com/boardgame/40692/small-world",
     # "Wingspan": "https://boardgamegeek.com/boardgame/266192/wingspan",
-    "Camp Grizzly": "https://boardgamegeek.com/boardgame/143096/camp-grizzly",
+    # "Camp Grizzly": "https://boardgamegeek.com/boardgame/143096/camp-grizzly",
     "Inis": "https://boardgamegeek.com/boardgame/155821/inis",
-    # "Quacks of Quedlinburg": "https://boardgamegeek.com/boardgame/244521/quacks-quedlinburg",
+    "Quacks of Quedlinburg": "https://boardgamegeek.com/boardgame/244521/quacks-quedlinburg",
     # "Zombicide": "https://boardgamegeek.com/boardgame/113924/zombicide",
     "King Of Tokyo" : "https://boardgamegeek.com/boardgame/70323/king-tokyo",
     "Tokaido": "https://boardgamegeek.com/boardgame/123540/tokaido",
     "Pandemic": "https://boardgamegeek.com/boardgame/30549/pandemic",
-    "Food Chain Magnate": "https://boardgamegeek.com/boardgame/175914/food-chain-magnate",
-    "Among us": "https://store.steampowered.com/app/945360/Among_Us/",
+    # "Food Chain Magnate": "https://boardgamegeek.com/boardgame/175914/food-chain-magnate",
+    # "Among us": "https://store.steampowered.com/app/945360/Among_Us/",
     "Left 4 Dead 2": "https://store.steampowered.com/app/550/Left_4_Dead_2/",
     "Garry's Mod" : "https://store.steampowered.com/app/4000/Garrys_Mod/",
     "Jackbox Party Packs": "https://store.steampowered.com/app/1211630/The_Jackbox_Party_Pack_7/",
     "Pummel Party": "https://store.steampowered.com/app/880940/Pummel_Party/",
-    "Skribbl.io": "https://skribbl.io/",
+    # "Skribbl.io": "https://skribbl.io/",
     "Human Fall Flat": "https://store.steampowered.com/app/477160/Human_Fall_Flat/",
     "Golf with your friends": "https://store.steampowered.com/app/431240/Golf_With_Your_Friends/",
-    "League Legends": "https://na.leagueoflegends.com/en-us/"
+    "League Legends": "https://na.leagueoflegends.com/en-us/",
+    "Red Dragon Inn": "https://boardgamegeek.com/boardgame/24310/red-dragon-inn",
+    # "Scythe": "https://boardgamegeek.com/boardgame/169786/scythe",
+    "rocketcrab.com 🚀🦀 ": "https://rocketcrab.com/",
+    "Overwatch": "https://playoverwatch.com/en-us/",
+    "Minecraft": "https://www.minecraft.net/en-us/"
 }
 
 
@@ -145,7 +160,6 @@ with open("state.json") as file:
 @client.event
 async def on_ready():
     print(f"Bot start up. Loaded state={state}")
-    save_to_s3("state.json")
     check_time.start()
 
 
@@ -391,15 +405,14 @@ async def bonus_go_no_go(channel_id, message):
     voter_ids = set([voter.id for voter in flat_list])
     non_voters = set(users) - set(voter_ids)
     if len(voter_ids) >= len(bonus_users) + 1:
-        await save_state(channel_id, "late", None)
-        await save_state(channel_id, "bonus_poll", None)
         for k in winning:
             if k.emoji == '👍':
                 voters = await k.users().flatten()
                 voters = [voter.id for voter in voters if
                           voter.id != 643411373346521088]
                 await save_state(channel_id, "bonus_attendees", voters[:])
-                voters.remove(state[channel_id].get("last_host"))
+                if state[channel_id].get("last_host") in voters:
+                    voters.remove(state[channel_id].get("last_host"))
                 rand_idx = random.randrange(len(voters))
                 host_id = voters[rand_idx]
                 channel = client.get_channel(int(channel_id))
@@ -409,6 +422,8 @@ They will receive a DM which will allow them to suggest a start time and game fo
 """
                 await save_state(channel_id, "bonus_host", host_id)
                 await channel.send(announce)
+                await save_state(channel_id, "late", None)
+                await save_state(channel_id, "bonus_poll", None)
                 host = await client.fetch_user(host_id)
                 await prompt_bonus_host(channel_id, host)
     elif len(non_voters) == 1:

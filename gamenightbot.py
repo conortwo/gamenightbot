@@ -143,7 +143,7 @@ default_old_games = {
     # "Skribbl.io": "https://skribbl.io/",
     "Human Fall Flat": "https://store.steampowered.com/app/477160/Human_Fall_Flat/",
     "Golf with your friends": "https://store.steampowered.com/app/431240/Golf_With_Your_Friends/",
-    "League Legends": "https://na.leagueoflegends.com/en-us/",
+    # "League Legends": "https://na.leagueoflegends.com/en-us/",
     "Red Dragon Inn": "https://boardgamegeek.com/boardgame/24310/red-dragon-inn",
     # "Scythe": "https://boardgamegeek.com/boardgame/169786/scythe",
     "rocketcrab.com 🚀🦀 ": "https://rocketcrab.com/",
@@ -370,7 +370,7 @@ async def tally(channel_id, message , is_timeslot=False):
         key, count = recount.popitem()
         if key.emoji == '🚫':
             resp = f"""Game day will be **skipped** this week as a majority({count}) of players have indicated they can't attend({key.emoji}).
-See you all next year for more games! 🎅 💝         
+See you all next week for more games!        
             """
             await channel.send(resp)
         elif key.emoji in ['🇸', '☀️']:
@@ -466,8 +466,9 @@ async def remind(channel_id, reminder):
     mentions = f"""<@{'>, <@'.join(str(a) for a in attendees[:-1])}> and <@{attendees[
     -1]}>""" if attendees else "@everyone"
     message = f"""{mentions}!
-It's game day!
-Today we will be playing **{reminder['game_name']}** @ **{reminder['start_time']}**(approximately 1 hour from now), Have fun! {emoji}
+*notices your reminder* OwO whats this..?
+it's game day!~
+today we wiww be pwaying **{reminder['game_name']}** @ **{reminder['start_time']}**(appwoximatewy 1 houw fwom now), Have fun!~ :wowwhigh:
     """
     await channel.send(message)
     await save_state(channel_id, "remind_at", float('Inf'))

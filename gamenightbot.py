@@ -153,7 +153,7 @@ default_old_games = {
     "Minecraft": "https://www.minecraft.net/en-us/"
 }
 
-# load_from_s3("state.json")
+load_from_s3("state.json")
 with open("state.json") as file:
     state = json.load(file)
 
@@ -161,7 +161,6 @@ with open("state.json") as file:
 @client.event
 async def on_ready():
     print(f"Bot start up. Loaded state={state}")
-    # await save_state("645296440419156010", "next_poll_at", 0)
     check_time.start()
 
 
@@ -179,7 +178,7 @@ async def save_state(channel_id, field, value):
     print(f"state saved {state[channel_id]} with field={field} value={value}")
     with open("state.json", "w") as fh:
         json.dump(state, fh)
-    # save_to_s3("state.json")
+    save_to_s3("state.json")
     return
 
 
@@ -205,22 +204,22 @@ async def update_poll_status(channel_id, message, status):
 
 async def winners(channel_id, message, is_timeslot):
     emojis = timeslots if is_timeslot else reactions
+    players = state[channel_id].get("attendees", []) if is_timeslot else state[channel_id].get("users")
     counts = {r: r.count - 1 for r in message.reactions if r.emoji in emojis}
     cancel = [react for react in message.reactions if react.emoji == '🚫'][0]
     opt_outs = counts[cancel]
-    max_players = len(state[channel_id].get("users")) - opt_outs
+    max_players = len(players) - opt_outs
     if opt_outs > max_players:
         return {cancel: opt_outs}
     else:
         winning = {r: counts[r] for r in counts if counts[r] == max_players}
         total_voters = []
-        users = state[channel_id].get("users")
         for k in counts:
             voters = await k.users().flatten()
             total_voters.append(voters)
         flat_list = [voter for sublist in total_voters for voter in sublist]
         voter_ids = set([voter.id for voter in flat_list])
-        non_voters = set(users) - voter_ids
+        non_voters = set(players) - voter_ids
         if len(non_voters) == 0:
             await save_state(channel_id, "late", None)
         elif len(non_voters) == 1:
@@ -291,7 +290,10 @@ Can't decide? Type `/tiebreak random` and I'll break the tie for you!
 
 
 async def poll_timeslot(channel_id, weekend, count):
-    message = f"""@everyone
+    attendees = state[channel_id].get("attendees", [])
+    mentions = f"""<@{'>, <@'.join(str(a) for a in attendees[:-1])}> and <@{attendees[
+        -1]}>""" if attendees else "@everyone"
+    message = f"""{mentions}
 {reactions[weekend]}({weekend}) has won with {count} votes!
 Weekends are a busier time so let's try to narrow down a range for the start time. All times are UTC.
 1️⃣ - Starting between 1pm and 3pm
@@ -300,8 +302,7 @@ Weekends are a busier time so let's try to narrow down a range for the start tim
 4️⃣ - Starting between 7pm and 9pm
 5️⃣ - Starting between 9pm and 11pm
 :no_entry_sign: - Can't attend
-
-    """
+"""
     channel = client.get_channel(int(channel_id))
     msg = await channel.send(message)
     for reaction in timeslots.keys():
@@ -776,7 +777,11 @@ async def suggest(ctx, start_time, *gamename):
     await save_state(channel_id, "remind_at", (remind_at - timedelta(hours=1)).timestamp())
     await save_state(channel_id, "reminder", reminder)
     channel = client.get_channel(int(channel_id))
-    announce = f"""@everyone The poll has concluded. 
+    attendees = state[channel_id].get("attendees", [])
+    mentions = f"""<@{'>, <@'.join(str(a) for a in attendees[:-1])}> and <@{attendees[
+        -1]}>""" if attendees else "@everyone"
+    announce = f"""{mentions}
+ The poll has concluded. 
 {host.mention} has decided we'll play **{game_name}** @ **{start_time}** on **{game_night}**.
 I'll remind this channel an hour before then."""
     await channel.send(announce)

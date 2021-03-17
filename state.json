@@ -1,1 +1,48 @@
-{"645296440419156010": {"users": [237651345425825792, 371495733918040064, 695116077709000794], "last_host": 371495733918040064, "next_poll_at": 1590641724.619489, "remind_at": 1590444000.0, "reminder": {"start_time": "8pm", "game_name": "mon"}, "open_poll": 712891260477636659, "game_night": "Monday May 25, 2020", "tied": [], "side_poll": null, "weekend": null, "nudged": null, "late": 695116077709000794, "nudge_at": 1590039343.570644}, "712856504243453952": {"users": [371495733918040064, 237651345425825792], "last_host": 371495733918040064, "next_poll_at": 1590641727.443384, "remind_at": 1590271200.0, "reminder": {"start_time": "8pm", "game_name": "mon"}, "open_poll": 712891272167292970, "game_night": "Saturday May 23, 2020", "tied": [], "side_poll": null, "weekend": null, "nudged": null, "late": null, "nudge_at": 1590043807.895778}}
+{
+  "402183402608132096": {
+    "users": [
+      261949007000109056,
+      237597912538808320,
+      238316319089491970,
+      272120805016469518,
+      237651345425825792
+    ],
+    "last_host": 272120805016469518,
+    "next_poll_at": 1616004545.741335,
+    "remind_at": Infinity,
+    "reminder": null,
+    "game_night": "Friday March 12, 2021",
+    "nudged": 272120805016469504,
+    "tied": [],
+    "nudge_at": Infinity,
+    "bonus_check": null,
+    "attendees": [
+      272120805016469518,
+      261949007000109056,
+      238316319089491970,
+      237651345425825792
+    ],
+    "bonus_night": "Sunday March 14, 2021",
+    "bonus_attendees": [
+      272120805016469518,
+      261949007000109056,
+      238316319089491970,
+      237651345425825792
+    ],
+    "bonus_host": 238316319089491970,
+    "bonus_host_times": {
+      "715978300723560479": 5,
+      "272120805016469518": 4,
+      "237651345425825792": 1,
+      "237597912538808320": 2,
+      "261949007000109056": 0
+    },
+    "bonus_remind_at": Infinity,
+    "open_poll": null,
+    "side_poll": null,
+    "weekend": null,
+    "late": null,
+    "bonus_poll": null,
+    "bonus_reminder": null
+  }
+}

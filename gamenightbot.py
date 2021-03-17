@@ -379,7 +379,7 @@ async def tally(channel_id, message, is_timeslot=False):
 See you all next week for more games!        
             """
             await channel.send(resp)
-        elif count == 2 and not cyberpunk_poll:
+        elif count == 5 and not cyberpunk_poll:
             await check_cyberpunk(channel_id, key)
         elif key.emoji in ['🇸', '☀️']:
             await poll_timeslot(channel_id, key.emoji, count)
@@ -399,7 +399,7 @@ See you all next week for more games!
                 weekend_choices.append(key)
 
         key, count = recount.popitem()
-        if count == 2 and not cyberpunk_poll:
+        if count == 5 and not cyberpunk_poll:
             cyberday = weekend_choices[0] if len(weekend_choices) > 0 else choices[0]
             await check_cyberpunk(channel_id, cyberday)
         else:
@@ -411,7 +411,7 @@ See you all next week for more games!
 
 async def cyberpunk_go_no_go(channel_id, message):
     counts = {r: r.count - 1 for r in message.reactions if r.emoji in ['👍', '👎']}
-    winning = {r: counts[r] for r in counts if counts[r] >= 2}
+    winning = {r: counts[r] for r in counts if counts[r] >= 3}
     total_voters = []
     users = state[channel_id].get("users")
     for k in counts:
@@ -433,6 +433,7 @@ async def cyberpunk_go_no_go(channel_id, message):
 The group has decided we'll play **Cyberpunk Red** @ **{start_time}** on **{game_night}**.
 I'll remind this channel an hour before then."""
                 await channel.send(announce)
+                await save_state(channel_id, "attendees", users[:])
                 await save_state(channel_id, "cyberpunk_poll", None)
                 await save_state(channel_id, "late", None)
                 await check_bonus(channel_id)
@@ -469,14 +470,16 @@ async def bonus_go_no_go(channel_id, message):
                 await save_state(channel_id, "bonus_attendees", voters[:])
                 if state[channel_id].get("last_host") in voters:
                     voters.remove(state[channel_id].get("last_host"))
-                rand_idx = random.randrange(len(voters))
-                host_id = voters[rand_idx]
+                bonus_host_times = state[channel_id].get("bonus_host_times")
+                host_id = int(min(bonus_host_times, key=bonus_host_times.get))
                 channel = client.get_channel(int(channel_id))
                 bonus_night = state[channel_id].get("bonus_night", "the bonus night")
-                announce = f""" <@{host_id}> is this week's randomly selected **bonus** host. 
+                announce = f""" <@{host_id}> is this week's **bonus** host. 
 They will receive a DM which will allow them to suggest a start time and game for additional games on {bonus_night}
 """
                 await save_state(channel_id, "bonus_host", host_id)
+                bonus_host_times[str(host_id)] += 1
+                await save_state(channel_id, "bonus_host_times", bonus_host_times)
                 await channel.send(announce)
                 await save_state(channel_id, "late", None)
                 await save_state(channel_id, "bonus_poll", None)
@@ -659,7 +662,7 @@ async def check_bonus(channel_id):
         message = await channel.fetch_message(int(poll))
         counts = {r: r.count - 1 for r in message.reactions if r.emoji in
                   reactions and r.emoji != winner}
-        options = {r: counts[r] for r in counts if counts[r] >= 2}
+        options = {r: counts[r] for r in counts if counts[r] >= 3}
         make_up = {}
         attendees = state[channel_id].get("attendees", [])
         for k in options:

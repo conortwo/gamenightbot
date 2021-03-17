@@ -535,7 +535,7 @@ async def remind(channel_id, reminder):
         -1]}>""" if attendees else "@everyone"
     message = f"""{mentions}!
 It's game day!
-Today we will be playing **{reminder['game_name']}** @ **{reminder['start_time']}**(approximately 1 hour from now), Have fun! {emoji}
+Today we will be playing **{reminder['game_name']}** @ **{reminder['start_time']}** (approximately 1 hour from now), Have fun! {emoji}
     """
     await channel.send(message)
     await save_state(channel_id, "remind_at", float('Inf'))

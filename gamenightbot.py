@@ -560,7 +560,7 @@ async def poll_time(channel_id):
     message = """@everyone
 The weekly poll is ready! Please indicate your availability below:
 :regional_indicator_t: - Thursday
-:regional_indicator_f: - Late night Friday (starting from 10pm UTC)
+:regional_indicator_f: - Late night Friday (starting from 9pm UTC)
 :regional_indicator_s: - Saturday (A secondary poll to pick a time slot will follow)
 :sunny: - Sunday (A secondary poll to pick a time slot will follow)
 :regional_indicator_m: - Monday

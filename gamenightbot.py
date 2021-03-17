@@ -11,10 +11,12 @@ import os
 import boto3
 
 client = commands.Bot(command_prefix='/', help_command=None)
-reactions = {'🇹': "Thursday",'🇫': "Friday", '🇸': "Saturday", '☀️': "Sunday", '🇲': "Monday", '2️⃣': "Tuesday", '🇼': "Wednesday", '🚫': "Can't attend"}
-timeslots = {'1️⃣': "1pm - 3pm", '2️⃣': "3pm - 5pm", '3️⃣': "5pm - 7pm", '4️⃣': "7pm - 9pm", '5️⃣':"9pm-11pm", '🚫': "Can't attend"}
-dow={d:i for i,d in
-         enumerate('monday,tuesday,wednesday,thursday,friday,saturday,sunday'.split(','))}
+reactions = {'🇹': "Thursday", '🇫': "Friday", '🇸': "Saturday", '☀️': "Sunday", '🇲': "Monday", '2️⃣': "Tuesday",
+             '🇼': "Wednesday", '🚫': "Can't attend"}
+timeslots = {'1️⃣': "1pm - 3pm", '2️⃣': "3pm - 5pm", '3️⃣': "5pm - 7pm", '4️⃣': "7pm - 9pm", '5️⃣': "9pm-11pm",
+             '🚫': "Can't attend"}
+dow = {d: i for i, d in
+       enumerate('monday,tuesday,wednesday,thursday,friday,saturday,sunday'.split(','))}
 S3_BUCKET = os.environ.get('S3_BUCKET')
 
 
@@ -131,13 +133,13 @@ default_old_games = {
     "Inis": "https://boardgamegeek.com/boardgame/155821/inis",
     "Quacks of Quedlinburg": "https://boardgamegeek.com/boardgame/244521/quacks-quedlinburg",
     # "Zombicide": "https://boardgamegeek.com/boardgame/113924/zombicide",
-    "King Of Tokyo" : "https://boardgamegeek.com/boardgame/70323/king-tokyo",
+    "King Of Tokyo": "https://boardgamegeek.com/boardgame/70323/king-tokyo",
     "Tokaido": "https://boardgamegeek.com/boardgame/123540/tokaido",
     "Pandemic": "https://boardgamegeek.com/boardgame/30549/pandemic",
     # "Food Chain Magnate": "https://boardgamegeek.com/boardgame/175914/food-chain-magnate",
     # "Among us": "https://store.steampowered.com/app/945360/Among_Us/",
     "Left 4 Dead 2": "https://store.steampowered.com/app/550/Left_4_Dead_2/",
-    "Garry's Mod" : "https://store.steampowered.com/app/4000/Garrys_Mod/",
+    "Garry's Mod": "https://store.steampowered.com/app/4000/Garrys_Mod/",
     "Jackbox Party Packs": "https://store.steampowered.com/app/1211630/The_Jackbox_Party_Pack_7/",
     "Pummel Party": "https://store.steampowered.com/app/880940/Pummel_Party/",
     # "Skribbl.io": "https://skribbl.io/",
@@ -151,8 +153,7 @@ default_old_games = {
     "Minecraft": "https://www.minecraft.net/en-us/"
 }
 
-
-load_from_s3("state.json")
+# load_from_s3("state.json")
 with open("state.json") as file:
     state = json.load(file)
 
@@ -160,6 +161,7 @@ with open("state.json") as file:
 @client.event
 async def on_ready():
     print(f"Bot start up. Loaded state={state}")
+    # await save_state("645296440419156010", "next_poll_at", 0)
     check_time.start()
 
 
@@ -177,7 +179,7 @@ async def save_state(channel_id, field, value):
     print(f"state saved {state[channel_id]} with field={field} value={value}")
     with open("state.json", "w") as fh:
         json.dump(state, fh)
-    save_to_s3("state.json")
+    # save_to_s3("state.json")
     return
 
 
@@ -203,7 +205,7 @@ async def update_poll_status(channel_id, message, status):
 
 async def winners(channel_id, message, is_timeslot):
     emojis = timeslots if is_timeslot else reactions
-    counts = {r: r.count-1 for r in message.reactions if r.emoji in emojis}
+    counts = {r: r.count - 1 for r in message.reactions if r.emoji in emojis}
     cancel = [react for react in message.reactions if react.emoji == '🚫'][0]
     opt_outs = counts[cancel]
     max_players = len(state[channel_id].get("users")) - opt_outs
@@ -233,7 +235,8 @@ async def winners(channel_id, message, is_timeslot):
 
 
 async def nudge(channel_id, late):
-    await late.send(f"""Hey {late.name}! Looks like your vote could help close out a poll in <#{channel_id}>. Get voting!""")
+    await late.send(
+        f"""Hey {late.name}! Looks like your vote could help close out a poll in <#{channel_id}>. Get voting!""")
     await save_state(channel_id, "nudge_at", float('Inf'))
     await save_state(channel_id, "late", None)
 
@@ -244,7 +247,7 @@ async def prompt_host(channel_id, host, options):
     await save_state(channel_id, "attendees", attendees[:])
     attendees.remove(host.id)
     mentions = f"""<@{'>, <@'.join(str(a) for a in attendees[:-1])}> and <@{attendees[
-    -1]}>""" if len(attendees) > 1 else f"<@{attendees[0]}>"
+        -1]}>""" if len(attendees) > 1 else f"<@{attendees[0]}>"
     timeslot = ""
     if len(options) == 1:
         timeslot = f"""A time between **{options[0]}** best suits the group so try to stick to that range!"""
@@ -265,8 +268,8 @@ async def prompt_bonus_host(channel_id, host):
     attendees = state[channel_id].get("bonus_attendees", [])
     attendees = attendees[:]
     attendees.remove(host.id)
-    mentions = f"""<@{'>, <@'.join( str(a) for a in attendees[:-1])}> and <@{attendees[
-    -1]}>""" if len(attendees) > 1 else f"<@{attendees[0]}>"
+    mentions = f"""<@{'>, <@'.join(str(a) for a in attendees[:-1])}> and <@{attendees[
+        -1]}>""" if len(attendees) > 1 else f"<@{attendees[0]}>"
     await host.send(f"""Hey there {host.name}! You are this week's lucky **bonus** host!
 **{len(attendees)}** players ({mentions}) will be joining you on {game_night}.
 Type ```/bonus [start_time] [game_name]``` to make a suggestion.
@@ -286,6 +289,7 @@ Day of the week should be expressed as a word, e.g ```/tiebreak Monday```
 Can't decide? Type `/tiebreak random` and I'll break the tie for you!
     """)
 
+
 async def poll_timeslot(channel_id, weekend, count):
     message = f"""@everyone
 {reactions[weekend]}({weekend}) has won with {count} votes!
@@ -304,6 +308,7 @@ Weekends are a busier time so let's try to narrow down a range for the start tim
         await msg.add_reaction(reaction)
     await save_state(channel_id, "side_poll", msg.id)
     await save_state(channel_id, "weekend", reactions[weekend])
+
 
 async def choose_host(channel, choices):
     channel_id = str(channel.id)
@@ -351,7 +356,7 @@ They will receive a DM which will allow them to suggest a start time and game fo
     await save_state(channel_id, "last_host", host.id)
 
 
-async def tally(channel_id, message , is_timeslot=False):
+async def tally(channel_id, message, is_timeslot=False):
     leading = await winners(channel_id, message, is_timeslot)
     if len(leading) == 0:
         return
@@ -365,6 +370,7 @@ async def tally(channel_id, message , is_timeslot=False):
     recount = await winners(channel_id, message, is_timeslot)
     channel = client.get_channel(int(channel_id))
     emojis = timeslots if is_timeslot else reactions
+    cyberpunk_poll = state[channel_id].get("cyberpunk_poll", None)
 
     if len(recount) == 1:
         key, count = recount.popitem()
@@ -373,6 +379,8 @@ async def tally(channel_id, message , is_timeslot=False):
 See you all next week for more games!        
             """
             await channel.send(resp)
+        elif count == 2 and not cyberpunk_poll:
+            await check_cyberpunk(channel_id, key)
         elif key.emoji in ['🇸', '☀️']:
             await poll_timeslot(channel_id, key.emoji, count)
         else:
@@ -383,17 +391,65 @@ See you all next week for more games!
     elif len(recount) >= 1:
         tied = []
         choices = []
+        weekend_choices = []
         for key in recount:
             tied.append(f"{emojis[key.emoji]}({key.emoji})")
             choices.append(key)
-        _, count = recount.popitem()
-        await channel.send(f"""{", ".join(tied[:-1])} and {tied[-1]} have {"both" if (len(tied) == 2 )  else "all"} tied with {count} votes! This tie will be broken by this week's host.""")
-        await choose_host(channel, choices)
-        await update_poll_status(channel_id, message, "closed")
+            if key.emoji in ['🇫', '🇸', '☀️']:
+                weekend_choices.append(key)
+
+        key, count = recount.popitem()
+        if count == 2 and not cyberpunk_poll:
+            cyberday = weekend_choices[0] if len(weekend_choices) > 0 else choices[0]
+            await check_cyberpunk(channel_id, cyberday)
+        else:
+            await channel.send(
+                f"""{", ".join(tied[:-1])} and {tied[-1]} have {"both" if (len(tied) == 2) else "all"} tied with {count} votes! This tie will be broken by this week's host.""")
+            await choose_host(channel, choices)
+            await update_poll_status(channel_id, message, "closed")
+
+
+async def cyberpunk_go_no_go(channel_id, message):
+    counts = {r: r.count - 1 for r in message.reactions if r.emoji in ['👍', '👎']}
+    winning = {r: counts[r] for r in counts if counts[r] >= 2}
+    total_voters = []
+    users = state[channel_id].get("users")
+    for k in counts:
+        voters = await k.users().flatten()
+        total_voters.append(voters)
+    flat_list = [voter for sublist in total_voters for voter in sublist]
+    voter_ids = set([voter.id for voter in flat_list])
+    if len(voter_ids) >= len(users) + 1:
+        for k in winning:
+            if k.emoji == '👍':
+                channel = client.get_channel(int(channel_id))
+                start_time = "7pm"
+                reminder = {"start_time": start_time, "game_name": "Cyberpunk Red"}
+                game_night = state[channel_id].get("game_night", "game day")
+                remind_at = parse(f"{start_time} {game_night}")
+                await save_state(channel_id, "remind_at", (remind_at - timedelta(hours=1)).timestamp())
+                await save_state(channel_id, "reminder", reminder)
+                announce = f"""@everyone The poll has concluded. 
+The group has decided we'll play **Cyberpunk Red** @ **{start_time}** on **{game_night}**.
+I'll remind this channel an hour before then."""
+                await channel.send(announce)
+                await save_state(channel_id, "cyberpunk_poll", None)
+                await save_state(channel_id, "late", None)
+                await check_bonus(channel_id)
+            else:
+                # return to regular flow at this point
+                poll = state[channel_id].get("bonus_check", None)
+                channel = client.get_channel(int(channel_id))
+                message = await channel.fetch_message(int(poll))
+                embed = message.embeds[0]
+                embed.clear_fields()
+                await message.edit(embed=embed)
+                await tally(channel_id, message)
+                await save_state(channel_id, "cyberpunk_poll", None)
 
 
 async def bonus_go_no_go(channel_id, message):
-    counts = {r: r.count-1 for r in message.reactions if r.emoji in ['👍', '👎'] }
+    counts = {r: r.count - 1 for r in message.reactions if r.emoji in ['👍', '👎']}
     winning = {r: counts[r] for r in counts if counts[r] >= 3}
     total_voters = []
     users = state[channel_id].get("users")
@@ -435,12 +491,15 @@ They will receive a DM which will allow them to suggest a start time and game fo
             await save_state(channel_id, "nudge_at",
                              (datetime.now() + timedelta(hours=1)).timestamp())
             await save_state(channel_id, "late", late.id)
+
+
 @client.event
 async def on_raw_reaction_add(payload):
     channel_id = str(payload.channel_id)
     open_poll = state[channel_id].get("open_poll", None)
     side_poll = state[channel_id].get("side_poll", None)
     bonus_poll = state[channel_id].get("bonus_poll", None)
+    cyberpunk_poll = state[channel_id].get("cyberpunk_poll", None)
     channel = client.get_channel(int(channel_id))
     if side_poll and side_poll == payload.message_id:
         message = await channel.fetch_message(payload.message_id)
@@ -457,6 +516,9 @@ async def on_raw_reaction_add(payload):
     elif bonus_poll and bonus_poll == payload.message_id:
         message = await channel.fetch_message(payload.message_id)
         await bonus_go_no_go(channel_id, message)
+    elif cyberpunk_poll and cyberpunk_poll == payload.message_id:
+        message = await channel.fetch_message(payload.message_id)
+        await cyberpunk_go_no_go(channel_id, message)
 
 
 async def remind(channel_id, reminder):
@@ -464,7 +526,7 @@ async def remind(channel_id, reminder):
     emoji = get(channel.guild.emojis, name='rollHigh')
     attendees = state[channel_id].get("attendees", [])
     mentions = f"""<@{'>, <@'.join(str(a) for a in attendees[:-1])}> and <@{attendees[
-    -1]}>""" if attendees else "@everyone"
+        -1]}>""" if attendees else "@everyone"
     message = f"""{mentions}!
 It's game day!
 Today we will be playing **{reminder['game_name']}** @ **{reminder['start_time']}**(approximately 1 hour from now), Have fun! {emoji}
@@ -474,19 +536,19 @@ Today we will be playing **{reminder['game_name']}** @ **{reminder['start_time']
     await save_state(channel_id, "reminder", None)
 
 
-
 async def bonus_remind(channel_id, reminder):
     channel = client.get_channel(int(channel_id))
     emoji = get(channel.guild.emojis, name='rollHigh')
     attendees = state[channel_id].get("bonus_attendees", None)
-    mentions = f"""<@{'>, <@'.join( str(a) for a in attendees[:-1])}> and <@{attendees[
-    -1]}>""" if attendees else "@everyone"
+    mentions = f"""<@{'>, <@'.join(str(a) for a in attendees[:-1])}> and <@{attendees[
+        -1]}>""" if attendees else "@everyone"
     message = f"""{mentions}!
 Today we will be playing **{reminder['game_name']}** @ **{reminder['start_time']}**(approximately 1 hour from now), Have fun! {emoji}
     """
     await channel.send(message)
     await save_state(channel_id, "bonus_remind_at", float('Inf'))
     await save_state(channel_id, "bonus_reminder", None)
+
 
 async def poll_time(channel_id):
     message = """@everyone
@@ -523,12 +585,14 @@ async def check_dm_with_host(ctx):
             possible_hosts.append(host)
     if ctx.message.channel.type != discord.ChannelType.private:
         await ctx.message.add_reaction('🙉')
-        await ctx.author.send(f"Sorry the command you tried to invoke (`/{ctx.command.name}`) in #{ctx.message.channel.name} on {ctx.message.channel.guild} is limited to direct message only,")
+        await ctx.author.send(
+            f"Sorry the command you tried to invoke (`/{ctx.command.name}`) in #{ctx.message.channel.name} on {ctx.message.channel.guild} is limited to direct message only,")
         return False
     elif ctx.author.id not in possible_hosts:
         await ctx.author.send("Sorry, only the weekly host can perform this action.")
         return False
     return True
+
 
 async def check_dm_with_bonus_host(ctx):
     possible_hosts = []
@@ -538,13 +602,15 @@ async def check_dm_with_bonus_host(ctx):
             possible_hosts.append(host)
     if ctx.message.channel.type != discord.ChannelType.private:
         await ctx.message.add_reaction('🙉')
-        await ctx.author.send(f"Sorry the command you tried to invoke (`/{ctx.command.name}`) in #{ctx.message.channel.name} on {ctx.message.channel.guild} is limited to direct message only,")
+        await ctx.author.send(
+            f"Sorry the command you tried to invoke (`/{ctx.command.name}`) in #{ctx.message.channel.name} on {ctx.message.channel.guild} is limited to direct message only,")
         return False
     elif ctx.author.id not in possible_hosts:
         await ctx.author.send("Sorry, only the bonus host can perform this "
                               "action.")
         return False
     return True
+
 
 async def fetch_attendees(channel_id, weekday):
     weekday = weekday.capitalize()
@@ -560,6 +626,29 @@ async def fetch_attendees(channel_id, weekday):
                 return [voter.id for voter in voters if voter.id != 643411373346521088]
     return []
 
+
+async def check_cyberpunk(channel_id, choice):
+    channel = client.get_channel(int(channel_id))
+    cyberpunk_msg = f"""@everyone
+I see we have a full five players on {reactions[choice.emoji]}({choice.emoji})
+The next session of Cyberpunk Red is **ready**:
+```
+Cyberpunk progress
+▰▰▰▰▰▰▰▰▱▱ 80%
+Scenario picked, characters imported, NPCs & battlemaps prepped - few more small imports and assets needed.
+```
+Want to play Cyberpunk Red on that day?
+👍 - Set a reminder for Cyberpunk on {reactions[choice.emoji]}({choice.emoji}) and pause host rotation for one week.
+👎 - Skip this check and continue the regular flow / host selection.
+"""
+    msg = await channel.send(cyberpunk_msg)
+    day_and_date = await get_date_for_day(channel_id, reactions[choice.emoji])
+    await save_state(channel_id, "game_night", day_and_date)
+    for reaction in ['👍', '👎']:
+        await msg.add_reaction(reaction)
+    await save_state(channel_id, "cyberpunk_poll", msg.id)
+
+
 async def check_bonus(channel_id):
     channel = client.get_channel(int(channel_id))
     poll = state[channel_id].get("bonus_check", None)
@@ -568,27 +657,28 @@ async def check_bonus(channel_id):
     winner = ivd.get(weekday, None)
     if winner and poll:
         message = await channel.fetch_message(int(poll))
-        counts = {r: r.count-1 for r in message.reactions if r.emoji in
+        counts = {r: r.count - 1 for r in message.reactions if r.emoji in
                   reactions and r.emoji != winner}
-        options = {r: counts[r] for r in counts if counts[r] >= 3}
+        options = {r: counts[r] for r in counts if counts[r] >= 2}
         make_up = {}
         attendees = state[channel_id].get("attendees", [])
         for k in options:
             voters = await k.users().flatten()
-            voter_ids = [voter.id for voter in voters if voter.id != 643411373346521088 ]
+            voter_ids = [voter.id for voter in voters if voter.id != 643411373346521088]
             make_up[k] = set(voter_ids) - set(attendees)
         if len(make_up) > 0:
             best_opt = max(make_up, key=lambda k: len(make_up[k]))
             tied = [k for k in make_up.keys() if len(make_up[k]) == len(make_up[best_opt])]
             if weekday in ["Friday", "Saturday", "Sunday"]:
-                filtered = [ k for k in tied if k.emoji not in ['🇫', '🇸', '☀️']]
+                filtered = [k for k in tied if k.emoji not in ['🇫', '🇸', '☀️']]
             else:
-                filtered = [ k for k in tied if k.emoji in ['🇫', '🇸', '☀️']]
+                filtered = [k for k in tied if k.emoji in ['🇫', '🇸', '☀️']]
             if len(filtered) > 0:
                 best_opt = random.choice(filtered)
             else:
                 best_opt = random.choice(tied)
-            mentions = f"""This way, <@{'>, + <@'.join(str(a) for a in make_up[best_opt])}> can still play this week."""  if len(make_up[best_opt]) > 0 else ""
+            mentions = f"""This way, <@{'>, + <@'.join(str(a) for a in make_up[best_opt])}> can still play this week.""" if len(
+                make_up[best_opt]) > 0 else ""
             if len(make_up[best_opt]) == 0:
                 best_opt = max(options, key=options.get)
                 tied = [k for k in options.keys() if options[k] == options[best_opt]]
@@ -603,12 +693,13 @@ async def check_bonus(channel_id):
                 else:
                     best_opt = random.choice(tied)
             audience = await best_opt.users().flatten()
-            audience_ids = [voter.id for voter in audience if voter.id != 643411373346521088 ]
-            prompt = f"""<@{'>, <@'.join( str(a) for a in audience_ids[:-1])}> and <@{audience_ids[
-            -1]}>"""
+            audience_ids = [voter.id for voter in audience if voter.id != 643411373346521088]
+            await save_state(channel_id, "bonus_attendees", audience_ids[:])
+            prompt = f"""<@{'>, <@'.join(str(a) for a in audience_ids[:-1])}> and <@{audience_ids[
+                -1]}>"""
             bonus_msg = f"""{prompt}
 I see that {reactions[best_opt.emoji]}({best_opt.emoji}) has {options[
-best_opt]} votes. Want me to setup an additional bonus game night for then?
+                best_opt]} votes. Want me to setup an additional bonus game night for then?
 {mentions}
 """
             msg = await channel.send(bonus_msg)
@@ -637,7 +728,7 @@ async def bonus(ctx, start_time, *gamename):
     game_night = state[channel_id].get("bonus_night", "game day")
     attendees = state[channel_id].get("bonus_attendees", [])
     mentions = f"""<@{'>, <@'.join(str(a) for a in attendees[:-1])}> and <@{attendees[
-    -1]}>""" if len(attendees) > 1 else f"@<{attendees[0]}>"
+        -1]}>""" if len(attendees) > 1 else f"@<{attendees[0]}>"
     remind_at = parse(f"{start_time} {game_night}")
     if remind_at is None or remind_at.timestamp() <= time.time():
         await ctx.send(f"Sorry I had trouble understanding {start_time} as a a start time. Please try again.")
@@ -720,20 +811,32 @@ async def tiebreak(ctx, weekday, *args):
             await poll_timeslot(channel_id, ivd[weekday], "the most")
         else:
             host = ctx.message.author
-            await prompt_host(channel_id, host,  [])
+            await prompt_host(channel_id, host, [])
     else:
         await ctx.send(f"Sorry, I didn't recognize {weekday} as one of the options for the tie break. Try again. ")
+
 
 async def output_boardgames(ctx, options, num_players, num_games):
     games = random.sample(list(options), num_games)
     reacts = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣']
     nl = "\n"
     bgames = f"""{''.join(f'**{reacts[i]} - {games[i]}** | {options[games[i]]}{nl}' for i in range(len(games)))}"""
-    msg = await ctx.send(f"""Okay <@{ctx.author.id}>, I've chosen **{num_games}** games which play well with **{num_players}** players:
+    msg = await ctx.send(
+        f"""Okay <@{ctx.author.id}>, I've chosen **{num_games}** games which play well with **{num_players}** players:
 {bgames}🔁 - Request a new set of games""")
     for reaction in reacts[:len(games)]:
         await msg.add_reaction(reaction)
     await msg.add_reaction('🔁')
+
+
+@client.command()
+async def cyberpunk(ctx):
+    await ctx.send("""The next session of Cyberpunk Red is **ready**:
+```
+Cyberpunk progress
+▰▰▰▰▰▰▰▰▱▱ 80%
+Scenario picked, characters imported, NPCs & battlemaps prepped - few more small imports and assets needed.
+```""")
 
 
 @client.command()

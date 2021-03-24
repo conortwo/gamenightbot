@@ -32,36 +32,36 @@ def load_from_s3(file_name):
 
 four_player_bgg = {
     "Azul": "https://boardgamegeek.com/boardgame/230802/azul",
-    "Burgle Bros": "https://boardgamegeek.com/boardgame/172081/burgle-bros",
+    # "Burgle Bros": "https://boardgamegeek.com/boardgame/172081/burgle-bros",
     "Clank!": "https://boardgamegeek.com/boardgame/201808/clank-deck-building-adventure",
     "Cryptid": "https://boardgamegeek.com/boardgame/246784/cryptid",
-    "Decrypto": "https://boardgamegeek.com/boardgame/225694/decrypto",
-    "Dice Throne": "https://boardgamegeek.com/boardgame/216734/dice-throne-season-one",
+    # "Dice Throne": "https://boardgamegeek.com/boardgame/216734/dice-throne-season-one",
     "Everdell": "https://boardgamegeek.com/boardgame/199792/everdell",
     "Forbidden Island": "https://boardgamegeek.com/boardgame/65244/forbidden-island",
     "Fort": "https://boardgamegeek.com/boardgame/296912/fort",
     "Ghost Stories": "https://boardgamegeek.com/boardgame/37046/ghost-stories",
     "Root": "https://boardgamegeek.com/boardgame/237182/root",
     "Smash up": "https://boardgamegeek.com/boardgame/122522/smash",
-    "Survive: Escape From Atlantis!": "https://boardgamegeek.com/boardgame/2653/survive-escape-atlantis",
-    "Suburbia": "https://boardgamegeek.com/boardgame/123260/suburbia",
-    "Terraforming Mars": "https://boardgamegeek.com/boardgame/167791/terraforming-mars",
+    # "Survive: Escape From Atlantis!": "https://boardgamegeek.com/boardgame/2653/survive-escape-atlantis",
+    # "Suburbia": "https://boardgamegeek.com/boardgame/123260/suburbia",
+    # "Terraforming Mars": "https://boardgamegeek.com/boardgame/167791/terraforming-mars",
     "T.I.M.E Stories": "https://boardgamegeek.com/boardgame/146508/time-stories",
-    "Crokinole": "https://boardgamegeek.com/boardgame/521/crokinole",
-    "Tragedy Looper": "https://boardgamegeek.com/boardgame/148319/tragedy-looper",
-    "XCOM: The Board game": "https://boardgamegeek.com/boardgame/163602/xcom-board-game",
+    # "Crokinole": "https://boardgamegeek.com/boardgame/521/crokinole",
+    # "Tragedy Looper": "https://boardgamegeek.com/boardgame/148319/tragedy-looper",
+    # "XCOM: The Board game": "https://boardgamegeek.com/boardgame/163602/xcom-board-game",
     "Isle of Cats": "https://boardgamegeek.com/boardgame/281259/isle-cats",
-    "Five Tribes": "https://boardgamegeek.com/boardgame/157354/five-tribes"
+    # "Five Tribes": "https://boardgamegeek.com/boardgame/157354/five-tribes"
+    "Phasmophophobia": "https://store.steampowered.com/app/739630/Phasmophobia/"
 }
 
 default_bgg = {
-    "Cockroach Poker": "https://boardgamegeek.com/boardgame/11971/cockroach-poker",
+    # "Cockroach Poker": "https://boardgamegeek.com/boardgame/11971/cockroach-poker",
     "7 Wonders": "https://boardgamegeek.com/boardgame/68448/7-wonders",
     "Blood Rage": "https://boardgamegeek.com/boardgame/170216/blood-rage",
     "Mysterium": "https://boardgamegeek.com/boardgame/181304/mysterium",
-    "Coup": "https://boardgamegeek.com/boardgame/131357/coup",
+    # "Coup": "https://boardgamegeek.com/boardgame/131357/coup",
     "Dead of Winter": "https://boardgamegeek.com/boardgame/150376/dead-winter-crossroads-game",
-    "Eldritch Horror": "https://boardgamegeek.com/boardgame/146021/eldritch-horror",
+    # "Eldritch Horror": "https://boardgamegeek.com/boardgame/146021/eldritch-horror",
     "Epic Spell Wars": "https://boardgamegeek.com/boardgame/112686/epic-spell-wars-battle-wizards-duel-mt-skullzfyre",
     "Forbidden Desert": "https://boardgamegeek.com/boardgame/136063/forbidden-desert",
     "Formula D": "https://boardgamegeek.com/boardgame/37904/formula-d",
@@ -90,20 +90,16 @@ default_bgg = {
     "Brawlhalla": "https://store.steampowered.com/app/291550/Brawlhalla/",
     "Keep Talking and Nobody Explodes": "https://store.steampowered.com/app/341800/Keep_Talking_and_Nobody_Explodes/",
     "Valorant": "https://playvalorant.com/en-us/",
-    "CS2D": "https://store.steampowered.com/app/666220/CS2D/",
-
+    "CS2D": "https://store.steampowered.com/app/666220/CS2D/"
 }
 
 five_player_bgg = {
     "The Resistance": "https://boardgamegeek.com/boardgame/41114/resistance",
-    "A Fake Artist Goes to New York": "https://boardgamegeek.com/boardgame/135779/fake-artist-goes-new-york",
     "Battlestar Galactica": "https://boardgamegeek.com/boardgame/37111/battlestar-galactica-board-game",
     "Cash' n Guns": "https://boardgamegeek.com/boardgame/19237/cah-n-gun",
     "Deception: Murder in Hong Kong": "https://boardgamegeek.com/boardgame/156129/deception-murder-hong-kong",
-    "Just One": "https://boardgamegeek.com/boardgame/254640/just-one",
     "The Resistance: Avalon": "https://boardgamegeek.com/boardgame/128882/resistance-avalon",
     "The Thing": "https://boardgamegeek.com/boardgame/226634/thing-infection-outpost-31",
-    "Wavelength": "https://boardgamegeek.com/boardgame/262543/wavelength"
 }
 
 four_player_old_games = {
@@ -113,7 +109,8 @@ four_player_old_games = {
     # "Sub Terra": "https://boardgamegeek.com/boardgame/204472/sub-terra",
     "Betrayal at Baldur's Gate": "https://boardgamegeek.com/boardgame/228660/betrayal-baldurs-gate",
     # "Mechs vs. Minions": "https://boardgamegeek.com/boardgame/209010/mechs-vs-minions",
-    "Phasmophophobia": "https://store.steampowered.com/app/739630/Phasmophobia/",
+    "Stardew Valley": "https://store.steampowered.com/app/413150/Stardew_Valley/",
+    "Stardew Valley: The Board Game": "https://boardgamegeek.com/boardgame/332290/stardew-valley-board-game"
 }
 
 default_old_games = {
@@ -145,12 +142,16 @@ default_old_games = {
     # "Skribbl.io": "https://skribbl.io/",
     "Human Fall Flat": "https://store.steampowered.com/app/477160/Human_Fall_Flat/",
     "Golf with your friends": "https://store.steampowered.com/app/431240/Golf_With_Your_Friends/",
-    # "League Legends": "https://na.leagueoflegends.com/en-us/",
+    "League of Legends": "https://na.leagueoflegends.com/en-us/",
     "Red Dragon Inn": "https://boardgamegeek.com/boardgame/24310/red-dragon-inn",
-    # "Scythe": "https://boardgamegeek.com/boardgame/169786/scythe",
+    "Scythe": "https://boardgamegeek.com/boardgame/169786/scythe",
     "rocketcrab.com 🚀🦀 ": "https://rocketcrab.com/",
     "Overwatch": "https://playoverwatch.com/en-us/",
-    "Minecraft": "https://www.minecraft.net/en-us/"
+    "Minecraft": "https://www.minecraft.net/en-us/",
+    "Counter Strike Source": "https://store.steampowered.com/app/240/CounterStrike_Source/",
+    "Counter-Strike: Global Offensive": "https://store.steampowered.com/app/730/CounterStrike_Global_Offensive/",
+    "Halo": "https://store.steampowered.com/app/976730/Halo_The_Master_Chief_Collection/",
+    "AoE II": "https://store.steampowered.com/app/813780/Age_of_Empires_II_Definitive_Edition/"
 }
 
 load_from_s3("state.json")
@@ -896,6 +897,31 @@ e.g ```/random_game 4 5``` gets 5 games which can be played with 4 players.""")
         except ValueError:
             await ctx.send(f"Sorry, I don't understand {num_games} as a number.")
 
+
+@client.command()
+async def video_game(ctx, num_players=None, num_games="3"):
+    if num_players is None:
+        await ctx.send(""" You must specify a number of players to find games for. Currently supported: 4 or 5
+Type ```/video_game [player_count] [num_games](default 3)``` to get random games for that many players.
+e.g ```/video_game 4 5``` gets 5 games which can be played with 4 players.""")
+    else:
+        try:
+            games = int(num_games)
+            if games > 5:
+                await ctx.send("Sorry, that's too many games. Please keep the number at 5 or under.")
+            elif num_players == "4":
+                options = {**four_player_bgg, **default_bgg, **four_player_old_games, **default_old_games}
+                filtered = {key: value for (key, value) in options.items()  if not "boardgame" in value}
+                await output_boardgames(ctx, filtered, "4", games)
+            elif num_players == "5":
+                options = {**five_player_bgg, **default_bgg, **default_old_games}
+                filtered = {key: value for (key, value) in options.items() if not "boardgame" in value}
+                await output_boardgames(ctx, filtered, "5", games)
+            else:
+                await ctx.send(
+                    """Sorry, I'm not aware of which games can be played with that many players.""")
+        except ValueError:
+            await ctx.send(f"Sorry, I don't understand {num_games} as a number.")
 
 @client.command()
 async def old_game(ctx, num_players=None, num_games="3"):

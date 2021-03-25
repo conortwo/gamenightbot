@@ -154,7 +154,7 @@ default_old_games = {
     "AoE II": "https://store.steampowered.com/app/813780/Age_of_Empires_II_Definitive_Edition/"
 }
 
-# load_from_s3("state.json")
+load_from_s3("state.json")
 with open("state.json") as file:
     state = json.load(file)
 
@@ -163,7 +163,6 @@ with open("state.json") as file:
 async def on_ready():
     print(f"Bot start up. Loaded state={state}")
     check_time.start()
-    save_to_s3("state.json")
 
 
 
@@ -563,7 +562,7 @@ async def poll_time(channel_id):
     message = """@everyone
 The weekly poll is ready! Please indicate your availability below:
 :regional_indicator_t: - Thursday
-:regional_indicator_f: - Late night Friday (starting from 9pm UTC)
+:regional_indicator_f: - Late night Friday (starting from 10pm UTC)
 :regional_indicator_s: - Saturday (A secondary poll to pick a time slot will follow)
 :sunny: - Sunday (A secondary poll to pick a time slot will follow)
 :regional_indicator_m: - Monday

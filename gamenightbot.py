@@ -51,7 +51,9 @@ four_player_bgg = {
     # "XCOM: The Board game": "https://boardgamegeek.com/boardgame/163602/xcom-board-game",
     "Isle of Cats": "https://boardgamegeek.com/boardgame/281259/isle-cats",
     # "Five Tribes": "https://boardgamegeek.com/boardgame/157354/five-tribes"
-    "Phasmophophobia": "https://store.steampowered.com/app/739630/Phasmophobia/"
+    "Deep Rock Galactic": "https://store.steampowered.com/app/548430/Deep_Rock_Galactic/",
+    "Risk of Rain 2": "https://store.steampowered.com/app/632360/Risk_of_Rain_2/",
+    "Div 2": "https://store.steampowered.com/app/435150/Divinity_Original_Sin_2__Definitive_Edition/",
 }
 
 default_bgg = {
@@ -90,7 +92,10 @@ default_bgg = {
     "Brawlhalla": "https://store.steampowered.com/app/291550/Brawlhalla/",
     "Keep Talking and Nobody Explodes": "https://store.steampowered.com/app/341800/Keep_Talking_and_Nobody_Explodes/",
     "Valorant": "https://playvalorant.com/en-us/",
-    "CS2D": "https://store.steampowered.com/app/666220/CS2D/"
+    "CS2D": "https://store.steampowered.com/app/666220/CS2D/",
+    "Valheim": "https://store.steampowered.com/app/892970/Valheim/",
+    "Rainbow Six Siege": "https://store.steampowered.com/app/359550/Tom_Clancys_Rainbow_Six_Siege/",
+
 }
 
 five_player_bgg = {
@@ -100,6 +105,7 @@ five_player_bgg = {
     "Deception: Murder in Hong Kong": "https://boardgamegeek.com/boardgame/156129/deception-murder-hong-kong",
     "The Resistance: Avalon": "https://boardgamegeek.com/boardgame/128882/resistance-avalon",
     "The Thing": "https://boardgamegeek.com/boardgame/226634/thing-infection-outpost-31",
+    "Dead by Daylight": "https://store.steampowered.com/app/381210/Dead_by_Daylight/"
 }
 
 four_player_old_games = {
@@ -110,7 +116,8 @@ four_player_old_games = {
     "Betrayal at Baldur's Gate": "https://boardgamegeek.com/boardgame/228660/betrayal-baldurs-gate",
     # "Mechs vs. Minions": "https://boardgamegeek.com/boardgame/209010/mechs-vs-minions",
     "Stardew Valley": "https://store.steampowered.com/app/413150/Stardew_Valley/",
-    "Stardew Valley: The Board Game": "https://boardgamegeek.com/boardgame/332290/stardew-valley-board-game"
+    "Stardew Valley: The Board Game": "https://boardgamegeek.com/boardgame/332290/stardew-valley-board-game",
+    "Phasmophophobia": "https://store.steampowered.com/app/739630/Phasmophobia/",
 }
 
 default_old_games = {

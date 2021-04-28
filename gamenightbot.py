@@ -53,7 +53,7 @@ four_player_bgg = {
     # "Five Tribes": "https://boardgamegeek.com/boardgame/157354/five-tribes"
     "Deep Rock Galactic": "https://store.steampowered.com/app/548430/Deep_Rock_Galactic/",
     "Risk of Rain 2": "https://store.steampowered.com/app/632360/Risk_of_Rain_2/",
-    "Div 2": "https://store.steampowered.com/app/435150/Divinity_Original_Sin_2__Definitive_Edition/",
+    "Legends of Runeterra": "https://playruneterra.com/",
 }
 
 default_bgg = {

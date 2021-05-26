@@ -433,7 +433,7 @@ async def cyberpunk_go_no_go(channel_id, message):
         for k in winning:
             if k.emoji == '👍':
                 channel = client.get_channel(int(channel_id))
-                start_time = "7pm"
+                start_time = "5pm"
                 reminder = {"start_time": start_time, "game_name": "Cyberpunk Red"}
                 game_night = state[channel_id].get("game_night", "game day")
                 remind_at = parse(f"{start_time} {game_night}")
@@ -649,9 +649,8 @@ I see we have a full five players on {reactions[choice.emoji]}({choice.emoji})
 The next session of Cyberpunk Red is **ready**:
 ```
 Cyberpunk progress
-▰▰▰▰▰▰▰▰▱▱ 80%
-Scenario picked, characters imported, NPCs & battlemaps prepped - few more small imports and assets needed.
-```
+▰▰▰▰▰▰▰▰▰▱ 99%
+Let's go!```
 Want to play Cyberpunk Red on that day?
 👍 - Set a reminder for Cyberpunk on {reactions[choice.emoji]}({choice.emoji}) and pause host rotation for one week.
 👎 - Skip this check and continue the regular flow / host selection.

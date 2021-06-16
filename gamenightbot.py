@@ -169,8 +169,8 @@ with open("state.json") as file:
 @client.event
 async def on_ready():
     print(f"Bot start up. Loaded state={state}")
+    # save_to_s3("state.json")
     check_time.start()
-
 
 
 async def get_date_for_day(channel_id, weekday):
@@ -389,8 +389,8 @@ async def tally(channel_id, message, is_timeslot=False):
 See you all next week for more games!        
             """
             await channel.send(resp)
-        elif count == 5 and not cyberpunk_poll:
-            await check_cyberpunk(channel_id, key)
+        # elif count == 5 and not cyberpunk_poll:
+        #     await check_cyberpunk(channel_id, key)
         elif key.emoji in ['🇸', '☀️']:
             await poll_timeslot(channel_id, key.emoji, count)
         else:
@@ -409,14 +409,13 @@ See you all next week for more games!
                 weekend_choices.append(key)
 
         key, count = recount.popitem()
-        if count == 5 and not cyberpunk_poll:
-            cyberday = weekend_choices[0] if len(weekend_choices) > 0 else choices[0]
-            await check_cyberpunk(channel_id, cyberday)
-        else:
-            await channel.send(
-                f"""{", ".join(tied[:-1])} and {tied[-1]} have {"both" if (len(tied) == 2) else "all"} tied with {count} votes! This tie will be broken by this week's host.""")
-            await choose_host(channel, choices)
-            await update_poll_status(channel_id, message, "closed")
+        # if count == 5 and not cyberpunk_poll:
+        #     cyberday = weekend_choices[0] if len(weekend_choices) > 0 else choices[0]
+        #     await check_cyberpunk(channel_id, cyberday)
+        await channel.send(
+            f"""{", ".join(tied[:-1])} and {tied[-1]} have {"both" if (len(tied) == 2) else "all"} tied with {count} votes! This tie will be broken by this week's host.""")
+        await choose_host(channel, choices)
+        await update_poll_status(channel_id, message, "closed")
 
 
 async def cyberpunk_go_no_go(channel_id, message):
@@ -482,7 +481,7 @@ async def bonus_go_no_go(channel_id, message):
                     voters.remove(state[channel_id].get("last_host"))
                 bonus_host_times = state[channel_id].get("bonus_host_times")
                 least_bonus = min(bonus_host_times.values())
-                lowest_hosts = [int(host) for host, times in bonus_host_times.items() if times == least_bonus]
+                lowest_hosts = [int(host) for host, times in bonus_host_times.items() if times == least_bonus and host in voters]
                 host_id = random.choice(lowest_hosts)
                 channel = client.get_channel(int(channel_id))
                 bonus_night = state[channel_id].get("bonus_night", "the bonus night")
@@ -661,6 +660,7 @@ Want to play Cyberpunk Red on that day?
     for reaction in ['👍', '👎']:
         await msg.add_reaction(reaction)
     await save_state(channel_id, "cyberpunk_poll", msg.id)
+
 
 
 async def check_bonus(channel_id):

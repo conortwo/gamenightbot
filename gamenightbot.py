@@ -433,7 +433,7 @@ async def cyberpunk_go_no_go(channel_id, message):
         for k in winning:
             if k.emoji == '👍':
                 channel = client.get_channel(int(channel_id))
-                start_time = "5pm"
+                start_time = "7pm"
                 reminder = {"start_time": start_time, "game_name": "Cyberpunk Red"}
                 game_night = state[channel_id].get("game_night", "game day")
                 remind_at = parse(f"{start_time} {game_night}")

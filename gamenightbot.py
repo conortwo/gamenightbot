@@ -389,8 +389,8 @@ async def tally(channel_id, message, is_timeslot=False):
 See you all next week for more games!        
             """
             await channel.send(resp)
-        # elif count == 5 and not cyberpunk_poll:
-        #     await check_cyberpunk(channel_id, key)
+        elif count == 5 and not cyberpunk_poll:
+            await check_cyberpunk(channel_id, key)
         elif key.emoji in ['🇸', '☀️']:
             await poll_timeslot(channel_id, key.emoji, count)
         else:
@@ -409,13 +409,14 @@ See you all next week for more games!
                 weekend_choices.append(key)
 
         key, count = recount.popitem()
-        # if count == 5 and not cyberpunk_poll:
-        #     cyberday = weekend_choices[0] if len(weekend_choices) > 0 else choices[0]
-        #     await check_cyberpunk(channel_id, cyberday)
-        await channel.send(
-            f"""{", ".join(tied[:-1])} and {tied[-1]} have {"both" if (len(tied) == 2) else "all"} tied with {count} votes! This tie will be broken by this week's host.""")
-        await choose_host(channel, choices)
-        await update_poll_status(channel_id, message, "closed")
+        if count == 5 and not cyberpunk_poll:
+            cyberday = weekend_choices[0] if len(weekend_choices) > 0 else choices[0]
+            await check_cyberpunk(channel_id, cyberday)
+        else:
+            await channel.send(
+                f"""{", ".join(tied[:-1])} and {tied[-1]} have {"both" if (len(tied) == 2) else "all"} tied with {count} votes! This tie will be broken by this week's host.""")
+            await choose_host(channel, choices)
+            await update_poll_status(channel_id, message, "closed")
 
 
 async def cyberpunk_go_no_go(channel_id, message):
@@ -648,8 +649,8 @@ I see we have a full five players on {reactions[choice.emoji]}({choice.emoji})
 The next session of Cyberpunk Red is **ready**:
 ```
 Cyberpunk progress
-▰▰▰▰▰▰▰▰▰▱ 99%
-Let's go!```
+▰▰▰▰▰▰▰▰▰▰ 100%
+The Apartment Part 2 - half session to resolve combat + some downtime for upgrades/buying gear```
 Want to play Cyberpunk Red on that day?
 👍 - Set a reminder for Cyberpunk on {reactions[choice.emoji]}({choice.emoji}) and pause host rotation for one week.
 👎 - Skip this check and continue the regular flow / host selection.

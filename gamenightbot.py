@@ -650,7 +650,7 @@ The next session of Cyberpunk Red is **ready**:
 ```
 Cyberpunk progress
 ▰▰▰▰▰▰▰▰▰▰ 100%
-The Apartment Part 2 - half session to resolve combat + some downtime for upgrades/buying gear```
+The Apartment Part 2 - shorter session to resolve combat + maybe some downtime for xp/upgrades/gear?```
 Want to play Cyberpunk Red on that day?
 👍 - Set a reminder for Cyberpunk on {reactions[choice.emoji]}({choice.emoji}) and pause host rotation for one week.
 👎 - Skip this check and continue the regular flow / host selection.

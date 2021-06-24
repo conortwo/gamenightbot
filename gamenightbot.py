@@ -482,7 +482,7 @@ async def bonus_go_no_go(channel_id, message):
                     voters.remove(state[channel_id].get("last_host"))
                 bonus_host_times = state[channel_id].get("bonus_host_times")
                 least_bonus = min(bonus_host_times.values())
-                lowest_hosts = [int(host) for host, times in bonus_host_times.items() if times == least_bonus and host in voters]
+                lowest_hosts = [int(host) for host, times in bonus_host_times.items() if times == least_bonus and int(host) in voters]
                 host_id = random.choice(lowest_hosts)
                 channel = client.get_channel(int(channel_id))
                 bonus_night = state[channel_id].get("bonus_night", "the bonus night")

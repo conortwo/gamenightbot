@@ -299,7 +299,7 @@ Can't decide? Type `/tiebreak random` and I'll break the tie for you!
 
 
 async def poll_timeslot(channel_id, weekend, count):
-    attendees = state[channel_id].get("attendees", [])
+    attendees = await fetch_attendees(channel_id, weekend)
     mentions = f"""<@{'>, <@'.join(str(a) for a in attendees[:-1])}> and <@{attendees[
         -1]}>""" if attendees else "@everyone"
     message = f"""{mentions}

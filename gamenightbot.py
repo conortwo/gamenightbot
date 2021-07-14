@@ -161,7 +161,7 @@ default_old_games = {
     "AoE II": "https://store.steampowered.com/app/813780/Age_of_Empires_II_Definitive_Edition/"
 }
 
-load_from_s3("state.json")
+# load_from_s3("state.json")
 with open("state.json") as file:
     state = json.load(file)
 
@@ -371,8 +371,8 @@ async def tally(channel_id, message, is_timeslot=False):
     if len(leading) == 0:
         return
     is_closing = await update_poll_status(channel_id, message, "closing")
-    if not is_closing:
-        return
+    # if not is_closing:
+    #     return
     await save_state(channel_id, "open_poll", None)
     await asyncio.sleep(30)
     channel = client.get_channel(int(channel_id))

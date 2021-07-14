@@ -161,7 +161,7 @@ default_old_games = {
     "AoE II": "https://store.steampowered.com/app/813780/Age_of_Empires_II_Definitive_Edition/"
 }
 
-# load_from_s3("state.json")
+load_from_s3("state.json")
 with open("state.json") as file:
     state = json.load(file)
 

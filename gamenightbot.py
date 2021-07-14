@@ -371,8 +371,8 @@ async def tally(channel_id, message, is_timeslot=False):
     if len(leading) == 0:
         return
     is_closing = await update_poll_status(channel_id, message, "closing")
-    # if not is_closing:
-    #     return
+    if not is_closing:
+        return
     await save_state(channel_id, "open_poll", None)
     await asyncio.sleep(30)
     channel = client.get_channel(int(channel_id))

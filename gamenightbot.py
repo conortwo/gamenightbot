@@ -636,7 +636,9 @@ async def fetch_attendees(channel_id, weekday):
         for r in message.reactions:
             if r.emoji == winner:
                 voters = await r.users().flatten()
-                return [voter.id for voter in voters if voter.id != 643411373346521088]
+                attendees = [voter.id for voter in voters if voter.id != 643411373346521088]
+                await save_state(channel_id, "attendees", attendees[:])
+                return attendees[:]
     return []
 
 

@@ -299,7 +299,7 @@ Can't decide? Type `/tiebreak random` and I'll break the tie for you!
 
 
 async def poll_timeslot(channel_id, weekend, count):
-    attendees = await fetch_attendees(channel_id, weekend)
+    attendees = await fetch_attendees(channel_id, reactions[weekend])
     mentions = f"""<@{'>, <@'.join(str(a) for a in attendees[:-1])}> and <@{attendees[
         -1]}>""" if attendees else "@everyone"
     message = f"""{mentions}
@@ -647,8 +647,9 @@ I see we have a full five players on {reactions[choice.emoji]}({choice.emoji})
 The next session of Cyberpunk Red is **ready**:
 ```
 Cyberpunk progress
-▰▰▰▰▰▰▰▰▰▰ 100%
-The Apartment Part 2 - shorter session to resolve combat + maybe some downtime for xp/upgrades/gear?```
+▰▰▰▰▰▰▰▰▱▱ 80%
+Is it a heist? Is it an investigation? Nope, it's a weird hybrid of the two.
+The gang get in over their head in EPISODE 2 - CABIN FEVER.```
 Want to play Cyberpunk Red on that day?
 👍 - Set a reminder for Cyberpunk on {reactions[choice.emoji]}({choice.emoji}) and pause host rotation for one week.
 👎 - Skip this check and continue the regular flow / host selection.

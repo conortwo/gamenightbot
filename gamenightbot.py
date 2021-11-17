@@ -389,8 +389,8 @@ async def tally(channel_id, message, is_timeslot=False):
 See you all next week for more games!        
             """
             await channel.send(resp)
-        # elif count == 5 and not cyberpunk_poll:
-        #     await check_cyberpunk(channel_id, key)
+        elif count == 5 and not cyberpunk_poll:
+            await check_cyberpunk(channel_id, key)
         elif key.emoji in ['🇸', '☀️']:
             await poll_timeslot(channel_id, key.emoji, count)
         else:
@@ -649,9 +649,8 @@ I see we have a full five players on {reactions[choice.emoji]}({choice.emoji})
 The next session of Cyberpunk Red is **ready**:
 ```
 Cyberpunk progress
-▰▰▰▰▰▰▰▰▱▱ 80%
-Is it a heist? Is it an investigation? Nope, it's a weird hybrid of the two.
-The gang get in over their head in EPISODE 2 - CABIN FEVER.```
+▰▰▰▰▰▰▰▰▰▰ 100%
+Heist with a dash of mystery?```
 Want to play Cyberpunk Red on that day?
 👍 - Set a reminder for Cyberpunk on {reactions[choice.emoji]}({choice.emoji}) and pause host rotation for one week.
 👎 - Skip this check and continue the regular flow / host selection.

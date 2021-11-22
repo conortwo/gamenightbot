@@ -11,8 +11,8 @@ import os
 import boto3
 
 client = commands.Bot(command_prefix='/', help_command=None)
-reactions = {'🇹': "Thursday", '🇫': "Friday", '🇸': "Saturday", '☀️': "Sunday", '🇲': "Monday", '2️⃣': "Tuesday",
-             '🇼': "Wednesday", '🚫': "Can't attend"}
+reactions = {'2️⃣': "Tuesday", '🇼': "Wednesday",'🇹': "Thursday", '🇫': "Friday",
+             '🇸': "Saturday", '☀️': "Sunday", '🇲': "Monday", '🚫': "Can't attend"}
 timeslots = {'1️⃣': "1pm - 3pm", '2️⃣': "3pm - 5pm", '3️⃣': "5pm - 7pm", '4️⃣': "7pm - 9pm", '5️⃣': "9pm-11pm",
              '🚫': "Can't attend"}
 dow = {d: i for i, d in
@@ -32,69 +32,69 @@ def load_from_s3(file_name):
 
 four_player_bgg = {
     "Azul": "https://boardgamegeek.com/boardgame/230802/azul",
-    # "Burgle Bros": "https://boardgamegeek.com/boardgame/172081/burgle-bros",
+    "Burgle Bros": "https://boardgamegeek.com/boardgame/172081/burgle-bros",
     "Clank!": "https://boardgamegeek.com/boardgame/201808/clank-deck-building-adventure",
     "Cryptid": "https://boardgamegeek.com/boardgame/246784/cryptid",
-    # "Dice Throne": "https://boardgamegeek.com/boardgame/216734/dice-throne-season-one",
-    # "Everdell": "https://boardgamegeek.com/boardgame/199792/everdell",
+    "Dice Throne": "https://boardgamegeek.com/boardgame/216734/dice-throne-season-one",
+    "Everdell": "https://boardgamegeek.com/boardgame/199792/everdell",
     "Forbidden Island": "https://boardgamegeek.com/boardgame/65244/forbidden-island",
     "Fort": "https://boardgamegeek.com/boardgame/296912/fort",
-    # "Ghost Stories": "https://boardgamegeek.com/boardgame/37046/ghost-stories",
-    # "Root": "https://boardgamegeek.com/boardgame/237182/root",
-    # "Smash up": "https://boardgamegeek.com/boardgame/122522/smash",
-    # "Survive: Escape From Atlantis!": "https://boardgamegeek.com/boardgame/2653/survive-escape-atlantis",
-    # "Suburbia": "https://boardgamegeek.com/boardgame/123260/suburbia",
-    # "Terraforming Mars": "https://boardgamegeek.com/boardgame/167791/terraforming-mars",
-    # "T.I.M.E Stories": "https://boardgamegeek.com/boardgame/146508/time-stories",
-    # "Crokinole": "https://boardgamegeek.com/boardgame/521/crokinole",
-    # "Tragedy Looper": "https://boardgamegeek.com/boardgame/148319/tragedy-looper",
-    # "XCOM: The Board game": "https://boardgamegeek.com/boardgame/163602/xcom-board-game",
+    "Ghost Stories": "https://boardgamegeek.com/boardgame/37046/ghost-stories",
+    "Root": "https://boardgamegeek.com/boardgame/237182/root",
+    "Smash up": "https://boardgamegeek.com/boardgame/122522/smash",
+    "Survive: Escape From Atlantis!": "https://boardgamegeek.com/boardgame/2653/survive-escape-atlantis",
+    "Suburbia": "https://boardgamegeek.com/boardgame/123260/suburbia",
+    "Terraforming Mars": "https://boardgamegeek.com/boardgame/167791/terraforming-mars",
+    "T.I.M.E Stories": "https://boardgamegeek.com/boardgame/146508/time-stories",
+    "Crokinole": "https://boardgamegeek.com/boardgame/521/crokinole",
+    "Tragedy Looper": "https://boardgamegeek.com/boardgame/148319/tragedy-looper",
+    "XCOM: The Board game": "https://boardgamegeek.com/boardgame/163602/xcom-board-game",
     "Isle of Cats": "https://boardgamegeek.com/boardgame/281259/isle-cats",
-    # "Five Tribes": "https://boardgamegeek.com/boardgame/157354/five-tribes"
+    "Five Tribes": "https://boardgamegeek.com/boardgame/157354/five-tribes",
     "Deep Rock Galactic": "https://store.steampowered.com/app/548430/Deep_Rock_Galactic/",
     "Risk of Rain 2": "https://store.steampowered.com/app/632360/Risk_of_Rain_2/",
     "Legends of Runeterra": "https://playruneterra.com/",
 }
 
 default_bgg = {
-    # "Cockroach Poker": "https://boardgamegeek.com/boardgame/11971/cockroach-poker",
+    "Cockroach Poker": "https://boardgamegeek.com/boardgame/11971/cockroach-poker",
     "7 Wonders": "https://boardgamegeek.com/boardgame/68448/7-wonders",
-    # "Blood Rage": "https://boardgamegeek.com/boardgame/170216/blood-rage",
-    # "Mysterium": "https://boardgamegeek.com/boardgame/181304/mysterium",
-    # "Coup": "https://boardgamegeek.com/boardgame/131357/coup",
-    # "Dead of Winter": "https://boardgamegeek.com/boardgame/150376/dead-winter-crossroads-game",
-    # "Eldritch Horror": "https://boardgamegeek.com/boardgame/146021/eldritch-horror",
+    "Blood Rage": "https://boardgamegeek.com/boardgame/170216/blood-rage",
+    "Mysterium": "https://boardgamegeek.com/boardgame/181304/mysterium",
+    "Coup": "https://boardgamegeek.com/boardgame/131357/coup",
+    "Dead of Winter": "https://boardgamegeek.com/boardgame/150376/dead-winter-crossroads-game",
+    "Eldritch Horror": "https://boardgamegeek.com/boardgame/146021/eldritch-horror",
     "Epic Spell Wars": "https://boardgamegeek.com/boardgame/112686/epic-spell-wars-battle-wizards-duel-mt-skullzfyre",
     "Forbidden Desert": "https://boardgamegeek.com/boardgame/136063/forbidden-desert",
-    # "Formula D": "https://boardgamegeek.com/boardgame/37904/formula-d",
-    # "Fury of Dracula": "https://boardgamegeek.com/boardgame/181279/fury-dracula-thirdfourth-edition",
-    # "Game of Thrones": "https://boardgamegeek.com/boardgame/103343/game-thrones-board-game-second-edition",
-    # "Lords of Vegas": "https://boardgamegeek.com/boardgame/20437/lords-vegas",
+    "Formula D": "https://boardgamegeek.com/boardgame/37904/formula-d",
+    "Fury of Dracula": "https://boardgamegeek.com/boardgame/181279/fury-dracula-thirdfourth-edition",
+    "Game of Thrones": "https://boardgamegeek.com/boardgame/103343/game-thrones-board-game-second-edition",
+    "Lords of Vegas": "https://boardgamegeek.com/boardgame/20437/lords-vegas",
     "King of New York": "https://boardgamegeek.com/boardgame/160499/king-new-york",
-    # "Horrified": "https://boardgamegeek.com/boardgame/282524/horrified",
-    # "Lovecraft Letter": "https://boardgamegeek.com/boardgame/198740/lovecraft-letter",
-    # "Mansions of Madness": "https://boardgamegeek.com/boardgame/205059/mansions-madness-second-edition",
-    # "Pandemic: The Cure": "https://boardgamegeek.com/boardgame/150658/pandemic-cure",
-    # "Rising Sun": "https://boardgamegeek.com/boardgame/205896/rising-sun",
-    # "Shadows over Camelot": "https://boardgamegeek.com/boardgame/15062/shadows-over-camelot",
-    # "Sheriff of Nottingham": "https://boardgamegeek.com/boardgame/157969/sheriff-nottingham",
-    # "Space Alert": "https://boardgamegeek.com/boardgame/38453/space-alert",
-    # "The Settlers of Catan": "https://boardgamegeek.com/boardgame/13/catan",
-    # "Ticket to Ride Europe": "https://boardgamegeek.com/boardgame/14996/ticket-ride-europe",
+    "Horrified": "https://boardgamegeek.com/boardgame/282524/horrified",
+    "Lovecraft Letter": "https://boardgamegeek.com/boardgame/198740/lovecraft-letter",
+    "Mansions of Madness": "https://boardgamegeek.com/boardgame/205059/mansions-madness-second-edition",
+    "Pandemic: The Cure": "https://boardgamegeek.com/boardgame/150658/pandemic-cure",
+    "Rising Sun": "https://boardgamegeek.com/boardgame/205896/rising-sun",
+    "Shadows over Camelot": "https://boardgamegeek.com/boardgame/15062/shadows-over-camelot",
+    "Sheriff of Nottingham": "https://boardgamegeek.com/boardgame/157969/sheriff-nottingham",
+    "Space Alert": "https://boardgamegeek.com/boardgame/38453/space-alert",
+    "The Settlers of Catan": "https://boardgamegeek.com/boardgame/13/catan",
+    "Ticket to Ride Europe": "https://boardgamegeek.com/boardgame/14996/ticket-ride-europe",
     "War of Whispers": "https://boardgamegeek.com/boardgame/253499/war-whispers",
     "Welcome To...": "https://boardgamegeek.com/boardgame/233867/welcome",
-    # "Western Legends": "https://boardgamegeek.com/boardgame/232405/western-legends",
+    "Western Legends": "https://boardgamegeek.com/boardgame/232405/western-legends",
     "Bloodborne: The board game": "https://boardgamegeek.com/boardgame/273330/bloodborne-board-game",
     "Treasure Island": "https://boardgamegeek.com/boardgame/242639/treasure-island",
     "Moonrakers": "https://boardgamegeek.com/boardgame/270239/moonrakers",
-    # "Magic Maze": "https://boardgamegeek.com/boardgame/209778/magic-maze",
+    "Magic Maze": "https://boardgamegeek.com/boardgame/209778/magic-maze",
     "Century: Golem Edition": "https://boardgamegeek.com/boardgame/232832/century-golem-edition",
-    # "Brawlhalla": "https://store.steampowered.com/app/291550/Brawlhalla/",
-    # "Keep Talking and Nobody Explodes": "https://store.steampowered.com/app/341800/Keep_Talking_and_Nobody_Explodes/",
-    # "Valorant": "https://playvalorant.com/en-us/",
-    # "CS2D": "https://store.steampowered.com/app/666220/CS2D/",
+    "Brawlhalla": "https://store.steampowered.com/app/291550/Brawlhalla/",
+    "Keep Talking and Nobody Explodes": "https://store.steampowered.com/app/341800/Keep_Talking_and_Nobody_Explodes/",
+    "Valorant": "https://playvalorant.com/en-us/",
+    "CS2D": "https://store.steampowered.com/app/666220/CS2D/",
     "Valheim": "https://store.steampowered.com/app/892970/Valheim/",
-    # "Rainbow Six Siege": "https://store.steampowered.com/app/359550/Tom_Clancys_Rainbow_Six_Siege/",
+    "Rainbow Six Siege": "https://store.steampowered.com/app/359550/Tom_Clancys_Rainbow_Six_Siege/",
 
 }
 
@@ -109,54 +109,53 @@ five_player_bgg = {
 }
 
 four_player_old_games = {
-    # "Gloomhaven": "https://boardgamegeek.com/boardgame/174430/gloomhaven",
-    # "Arkham Horror: The Card Game": "https://boardgamegeek.com/boardgame/205637/arkham-horror-card-game",
-    # "Love Letter": "https://boardgamegeek.com/boardgame/129622/love-letter",
-    # "Sub Terra": "https://boardgamegeek.com/boardgame/204472/sub-terra",
+    "Gloomhaven": "https://boardgamegeek.com/boardgame/174430/gloomhaven",
+    "Arkham Horror: The Card Game": "https://boardgamegeek.com/boardgame/205637/arkham-horror-card-game",
+    "Love Letter": "https://boardgamegeek.com/boardgame/129622/love-letter",
+    "Sub Terra": "https://boardgamegeek.com/boardgame/204472/sub-terra",
     "Betrayal at Baldur's Gate": "https://boardgamegeek.com/boardgame/228660/betrayal-baldurs-gate",
-    # "Mechs vs. Minions": "https://boardgamegeek.com/boardgame/209010/mechs-vs-minions",
+    "Mechs vs. Minions": "https://boardgamegeek.com/boardgame/209010/mechs-vs-minions",
     "Stardew Valley": "https://store.steampowered.com/app/413150/Stardew_Valley/",
     "Stardew Valley: The Board Game": "https://boardgamegeek.com/boardgame/332290/stardew-valley-board-game",
     "Phasmophophobia": "https://store.steampowered.com/app/739630/Phasmophobia/",
 }
 
 default_old_games = {
-    # "Bang! The Dice Game": "https://boardgamegeek.com/boardgame/143741/bang-dice-game",
+    "Bang! The Dice Game": "https://boardgamegeek.com/boardgame/143741/bang-dice-game",
     "Betrayal Legacy": "https://boardgamegeek.com/boardgame/240196/betrayal-legacy",
-    # "Camel Up": "https://boardgamegeek.com/boardgame/153938/camel",
+    "Camel Up": "https://boardgamegeek.com/boardgame/153938/camel",
     "Cosmic Encounter": "https://boardgamegeek.com/boardgame/39463/cosmic-encounter",
-    # "Champions of Midgard": "https://boardgamegeek.com/boardgame/172287/champions-midgard",
-    # "Deep Sea Adventure": "https://boardgamegeek.com/boardgame/169654/deep-sea-adventure",
-    # "Lords of Waterdeep": "https://boardgamegeek.com/boardgame/110327/lords-waterdeep",
-    # "Nemesis": "https://boardgamegeek.com/boardgame/167355/nemesis",
-    # "Secret Hitler": "https://boardgamegeek.com/boardgame/188834/secret-hitler",
-    # "Skull": "https://boardgamegeek.com/boardgame/92415/skull",
-    # "Small World": "https://boardgamegeek.com/boardgame/40692/small-world",
-    # "Wingspan": "https://boardgamegeek.com/boardgame/266192/wingspan",
-    # "Camp Grizzly": "https://boardgamegeek.com/boardgame/143096/camp-grizzly",
+    "Champions of Midgard": "https://boardgamegeek.com/boardgame/172287/champions-midgard",
+    "Deep Sea Adventure": "https://boardgamegeek.com/boardgame/169654/deep-sea-adventure",
+    "Lords of Waterdeep": "https://boardgamegeek.com/boardgame/110327/lords-waterdeep",
+    "Nemesis": "https://boardgamegeek.com/boardgame/167355/nemesis",
+    "Secret Hitler": "https://boardgamegeek.com/boardgame/188834/secret-hitler",
+    "Skull": "https://boardgamegeek.com/boardgame/92415/skull",
+    "Small World": "https://boardgamegeek.com/boardgame/40692/small-world",
+    "Wingspan": "https://boardgamegeek.com/boardgame/266192/wingspan",
+    "Camp Grizzly": "https://boardgamegeek.com/boardgame/143096/camp-grizzly",
     "Inis": "https://boardgamegeek.com/boardgame/155821/inis",
     "Quacks of Quedlinburg": "https://boardgamegeek.com/boardgame/244521/quacks-quedlinburg",
-    # "Zombicide": "https://boardgamegeek.com/boardgame/113924/zombicide",
+    "Zombicide": "https://boardgamegeek.com/boardgame/113924/zombicide",
     "King Of Tokyo": "https://boardgamegeek.com/boardgame/70323/king-tokyo",
     "Tokaido": "https://boardgamegeek.com/boardgame/123540/tokaido",
     "Pandemic": "https://boardgamegeek.com/boardgame/30549/pandemic",
-    # "Food Chain Magnate": "https://boardgamegeek.com/boardgame/175914/food-chain-magnate",
-    # "Among us": "https://store.steampowered.com/app/945360/Among_Us/",
+    "Food Chain Magnate": "https://boardgamegeek.com/boardgame/175914/food-chain-magnate",
+    "Among us": "https://store.steampowered.com/app/945360/Among_Us/",
     "Left 4 Dead 2": "https://store.steampowered.com/app/550/Left_4_Dead_2/",
     "Garry's Mod": "https://store.steampowered.com/app/4000/Garrys_Mod/",
-    # "Jackbox Party Packs": "https://store.steampowered.com/app/1211630/The_Jackbox_Party_Pack_7/",
-    # "Pummel Party": "https://store.steampowered.com/app/880940/Pummel_Party/",
-    # "Skribbl.io": "https://skribbl.io/",
-    # "Human Fall Flat": "https://store.steampowered.com/app/477160/Human_Fall_Flat/",
+    "Jackbox Party Packs": "https://store.steampowered.com/app/1211630/The_Jackbox_Party_Pack_7/",
+    "Pummel Party": "https://store.steampowered.com/app/880940/Pummel_Party/",
+    "Skribbl.io": "https://skribbl.io/",
+    "Human Fall Flat": "https://store.steampowered.com/app/477160/Human_Fall_Flat/",
     "Golf with your friends": "https://store.steampowered.com/app/431240/Golf_With_Your_Friends/",
     "League of Legends": "https://na.leagueoflegends.com/en-us/",
     "Red Dragon Inn": "https://boardgamegeek.com/boardgame/24310/red-dragon-inn",
     "Scythe": "https://boardgamegeek.com/boardgame/169786/scythe",
     "rocketcrab.com 🚀🦀 ": "https://rocketcrab.com/",
-    # "Overwatch": "https://playoverwatch.com/en-us/",
-    # "Minecraft": "https://www.minecraft.net/en-us/",
-    # "Counter Strike Source": "https://store.steampowered.com/app/240/CounterStrike_Source/",
-    # "Counter-Strike: Global Offensive": "https://store.steampowered.com/app/730/CounterStrike_Global_Offensive/",
+    "Overwatch": "https://playoverwatch.com/en-us/",
+    "Counter Strike Source": "https://store.steampowered.com/app/240/CounterStrike_Source/",
+    "Counter-Strike: Global Offensive": "https://store.steampowered.com/app/730/CounterStrike_Global_Offensive/",
     "Halo": "https://store.steampowered.com/app/976730/Halo_The_Master_Chief_Collection/",
     "AoE II": "https://store.steampowered.com/app/813780/Age_of_Empires_II_Definitive_Edition/"
 }
@@ -298,15 +297,18 @@ Can't decide? Type `/tiebreak random` and I'll break the tie for you!
     """)
 
 
-async def poll_timeslot(channel_id, weekend, count):
-    attendees = await fetch_attendees(channel_id, reactions[weekend])
+async def poll_timeslot(channel_id, day, count):
+    attendees = await fetch_attendees(channel_id, reactions[day])
     mentions = f"""<@{'>, <@'.join(str(a) for a in attendees[:-1])}> and <@{attendees[
         -1]}>""" if attendees else "@everyone"
-    message = f"""{mentions}
-{reactions[weekend]}({weekend}) has won with {count} votes!
-Weekends are a busier time so let's try to narrow down a range for the start time. All times are UTC.
+    weekend_extra = f"""
 1️⃣ - Starting between 1pm and 3pm
 2️⃣ - Starting between 3pm and 5pm
+""" if day in  ['🇸', '☀️'] else ""
+    message = f"""{mentions}
+{reactions[day]}({day}) has won with {count} votes!
+What time suits best? All times are based on Irish time.
+{weekend_extra}
 3️⃣ - Starting between 5pm and 7pm
 4️⃣ - Starting between 7pm and 9pm
 5️⃣ - Starting between 9pm and 11pm
@@ -317,7 +319,7 @@ Weekends are a busier time so let's try to narrow down a range for the start tim
     for reaction in timeslots.keys():
         await msg.add_reaction(reaction)
     await save_state(channel_id, "side_poll", msg.id)
-    await save_state(channel_id, "weekend", reactions[weekend])
+    await save_state(channel_id, "weekend", reactions[day])
 
 
 async def choose_host(channel, choices):
@@ -343,7 +345,8 @@ async def choose_host(channel, choices):
     users[new_host_idx], users[next_host_idx] = users[next_host_idx], users[new_host_idx]
     print(f" {last_host} has been succeeded by new host {new_host}")
     host = await client.fetch_user(new_host)
-    announce = f""" <@{host.id}> is this week's host. {"They will first be asked to break the tie between the winning votes." if len(choices) > 1 else ""}
+    announce = f""" <@{host.id}> is this week's host. {
+    "They will first be asked to break the tie between the winning votes." if len(choices) > 1 else ""} 
 They will receive a DM which will allow them to suggest a start time and game for the winning day.
     """
     await channel.send(announce)
@@ -389,27 +392,16 @@ async def tally(channel_id, message, is_timeslot=False):
 See you all next week for more games!        
             """
             await channel.send(resp)
-        elif count == 5 and not cyberpunk_poll:
-            await check_cyberpunk(channel_id, key)
-        elif key.emoji in ['🇸', '☀️']:
-            await poll_timeslot(channel_id, key.emoji, count)
         else:
-            resp = f"{emojis[key.emoji]}({key.emoji}) has won with {count} votes!"
-            await channel.send(resp)
-            await choose_host(channel, [key])
+            await poll_timeslot(channel_id, key.emoji, count)
         await update_poll_status(channel_id, message, "closed")
     elif len(recount) >= 1:
         tied = []
         choices = []
-        weekend_choices = []
         for key in recount:
             tied.append(f"{emojis[key.emoji]}({key.emoji})")
             choices.append(key)
-            if key.emoji in ['🇫', '🇸', '☀️']:
-                weekend_choices.append(key)
-
         key, count = recount.popitem()
-
         await channel.send(
             f"""{", ".join(tied[:-1])} and {tied[-1]} have {"both" if (len(tied) == 2) else "all"} tied with {count} votes! This tie will be broken by this week's host.""")
         await choose_host(channel, choices)
@@ -428,7 +420,7 @@ async def cyberpunk_go_no_go(channel_id, message):
     voter_ids = set([voter.id for voter in flat_list])
     if len(voter_ids) >= len(users) + 1:
         for k in winning:
-            if k.emoji == '👍':
+            if k.emoji == '👍' and winning[k] == 5:
                 channel = client.get_channel(int(channel_id))
                 start_time = "7pm"
                 reminder = {"start_time": start_time, "game_name": "Cyberpunk Red"}
@@ -566,13 +558,13 @@ Today we will be playing **{reminder['game_name']}** @ **{reminder['start_time']
 async def poll_time(channel_id):
     message = """@everyone
 The weekly poll is ready! Please indicate your availability below:
-:regional_indicator_t: - Thursday
-:regional_indicator_f: - Late night Friday (starting from 10pm UTC)
-:regional_indicator_s: - Saturday (A secondary poll to pick a time slot will follow)
-:sunny: - Sunday (A secondary poll to pick a time slot will follow)
-:regional_indicator_m: - Monday
 2️⃣ - Tuesday
 :regional_indicator_w: - Wednesday
+:regional_indicator_t: - Thursday
+:regional_indicator_f: - Friday
+:regional_indicator_s: - Saturday 
+:sunny: - Sunday 
+:regional_indicator_m: - Monday
 :no_entry_sign: - Can't attend
 A winning day will be announced once everyone has voted.
     """
@@ -653,7 +645,7 @@ Cyberpunk progress
 Heist with a dash of mystery?```
 Want to play Cyberpunk Red on that day?
 👍 - Set a reminder for Cyberpunk on {reactions[choice.emoji]}({choice.emoji}) and pause host rotation for one week.
-👎 - Skip this check and continue the regular flow / host selection.
+👎 - Skip this check and continue the regular flow / host selection. This will be selected if there are < 5 votes for yes.
 """
     msg = await channel.send(cyberpunk_msg)
     day_and_date = await get_date_for_day(channel_id, reactions[choice.emoji])
@@ -821,15 +813,11 @@ async def tiebreak(ctx, weekday, *args):
         await save_state(channel_id, "game_night", day_and_date)
         await save_state(channel_id, "tied", [])
         ivd = {v: k for k, v in reactions.items()}
-        if weekday in ["Saturday", "Sunday"]:
-            users = state[channel_id].get("users")
-            last_host = state[channel_id].get("last_host", users[0])
-            before = users.index(last_host) - 1
-            await save_state(channel_id, "last_host", users[before])
-            await poll_timeslot(channel_id, ivd[weekday], "the most")
-        else:
-            host = ctx.message.author
-            await prompt_host(channel_id, host, [])
+        users = state[channel_id].get("users")
+        last_host = state[channel_id].get("last_host", users[0])
+        before = users.index(last_host) - 1
+        await save_state(channel_id, "last_host", users[before])
+        await poll_timeslot(channel_id, ivd[weekday], "the most")
     else:
         await ctx.send(f"Sorry, I didn't recognize {weekday} as one of the options for the tie break. Try again. ")
 

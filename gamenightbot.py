@@ -10,6 +10,7 @@ import json
 import os
 import boto3
 
+
 client = commands.Bot(command_prefix='/', help_command=None)
 reactions = {'2️⃣': "Tuesday", '🇼': "Wednesday",'🇹': "Thursday", '🇫': "Friday",
              '🇸': "Saturday", '☀️': "Sunday", '🇲': "Monday", '🚫': "Can't attend"}
@@ -30,15 +31,34 @@ def load_from_s3(file_name):
     s3_client.download_file(S3_BUCKET, file_name, file_name)
 
 
+bad_at_three = {
+    "Dice Throne": "https://boardgamegeek.com/boardgame/216734/dice-throne-season-one",
+    "Crokinole": "https://boardgamegeek.com/boardgame/521/crokinole",
+    "Tragedy Looper": "https://boardgamegeek.com/boardgame/148319/tragedy-looper",
+    "XCOM: The Board game": "https://boardgamegeek.com/boardgame/163602/xcom-board-game",
+    "Legends of Runeterra": "https://playruneterra.com/",
+    "Cockroach Poker": "https://boardgamegeek.com/boardgame/11971/cockroach-poker",
+    "7 Wonders": "https://boardgamegeek.com/boardgame/68448/7-wonders",
+    "Coup": "https://boardgamegeek.com/boardgame/131357/coup",
+    "Dead of Winter": "https://boardgamegeek.com/boardgame/150376/dead-winter-crossroads-game",
+    "Eldritch Horror": "https://boardgamegeek.com/boardgame/146021/eldritch-horror",
+    "Formula D": "https://boardgamegeek.com/boardgame/37904/formula-d",
+    "Rising Sun": "https://boardgamegeek.com/boardgame/205896/rising-sun",
+    "Shadows over Camelot": "https://boardgamegeek.com/boardgame/15062/shadows-over-camelot",
+    "Sheriff of Nottingham": "https://boardgamegeek.com/boardgame/157969/sheriff-nottingham",
+    "Space Alert": "https://boardgamegeek.com/boardgame/38453/space-alert",
+    "Western Legends": "https://boardgamegeek.com/boardgame/232405/western-legends",
+    "Jaws": "https://boardgamegeek.com/boardgame/272738/jaws",
+    "Bohnazna": "https://boardgamegeek.com/boardgame/11/bohnanza",
+
+}
 four_player_bgg = {
     "Azul": "https://boardgamegeek.com/boardgame/230802/azul",
     "Burgle Bros": "https://boardgamegeek.com/boardgame/172081/burgle-bros",
-    "Clank!": "https://boardgamegeek.com/boardgame/201808/clank-deck-building-adventure",
     "Cryptid": "https://boardgamegeek.com/boardgame/246784/cryptid",
     "Dice Throne": "https://boardgamegeek.com/boardgame/216734/dice-throne-season-one",
-    "Everdell": "https://boardgamegeek.com/boardgame/199792/everdell",
     "Forbidden Island": "https://boardgamegeek.com/boardgame/65244/forbidden-island",
-    "Fort": "https://boardgamegeek.com/boardgame/296912/fort",
+    # "Fort": "https://boardgamegeek.com/boardgame/296912/fort",
     "Ghost Stories": "https://boardgamegeek.com/boardgame/37046/ghost-stories",
     "Root": "https://boardgamegeek.com/boardgame/237182/root",
     "Smash up": "https://boardgamegeek.com/boardgame/122522/smash",
@@ -49,18 +69,27 @@ four_player_bgg = {
     "Crokinole": "https://boardgamegeek.com/boardgame/521/crokinole",
     "Tragedy Looper": "https://boardgamegeek.com/boardgame/148319/tragedy-looper",
     "XCOM: The Board game": "https://boardgamegeek.com/boardgame/163602/xcom-board-game",
-    "Isle of Cats": "https://boardgamegeek.com/boardgame/281259/isle-cats",
     "Five Tribes": "https://boardgamegeek.com/boardgame/157354/five-tribes",
     "Deep Rock Galactic": "https://store.steampowered.com/app/548430/Deep_Rock_Galactic/",
     "Risk of Rain 2": "https://store.steampowered.com/app/632360/Risk_of_Rain_2/",
     "Legends of Runeterra": "https://playruneterra.com/",
+    "Dune Imperium": "https://boardgamegeek.com/boardgame/316554/dune-imperium",
+    "Lost Ruins of Arnak": "https://boardgamegeek.com/boardgame/312484/lost-ruins-arnak",
+    "Cascadia": "https://boardgamegeek.com/boardgame/295947/cascadia",
+    "Calico": "https://boardgamegeek.com/boardgame/283155/calico",
+    "Marvel United": "https://boardgamegeek.com/boardgame/298047/marvel-united",
+    "Nidavellir": "https://boardgamegeek.com/boardgame/293014/nidavellir",
+    "Cubitos": "https://boardgamegeek.com/boardgame/298069/cubitos",
+    "Jaws": "https://boardgamegeek.com/boardgame/272738/jaws",
+    "Bohnazna": "https://boardgamegeek.com/boardgame/11/bohnanza",
+    "Parks": "https://boardgamegeek.com/boardgame/266524/parks",
+    "Taverns of tiefenthal": "https://boardgamegeek.com/boardgame/269207/taverns-tiefenthal",
 }
 
 default_bgg = {
     "Cockroach Poker": "https://boardgamegeek.com/boardgame/11971/cockroach-poker",
     "7 Wonders": "https://boardgamegeek.com/boardgame/68448/7-wonders",
     "Blood Rage": "https://boardgamegeek.com/boardgame/170216/blood-rage",
-    "Mysterium": "https://boardgamegeek.com/boardgame/181304/mysterium",
     "Coup": "https://boardgamegeek.com/boardgame/131357/coup",
     "Dead of Winter": "https://boardgamegeek.com/boardgame/150376/dead-winter-crossroads-game",
     "Eldritch Horror": "https://boardgamegeek.com/boardgame/146021/eldritch-horror",
@@ -68,7 +97,6 @@ default_bgg = {
     "Forbidden Desert": "https://boardgamegeek.com/boardgame/136063/forbidden-desert",
     "Formula D": "https://boardgamegeek.com/boardgame/37904/formula-d",
     "Fury of Dracula": "https://boardgamegeek.com/boardgame/181279/fury-dracula-thirdfourth-edition",
-    "Game of Thrones": "https://boardgamegeek.com/boardgame/103343/game-thrones-board-game-second-edition",
     "Lords of Vegas": "https://boardgamegeek.com/boardgame/20437/lords-vegas",
     "King of New York": "https://boardgamegeek.com/boardgame/160499/king-new-york",
     "Horrified": "https://boardgamegeek.com/boardgame/282524/horrified",
@@ -84,18 +112,14 @@ default_bgg = {
     "War of Whispers": "https://boardgamegeek.com/boardgame/253499/war-whispers",
     "Welcome To...": "https://boardgamegeek.com/boardgame/233867/welcome",
     "Western Legends": "https://boardgamegeek.com/boardgame/232405/western-legends",
-    "Bloodborne: The board game": "https://boardgamegeek.com/boardgame/273330/bloodborne-board-game",
     "Treasure Island": "https://boardgamegeek.com/boardgame/242639/treasure-island",
     "Moonrakers": "https://boardgamegeek.com/boardgame/270239/moonrakers",
     "Magic Maze": "https://boardgamegeek.com/boardgame/209778/magic-maze",
     "Century: Golem Edition": "https://boardgamegeek.com/boardgame/232832/century-golem-edition",
-    "Brawlhalla": "https://store.steampowered.com/app/291550/Brawlhalla/",
-    "Keep Talking and Nobody Explodes": "https://store.steampowered.com/app/341800/Keep_Talking_and_Nobody_Explodes/",
-    "Valorant": "https://playvalorant.com/en-us/",
+    # "Brawlhalla": "https://store.steampowered.com/app/291550/Brawlhalla/",
+    # "Keep Talking and Nobody Explodes": "https://store.steampowered.com/app/341800/Keep_Talking_and_Nobody_Explodes/",
     "CS2D": "https://store.steampowered.com/app/666220/CS2D/",
     "Valheim": "https://store.steampowered.com/app/892970/Valheim/",
-    "Rainbow Six Siege": "https://store.steampowered.com/app/359550/Tom_Clancys_Rainbow_Six_Siege/",
-
 }
 
 five_player_bgg = {
@@ -105,7 +129,9 @@ five_player_bgg = {
     "Deception: Murder in Hong Kong": "https://boardgamegeek.com/boardgame/156129/deception-murder-hong-kong",
     "The Resistance: Avalon": "https://boardgamegeek.com/boardgame/128882/resistance-avalon",
     "The Thing": "https://boardgamegeek.com/boardgame/226634/thing-infection-outpost-31",
-    "Dead by Daylight": "https://store.steampowered.com/app/381210/Dead_by_Daylight/"
+    "Dead by Daylight": "https://store.steampowered.com/app/381210/Dead_by_Daylight/",
+    "Mysterium": "https://boardgamegeek.com/boardgame/181304/mysterium",
+    "Unfathomable": "https://boardgamegeek.com/boardgame/340466/unfathomable",
 }
 
 four_player_old_games = {
@@ -118,6 +144,9 @@ four_player_old_games = {
     "Stardew Valley": "https://store.steampowered.com/app/413150/Stardew_Valley/",
     "Stardew Valley: The Board Game": "https://boardgamegeek.com/boardgame/332290/stardew-valley-board-game",
     "Phasmophophobia": "https://store.steampowered.com/app/739630/Phasmophobia/",
+    "Isle of Cats": "https://boardgamegeek.com/boardgame/281259/isle-cats",
+    "Clank!": "https://boardgamegeek.com/boardgame/201808/clank-deck-building-adventure",
+    "Everdell": "https://boardgamegeek.com/boardgame/199792/everdell",
 }
 
 default_old_games = {
@@ -128,6 +157,7 @@ default_old_games = {
     "Champions of Midgard": "https://boardgamegeek.com/boardgame/172287/champions-midgard",
     "Deep Sea Adventure": "https://boardgamegeek.com/boardgame/169654/deep-sea-adventure",
     "Lords of Waterdeep": "https://boardgamegeek.com/boardgame/110327/lords-waterdeep",
+    "Game of Thrones": "https://boardgamegeek.com/boardgame/103343/game-thrones-board-game-second-edition",
     "Nemesis": "https://boardgamegeek.com/boardgame/167355/nemesis",
     "Secret Hitler": "https://boardgamegeek.com/boardgame/188834/secret-hitler",
     "Skull": "https://boardgamegeek.com/boardgame/92415/skull",
@@ -157,7 +187,10 @@ default_old_games = {
     "Counter Strike Source": "https://store.steampowered.com/app/240/CounterStrike_Source/",
     "Counter-Strike: Global Offensive": "https://store.steampowered.com/app/730/CounterStrike_Global_Offensive/",
     "Halo": "https://store.steampowered.com/app/976730/Halo_The_Master_Chief_Collection/",
-    "AoE II": "https://store.steampowered.com/app/813780/Age_of_Empires_II_Definitive_Edition/"
+    "AoE II": "https://store.steampowered.com/app/813780/Age_of_Empires_II_Definitive_Edition/",
+    "Valorant": "https://playvalorant.com/en-us/",
+    "Rainbow Six Siege": "https://store.steampowered.com/app/359550/Tom_Clancys_Rainbow_Six_Siege/",
+
 }
 
 load_from_s3("state.json")
@@ -856,6 +889,10 @@ e.g ```/new_game 4 5``` gets 5 previously unplayed games which can be played wit
             games = int(num_games)
             if games > 5:
                 await ctx.send("Sorry, that's too many games. Please keep the number at 5 or under.")
+            elif num_players == "3":
+                good = {**four_player_bgg, **default_bgg}
+                options = {k: v for k, v in good.items() if k not in bad_at_three}
+                await output_boardgames(ctx, options, "3", games)
             elif num_players == "4":
                 options = {**four_player_bgg, **default_bgg}
                 await output_boardgames(ctx, options, "4", games)
@@ -880,6 +917,10 @@ e.g ```/random_game 4 5``` gets 5 games which can be played with 4 players.""")
             games = int(num_games)
             if games > 5:
                 await ctx.send("Sorry, that's too many games. Please keep the number at 5 or under.")
+            elif num_players == "3":
+                good = {**four_player_bgg, **default_bgg, **four_player_old_games, **default_old_games}
+                options = {k: v for k, v in good.items() if k not in bad_at_three}
+                await output_boardgames(ctx, options, "3", games)
             elif num_players == "4":
                 options = {**four_player_bgg, **default_bgg, **four_player_old_games, **default_old_games}
                 await output_boardgames(ctx, options, "4", games)
@@ -904,6 +945,11 @@ e.g ```/video_game 4 5``` gets 5 games which can be played with 4 players.""")
             games = int(num_games)
             if games > 5:
                 await ctx.send("Sorry, that's too many games. Please keep the number at 5 or under.")
+            elif num_players == "3":
+                good = {**four_player_bgg, **default_bgg, **four_player_old_games, **default_old_games}
+                options = {k: v for k, v in good.items() if k not in bad_at_three}
+                filtered = {key: value for (key, value) in options.items()  if not "boardgame" in value}
+                await output_boardgames(ctx, filtered, "3", games)
             elif num_players == "4":
                 options = {**four_player_bgg, **default_bgg, **four_player_old_games, **default_old_games}
                 filtered = {key: value for (key, value) in options.items()  if not "boardgame" in value}
@@ -929,6 +975,10 @@ e.g ```/old_game 4 5``` gets 5 previously played games which can be played with 
             games = int(num_games)
             if games > 5:
                 await ctx.send("Sorry, that's too many games. Please keep the number at 5 or under.")
+            elif num_players == "3":
+                good = {**four_player_old_games, **default_old_games}
+                options = {k: v for k, v in good.items() if k not in bad_at_three}
+                await output_boardgames(ctx, options, "3", games)
             elif num_players == "4":
                 options = {**four_player_old_games, **default_old_games}
                 await output_boardgames(ctx, options, "4", games)

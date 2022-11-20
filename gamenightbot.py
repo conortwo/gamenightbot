@@ -567,7 +567,7 @@ async def remind(channel_id, reminder):
     emoji = get(channel.guild.emojis, name='rollHigh')
     attendees = state[channel_id].get("attendees", [])
     game_time = state[channel_id].get("remind_at", datetime.now())
-    game_time_int = int(game_time.timestamp() + timedelta(hours=1))
+    game_time_int = int((datetime.fromtimestamp(game_time) + timedelta(hours=1)).timestamp())
     mentions = f"""<@{'>, <@'.join(str(a) for a in attendees[:-1])}> and <@{attendees[
         -1]}>""" if attendees else "@everyone"
     message = f"""{mentions}!

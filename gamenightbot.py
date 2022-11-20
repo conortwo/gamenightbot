@@ -566,12 +566,12 @@ async def remind(channel_id, reminder):
     channel = client.get_channel(int(channel_id))
     emoji = get(channel.guild.emojis, name='rollHigh')
     attendees = state[channel_id].get("attendees", [])
-    remind_at = state[channel_id].get("remind_at", datetime.now() + timedelta(hours=1))
+    game_time = state[channel_id].get("remind_at", datetime.now()) + + timedelta(hours=1)
     mentions = f"""<@{'>, <@'.join(str(a) for a in attendees[:-1])}> and <@{attendees[
         -1]}>""" if attendees else "@everyone"
     message = f"""{mentions}!
 It's game day!
-Today we will be playing **{reminder['game_name']}** @ **<t:{int(remind_at.timestamp())}:t>** **<t:{int(remind_at.timestamp())}:R>**, Have fun! {emoji}
+Today we will be playing **{reminder['game_name']}** @ **<t:{int(game_time.timestamp())}:t>** **<t:{int(game_time.timestamp())}:R>**, Have fun! {emoji}
     """
     await channel.send(message)
     await save_state(channel_id, "remind_at", float('Inf'))

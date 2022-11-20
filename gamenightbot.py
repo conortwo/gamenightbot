@@ -462,7 +462,7 @@ async def cyberpunk_go_no_go(channel_id, message):
                 reminder = {"start_time": start_time, "game_name": "Cyberpunk Red"}
                 game_night = state[channel_id].get("game_night", "game day")
                 remind_at = parse(f"{start_time} {game_night}")
-                await save_state(channel_id, "remind_at", (remind_at - timedelta(hours=2)).timestamp())
+                await save_state(channel_id, "remind_at", (remind_at - timedelta(hours=1)).timestamp())
                 await save_state(channel_id, "reminder", reminder)
                 announce = f"""@everyone The poll has concluded. 
 The group has decided we'll play **Cyberpunk Red** @ **{start_time}** on **{game_night}**.
@@ -566,11 +566,12 @@ async def remind(channel_id, reminder):
     channel = client.get_channel(int(channel_id))
     emoji = get(channel.guild.emojis, name='rollHigh')
     attendees = state[channel_id].get("attendees", [])
+    remind_at = state[channel_id].get("remind_at", datetime.now() + timedelta(hours=1))
     mentions = f"""<@{'>, <@'.join(str(a) for a in attendees[:-1])}> and <@{attendees[
         -1]}>""" if attendees else "@everyone"
     message = f"""{mentions}!
 It's game day!
-Today we will be playing **{reminder['game_name']}** @ **{reminder['start_time']}** (approximately 1 hour from now), Have fun! {emoji}
+Today we will be playing **{reminder['game_name']}** @ **<t:{int(remind_at.timestamp())}:t>** **<t:{int(remind_at.timestamp())}:R>**, Have fun! {emoji}
     """
     await channel.send(message)
     await save_state(channel_id, "remind_at", float('Inf'))
@@ -777,7 +778,7 @@ async def bonus(ctx, start_time, *gamename):
         await ctx.send(f"Sorry I had trouble understanding {start_time} as a a start time. Please try again.")
         return
     await ctx.send(f"Ok, I'll announce your suggestion of {game_name} @ {start_time} on {game_night}.")
-    await save_state(channel_id, "bonus_remind_at", (remind_at - timedelta(hours=2)).timestamp())
+    await save_state(channel_id, "bonus_remind_at", (remind_at - timedelta(hours=1)).timestamp())
     await save_state(channel_id, "bonus_reminder", reminder)
     channel = client.get_channel(int(channel_id))
     announce = f"""Okay, I've setup a ✨ **bonus** ✨ game day for {mentions}.
@@ -810,7 +811,7 @@ async def suggest(ctx, start_time, *gamename):
         await ctx.send(f"Sorry I had trouble understanding {start_time} as a a start time. Please try again.")
         return
     await ctx.send(f"Ok, I'll announce your suggestion of {game_name} @ {start_time} on {game_night}.")
-    await save_state(channel_id, "remind_at", (remind_at - timedelta(hours=2)).timestamp())
+    await save_state(channel_id, "remind_at", (remind_at - timedelta(1)).timestamp())
     await save_state(channel_id, "reminder", reminder)
     channel = client.get_channel(int(channel_id))
     attendees = state[channel_id].get("attendees", [])
@@ -818,7 +819,7 @@ async def suggest(ctx, start_time, *gamename):
         -1]}>""" if attendees else "@everyone"
     announce = f"""{mentions}
  The poll has concluded. 
-{host.mention} has decided we'll play **{game_name}** @ **{start_time}** on **{game_night}**.
+{host.mention} has decided we'll play **{game_name}** @ **<t:{int(remind_at.timestamp())}:F>**.
 I'll remind this channel an hour before then."""
     await channel.send(announce)
     await check_bonus(channel_id)
